@@ -150,3 +150,16 @@ button:hover {
 .hidden {
   display: none;
 }
+
+footer {
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+  color: #b3b3b3;
+}
+
+footer a:hover {
+  color: #fff;
+}
