@@ -7,6 +7,8 @@ body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, Helvetica, sans-serif;
   background-color: #121212;
   color: #b3b3b3;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
@@ -153,6 +155,7 @@ button:hover {
 
 footer {
   text-align: center;
+  flex: 0;
 }
 
 footer a {
