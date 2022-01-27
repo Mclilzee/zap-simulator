@@ -121,7 +121,7 @@ button:hover {
 }
 
 .zapped {
-  background-image: url(./myThunderAttempt.png);
+  background-image: url(./otherthundersmall.png);
   background-position: 40%;
   transition: 0.2s;
 }
