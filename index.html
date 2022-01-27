@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zap simulator</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./index.js" defer></script>
+  </head>
+  <body>
+    <div class="bannMessage hidden">
+      <div class="bannTitle">You just got banned!</div>
+      <button class="tryAgainButton">Try again to behave</button>
+    </div>
+    <div class="content">
+    <div class="zapTable">
+      <div class="row pointsRow">
+        <span class="pointsLabelSpace"></span>
+        <span class="pointsLabel">0 Points</span>
+        <span class="pointsLabel">1 Point</span>
+        <span class="pointsLabel">2 Points</span>
+        <span class="pointsLabel">3 Points</span>
+        <span class="pointsLabel">5 Points</span>
+        <span class="pointsLabel">10 Points</span>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 0</span>
+        <div class="cell" id="00"></div>
+        <div class="cell" id="01"></div>
+        <div class="cell" id="02"></div>
+        <div class="cell" id="03"></div>
+        <div class="cell" id="04"></div>
+        <div class="cell" id="05"></div>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 1</span>
+        <div class="cell skipped" id="10"></div>
+        <div class="cell" id="11"></div>
+        <div class="cell" id="12"></div>
+        <div class="cell" id="13"></div>
+        <div class="cell" id="14"></div>
+        <div class="cell" id="15"></div>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 2</span>
+        <div class="cell skipped" id="20"></div>
+        <div class="cell skipped" id="21"></div>
+        <div class="cell" id="22"></div>
+        <div class="cell" id="23"></div>
+        <div class="cell" id="24"></div>
+        <div class="cell" id="25"></div>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 3</span>
+        <div class="cell skipped" id="30"></div>
+        <div class="cell skipped" id="31"></div>
+        <div class="cell skipped" id="32"></div>
+        <div class="cell" id="33"></div>
+        <div class="cell" id="34"></div>
+        <div class="cell" id="35"></div>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 5</span>
+        <div class="cell skipped" id="40"></div>
+        <div class="cell skipped" id="41"></div>
+        <div class="cell skipped" id="42"></div>
+        <div class="cell skipped" id="43"></div>
+        <div class="cell" id="44"></div>
+        <div class="cell" id="45"></div>
+      </div>
+      <div class="row">
+        <span class="zapLabel">Zap 10</span>
+        <div class="cell skipped" id="50"></div>
+        <div class="cell skipped" id="51"></div>
+        <div class="cell skipped" id="52"></div>
+        <div class="cell skipped" id="53"></div>
+        <div class="cell skipped" id="54"></div>
+        <div class="cell" id="55"></div>
+      </div>
+    </div>
+    <div id="currentPointsRank1" class="zapPointsLabel">Current Zap Points: 0</div>
+    <div class="buttonsContainer">
+      <div class="zapButtons">
+      <button id="zapIndex0">Commit Zap Tier 0</buttons>
+      <button id="zapIndex1">Commit Zap Tier 1</buttons>
+      <button id="zapIndex2">Commit Zap Tier 2</buttons>
+      <button id="zapIndex3">Commit Zap Tier 3</buttons>
+      <button id="zapIndex4">Commit Zap Tier 5</buttons>
+      <button id="zapIndex5">Commit Zap Tier 10</buttons>
+        </div>
+        <button class="timeTravelButton">Fastforward time by one Week</button>
+    </div>
+  </div>
+  </body>
+</html>

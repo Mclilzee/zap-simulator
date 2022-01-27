@@ -1,0 +1,146 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.zapTable {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  height: 600px;
+  cursor: not-allowed;
+}
+
+.row {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex: auto;
+}
+
+.pointsLabelSpace {
+  width: 120px;
+}
+.pointsLabel {
+  flex: auto;
+  text-align: center;
+  color: rgb(0, 217, 255);
+  font-size: larger;
+}
+
+.zapLabel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  width: 100px;
+  font-size: x-large;
+  color: red;
+}
+
+.cell {
+  border: 1px solid black;
+  flex: auto;
+}
+
+.zapButtons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+button {
+  background-color: rgba(0, 89, 255, 0.473);
+  padding: 30px;
+  font-size: larger;
+  font-weight: bolder;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgba(173, 34, 46, 0.849);
+}
+
+.zapPointsLabel {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+#currentPointsRank1 {
+  color: green;
+}
+
+#currentPointsRank2 {
+  color: rgb(245, 132, 2);
+}
+
+#currentPointsRank3 {
+  color: red;
+}
+
+.timeTravelButton {
+  background-color: rgb(238, 171, 26);
+  color: black;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+}
+
+.skipped {
+  background-color: black;
+}
+
+.zapped {
+  background-image: url(./myThunderAttempt.png);
+  background-position: 40%;
+  transition: 0.2s;
+}
+
+.bannMessage {
+  padding-top: 100px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.281);
+}
+
+.bannTitle {
+  font-size: xx-large;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.tryAgainButton {
+  background-color: green;
+  padding: 20px;
+}
+
+.tryAgainButton:hover {
+  background-color: rgb(34, 164, 173);
+}
+
+.hidden {
+  display: none;
+}
