@@ -37,8 +37,9 @@ body {
 .pointsLabel {
   flex: auto;
   text-align: center;
-  color: rgb(0, 217, 255);
-  font-size: larger;
+  color: #cc9543;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .zapLabel {
@@ -47,8 +48,8 @@ body {
   align-items: center;
   margin-right: 20px;
   width: 100px;
-  font-size: x-large;
-  color: red;
+  font-size: 24px;
+  color: #4a4a4a;
 }
 
 .cell {
@@ -61,19 +62,26 @@ body {
   gap: 20px;
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 button {
-  background-color: rgba(0, 89, 255, 0.473);
-  padding: 30px;
-  font-size: larger;
-  font-weight: bolder;
+  background-color: #6abfc3;
+  padding: 1rem 3.5rem;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
   color: white;
   cursor: pointer;
+  border-radius: 0.2em;
+  box-shadow: 0 0.05em 0.25em 0 rgb(0 0 0 / 50%);
+  font-size: 1em;
+  letter-spacing: 0.2px;
+  border: none;
 }
 
 button:hover {
-  background-color: rgba(173, 34, 46, 0.849);
+  background-color: #87cbce;
 }
 
 .zapPointsLabel {
@@ -82,19 +90,25 @@ button:hover {
 }
 
 #currentPointsRank1 {
-  color: green;
+  color: #4a4a4a;
 }
 
 #currentPointsRank2 {
-  color: rgb(245, 132, 2);
+  color: #a6824a;
 }
 
 #currentPointsRank3 {
-  color: red;
+  color: #ec761f;
 }
 
 .timeTravelButton {
-  background-color: rgb(238, 171, 26);
+  margin-top: 10px;
+  background-color: #eeeeee;
+  color: rgba(0, 0, 0, 0.63);
+}
+
+.timeTravelButton:hover {
+  background-color: #eeeeee;
   color: black;
 }
 
@@ -102,7 +116,6 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: scroll;
 }
 
 .skipped {
@@ -110,7 +123,8 @@ button:hover {
 }
 
 .zapped {
-  background-image: url(./myThunderAttempt.png);
+  background-image: url(https://www.theodinproject.com/assets/icons/odin-icon-b5b31c073f7417a257003166c98cc23743654715305910c068b93a3bf4d3065d.svg);
+  background-repeat: no-repeat;
   background-position: 40%;
   transition: 0.2s;
 }
@@ -123,22 +137,14 @@ button:hover {
   flex-direction: column;
   align-items: center;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.281);
+  background-color: #cc954359;
 }
 
 .bannTitle {
-  font-size: xx-large;
-  color: white;
+  font-size: 36px;
+  color: #4a4a4a;
   margin-bottom: 20px;
-}
-
-.tryAgainButton {
-  background-color: green;
-  padding: 20px;
-}
-
-.tryAgainButton:hover {
-  background-color: rgb(34, 164, 173);
+  font-weight: bold;
 }
 
 .hidden {
