@@ -5,6 +5,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, Helvetica, sans-serif;
+  background-color: #121212;
+  color: #b3b3b3;
 }
 
 .content {
@@ -65,17 +67,23 @@ body {
 }
 
 button {
-  background-color: rgba(0, 89, 255, 0.473);
-  padding: 30px;
-  font-size: larger;
-  font-weight: bolder;
+  background-color: #cc9543;
+  box-shadow: 0 0.05em 0.25em 0 rgba(0, 0, 0, 0.5);
+  border-radius: 0.2em;
+  border: none;
+  padding: 1rem 3.5rem;
+  font-size: 1em;
+  font-weight: bold;
   color: white;
   cursor: pointer;
+  text-align: center;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, Helvetica, sans-serif;
 }
 
 button:hover {
-  background-color: rgba(173, 34, 46, 0.849);
+  opacity: 0.8;
+  color: #fff;
+  text-decoration: none;
 }
 
 .zapPointsLabel {
@@ -96,8 +104,9 @@ button:hover {
 }
 
 .timeTravelButton {
-  background-color: rgb(238, 171, 26);
-  color: black;
+  background-color: #6abfc3;
+  color: #fff;
+  margin-top: 1em;
 }
 
 .buttonsContainer {
