@@ -40,7 +40,7 @@ body {
 .pointsLabel {
   flex: auto;
   text-align: center;
-  color: rgb(0, 217, 255);
+  color: #b3b3b3;
   font-size: larger;
 }
 
@@ -51,7 +51,7 @@ body {
   margin-right: 20px;
   width: 100px;
   font-size: x-large;
-  color: red;
+  color: #ec761f;
 }
 
 .cell {
@@ -92,7 +92,7 @@ button:hover {
 }
 
 #currentPointsRank1 {
-  color: green;
+  color: #fff;
 }
 
 #currentPointsRank2 {
@@ -144,12 +144,7 @@ button:hover {
 }
 
 .tryAgainButton {
-  background-color: green;
-  padding: 20px;
-}
-
-.tryAgainButton:hover {
-  background-color: rgb(34, 164, 173);
+  background-color: #6abfc3;
 }
 
 .hidden {
