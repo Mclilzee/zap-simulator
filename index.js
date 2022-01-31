@@ -59,7 +59,7 @@ function commitZap(index) {
 
 function updateBoard(index, zapRank) {
   setZapPointsLabel();
-  console.log(index, zapRank);
+
   const cellId = "" + index + zapRank;
   const cellToUpdate = document.getElementById(cellId);
   cellToUpdate.classList.add("zapped");
