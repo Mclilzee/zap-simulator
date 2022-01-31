@@ -26,7 +26,6 @@ const tryAgainButton = document.querySelector(".tryAgainButton");
 
 tryAgainButton.addEventListener("click", () => {
   document.querySelector(".bannMessage").classList.add("hidden");
-  document.querySelector(".buttonsContainer").classList.remove("hidden");
 
   currentZapPoints = 0;
   setZapPointsLabel();
@@ -44,29 +43,26 @@ function emptyAllCells() {
   });
 }
 
-function commitZap(zapTier) {
-  const zapRank = tierList[zapTier];
+function commitZap(index) {
+  const zapRank = tierList[index];
   const zapResult = tierPoints[zapRank];
-  tierList[zapTier] += 1;
+  tierList[index] += 1;
 
   currentZapPoints += zapResult;
 
-  updateBoard(zapTier);
+  updateBoard(index, zapRank);
 
   if (currentZapPoints >= 10) {
     getBanned();
   }
 }
 
-function updateBoard(zapTier) {
+function updateBoard(index, zapRank) {
   setZapPointsLabel();
-
-  const cellsCount = tierList[zapTier];
-  for (let i = zapTier; i < cellsCount; i++) {
-    const cellId = "" + zapTier + i;
-    const cellToUpdate = document.getElementById(cellId);
-    cellToUpdate.classList.add("zapped");
-  }
+  console.log(index, zapRank);
+  const cellId = "" + index + zapRank;
+  const cellToUpdate = document.getElementById(cellId);
+  cellToUpdate.classList.add("zapped");
 }
 
 function setZapPointsLabel() {
@@ -83,6 +79,5 @@ function setZapPointsLabel() {
 }
 
 function getBanned() {
-  document.querySelector(".buttonsContainer").classList.add("hidden");
   document.querySelector(".bannMessage").classList.remove("hidden");
 }
