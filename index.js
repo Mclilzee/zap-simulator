@@ -1,5 +1,5 @@
-const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 3, 4: 5, 5: 10, 6: 20 };
-let tierList = [0, 1, 2, 3, 4, 5];
+const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10};
+let tierList = [0, 1, 2, 3, 4];
 let currentZapPoints = 0;
 
 const zapButtons = document.querySelector(".zapButtons");
@@ -33,7 +33,7 @@ tryAgainButton.addEventListener("click", () => {
 });
 
 function resetBoard() {
-  tierList = [0, 1, 2, 3, 4, 5];
+  tierList = [0, 1, 2, 3, 4];
   emptyAllCells();
 }
 
