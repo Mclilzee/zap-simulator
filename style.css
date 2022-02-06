@@ -1,9 +1,5 @@
 * {
   box-sizing: border-box;
-}
-
-html,
-body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -27,12 +23,12 @@ body {
 .header {
   align-self: flex-start;
   position: fixed;
-  margin: 0;
+  width: 10%;
 }
 
 .odinHeadIcon {
-  align-self: flex-start;
-  margin: 10px 50px;
+  margin: 10px 10px;
+  max-width: 100%;
 }
 
 .content {
@@ -203,7 +199,7 @@ button:hover {
   }
 }
 
-@media (max-height: 400px) {
+@media (max-height: 466px) {
   .content {
     transform: scale(40%) translateY(-75%);
   }
@@ -211,17 +207,11 @@ button:hover {
 
 @media (max-height: 370px) {
   .content {
-    transform: scale(35%) translateY(-90%);
+    transform: scale(27%) translateY(-120%);
   }
 }
 
-@media (max-width: 590px) {
-  .content {
-    transform: scale(80%) translateX(-10%) translateY(-10%);
-  }
-}
-
-@media (max-width: 480px){
+@media (max-width: 490px){
   .content {
     transform: scale(60%) translateX(-30%) translateY(-25%);
   }
@@ -229,7 +219,7 @@ button:hover {
 
 @media (max-width: 360px) {
   .content {
-    transform: scale(40%) translateX(-70%) translateY(-50%);
+    transform: scale(30%) translateX(-70%) translateY(-50%);
   }
 }
 
