@@ -83,6 +83,7 @@ body {
 .cell {
   border: 2px solid black;
   flex: auto;
+  display: flex
 }
 
 .zapButtons {
@@ -176,10 +177,17 @@ button:hover {
   font-weight: bold;
   padding: 50px;
 }
-
-.hidden {
-  display: none;
+.blue{
+  background-color: blue;
 }
+.red{
+  background-color: red;
+}
+.green{
+  background-color: green;
+}
+
+
 
 @media (max-height: 910px) {
   .content {
@@ -228,5 +236,19 @@ button:hover {
     transform: scale(30%) translateX(-120%) translateY(-80%);
   }
 }
-
+.lvl1{
+  z-index: 2;
+  padding-top: 100px;
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  background-color: #cc9543e3;
+}
+.hidden {
+  display: none;
+}
 
