@@ -40,13 +40,13 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1vw;
+  gap: 3vw;
 }
 
 table {
   table-layout: fixed;
   border-spacing: 0;
-  width: 80%;
+  width: 90%;
   aspect-ratio: 1;
 }
 
@@ -82,7 +82,7 @@ button {
   cursor: pointer;
   border-radius: 0.2rem;
   box-shadow: 0 0.05rem 0.25rem 0 rgb(0 0 0 / 50%);
-  font-size: 3vw;
+  font-size: 2.8vw;
   letter-spacing: 0.2px;
   border: none;
 }
@@ -162,35 +162,39 @@ button:hover {
   display: none;
 }
 
-@media (min-width: 730px) {
-  
+@media (min-width: 600px) {
+
+  body {
+    justify-content: flex-start;
+  }
   table {
-    width: 40%;
+    width: 600px;
+    height: 600px;
   }
   
   .pointsLabel {
-    font-size: 1vw;
+    font-size: 1.125rem;
   }
   
   .zapLabel {
-    font-size: 1.4vw;
+    font-size: 1.5rem;
   }
   
   .zapButtons {
-    gap: 1.2vw;
+    gap: 20px;
   }
   
   button {
-    padding: 1vw 3vw;
-    font-size: 1vw;
+    padding: 1rem 3.5rem;
+    font-size: 1rem;
+
   }
 
   .bannTitle {
-    font-size: 3vw;
+    font-size: 36px;
   }
 
   .zapPointsLabel {
-    font-size: 1.8vw;
-    font-weight: bold;
+    font-size: x-large;
   }
 }
