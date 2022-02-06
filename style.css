@@ -163,31 +163,34 @@ button:hover {
 }
 
 @media (min-width: 600px) {
-
   body {
     justify-content: flex-start;
   }
+
+  .content {
+    gap: 10px;
+  }
+
   table {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
   }
-  
+
   .pointsLabel {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
-  
+
   .zapLabel {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
-  
+
   .zapButtons {
     gap: 20px;
   }
-  
-  button {
-    padding: 1rem 3.5rem;
-    font-size: 1rem;
 
+  button {
+    padding: 1rem 3rem;
+    font-size: 1rem;
   }
 
   .bannTitle {
@@ -195,6 +198,34 @@ button:hover {
   }
 
   .zapPointsLabel {
-    font-size: x-large;
+    font-size: larger;
   }
 }
+
+@media (max-height: 620px) and (min-width: 600px) {
+  .content {
+    transform: scale(70%) translateY(-20%);
+  }
+}
+
+
+@media (max-height: 430px) and (min-width: 600px) {
+  .content {
+    transform: scale(50%) translateY(-50%);
+  }
+}
+
+@media (max-height: 375px) and (min-width: 600px) {
+  .content {
+    transform: scale(40%) translateY(-70%);
+  }
+}
+
+
+@media (max-height: 280px) and (min-width: 600px) {
+  .content {
+    transform: scale(35%) translateY(-95%);
+  }
+}
+
+
