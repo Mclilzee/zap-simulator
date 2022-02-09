@@ -7,6 +7,7 @@
 }
 
 html {
+  height: 100%;
   margin-right: auto;
   display: flex;
   flex-direction: column;
@@ -15,14 +16,17 @@ html {
 }
 
 body {
-  margin: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .header {
   align-self: flex-start;
   position: fixed;
+  top: 0;
   width: 10%;
 }
 
@@ -36,74 +40,49 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
-  margin: 0 auto 1em auto;
-  width: 95%;
+  gap: 3vw;
 }
 
-.zapTable {
-  display: flex;
-  flex-direction: column;
-  width: 600px;
-  height: 600px;
-  cursor: not-allowed;
+table {
+  table-layout: fixed;
+  border-spacing: 0;
+  width: 90%;
+  aspect-ratio: 1;
 }
 
-.row {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex: auto;
-}
-
-.pointsLabelSpace {
-  width: 120px;
+td {
+  border: 1px solid black;
 }
 
 .pointsLabel {
-  flex: auto;
-  text-align: center;
   color: #cc9543;
-  font-size: 1.125rem;
+  font-size: 3vw;
   font-weight: light;
 }
 
 .zapLabel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
-  width: 100px;
-  font-size: 1.5rem;
+  font-size: 3vw;
   color: #4a4a4a;
-}
-.pointsRow {
-  align-items: center;
-}
-.cell {
-  border: 2px solid black;
-  flex: auto;
 }
 
 .zapButtons {
   display: flex;
-  gap: 20px;
-  width: 100%;
+  gap: 3vw;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 button {
   background-color: #6abfc3;
-  padding: 1rem 3.5rem;
+  padding: 3vw 8vw;
   text-align: center;
   text-decoration: none;
   font-weight: bold;
   color: white;
   cursor: pointer;
-  border-radius: 0.2em;
-  box-shadow: 0 0.05em 0.25em 0 rgb(0 0 0 / 50%);
-  font-size: 1em;
+  border-radius: 0.2rem;
+  box-shadow: 0 0.05rem 0.25rem 0 rgb(0 0 0 / 50%);
+  font-size: 2.8vw;
   letter-spacing: 0.2px;
   border: none;
 }
@@ -113,7 +92,7 @@ button:hover {
 }
 
 .zapPointsLabel {
-  font-size: x-large;
+  font-size: 4vw;
   font-weight: bold;
 }
 
@@ -130,7 +109,7 @@ button:hover {
 }
 
 .timeTravelButton {
-  margin-top: 10px;
+  margin: 10px 0;
   background-color: #eeeeee;
   color: rgba(0, 0, 0, 0.63);
 }
@@ -152,6 +131,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .skipped {
@@ -160,6 +140,7 @@ button:hover {
 
 .zapped {
   background-image: url(./myThunderAttempt.png);
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: 40%;
   transition: 0.2s;
@@ -178,7 +159,7 @@ button:hover {
 }
 
 .bannTitle {
-  font-size: 36px;
+  font-size: 7vw;
   color: #4a4a4a;
   margin-bottom: 20px;
   font-weight: bold;
@@ -189,50 +170,67 @@ button:hover {
   display: none;
 }
 
-@media (max-height: 910px) {
+@media (min-width: 600px) {
+  body {
+    justify-content: flex-start;
+  }
+
   .content {
-    transform: scale(90%) translateY(-5%);
+    gap: 10px;
+  }
+
+  table {
+    width: 500px;
+    height: 500px;
+  }
+
+  .pointsLabel {
+    font-size: 1rem;
+  }
+
+  .zapLabel {
+    font-size: 1.3rem;
+  }
+
+  .zapButtons {
+    gap: 20px;
+  }
+
+  button {
+    padding: 1rem 3rem;
+    font-size: 1rem;
+  }
+
+  .bannTitle {
+    font-size: 36px;
+  }
+
+  .zapPointsLabel {
+    font-size: larger;
   }
 }
 
-@media (max-height: 840px) {
+@media (max-height: 620px) and (min-width: 600px) {
   .content {
     transform: scale(70%) translateY(-20%);
   }
 }
 
-@media (max-height: 655px) {
+@media (max-height: 430px) and (min-width: 600px) {
   .content {
     transform: scale(50%) translateY(-50%);
   }
 }
 
-@media (max-height: 466px) {
+@media (max-height: 375px) and (min-width: 600px) {
   .content {
-    transform: scale(40%) translateY(-75%);
+    transform: scale(40%) translateY(-70%);
   }
 }
 
-@media (max-height: 370px) {
-  .content {
-    transform: scale(27%) translateY(-120%);
-  }
-}
 
-@media (max-width: 490px) {
+@media (max-height: 280px) and (min-width: 600px) {
   .content {
-    transform: scale(60%) translateX(-30%) translateY(-25%);
-  }
-}
-
-@media (max-width: 360px) {
-  .content {
-    transform: scale(30%) translateX(-70%) translateY(-50%);
-  }
-}
-
-@media (max-width: 254px) {
-  .content {
-    transform: scale(30%) translateX(-120%) translateY(-80%);
+    transform: scale(35%) translateY(-95%);
   }
 }
