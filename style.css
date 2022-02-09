@@ -2,8 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 html {
@@ -118,7 +118,15 @@ button:hover {
   background-color: #eeeeee;
   color: black;
 }
-
+.moderationMatrixLink {
+  text-decoration: none;
+  color: #cc9543;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+.moderationMatrixLink:hover {
+  color: black;
+}
 .buttonsContainer {
   display: flex;
   flex-direction: column;
@@ -208,7 +216,6 @@ button:hover {
   }
 }
 
-
 @media (max-height: 430px) and (min-width: 600px) {
   .content {
     transform: scale(50%) translateY(-50%);
@@ -227,5 +234,3 @@ button:hover {
     transform: scale(35%) translateY(-95%);
   }
 }
-
-
