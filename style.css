@@ -23,11 +23,17 @@ body {
   justify-content: center;
 }
 
+body.darkMode {
+background-color: #121212;
+color: #b3b3b3;
+}
+
 .header {
   align-self: flex-start;
   position: fixed;
   top: 0;
   width: 10%;
+  display: flex;
 }
 
 .odinHeadIcon {
@@ -54,15 +60,27 @@ td {
   border: 1px solid black;
 }
 
+td.darkMode {
+  border: 1px solid #3b3b3b;
+}
+
 .pointsLabel {
   color: #cc9543;
   font-size: 3vw;
   font-weight: light;
 }
 
+.pointsLabel.darkMode {
+  color: #b3b3b3;
+}
+
 .zapLabel {
   font-size: 3vw;
   color: #4a4a4a;
+}
+
+.zapLabel.darkMode {
+  color: #ec761f;
 }
 
 .zapButtons {
@@ -87,8 +105,19 @@ button {
   border: none;
 }
 
+button.darkMode {
+  background-color: #cc9543;
+}
+
 button:hover {
   background-color: #87cbce;
+}
+
+button:hover.darkMode {
+  opacity: 0.8;
+  color: #fff;
+  text-decoration: none;
+  background-color: #cc9543;
 }
 
 .zapPointsLabel {
@@ -114,10 +143,22 @@ button:hover {
   color: rgba(0, 0, 0, 0.63);
 }
 
+.timeTravelButton.darkMode {
+  background-color: #6abfc3;
+  color: #fff;
+}
+
 .timeTravelButton:hover {
   background-color: #eeeeee;
   color: black;
 }
+
+.timeTravelButton:hover.darkMode {
+  opacity: 0.8;
+  text-decoration: none;
+  background-color: #6abfc3;
+}
+
 .moderationMatrixLink {
   text-decoration: none;
   color: #cc9543;
@@ -136,6 +177,10 @@ button:hover {
 
 .skipped {
   background-color: black;
+}
+
+.skipped.darkMode {
+  background-color: #3b3b3b;
 }
 
 .zapped {
@@ -170,6 +215,21 @@ button:hover {
   display: none;
 }
 
+#darkModeIcon {
+  font-size: 2em;
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: #fff;
+  align-self: center;
+  box-shadow: none;
+}
+
+#darkModeIcon.darkMode {
+  background-color: #121212;
+}
 @media (min-width: 600px) {
   body {
     justify-content: flex-start;
