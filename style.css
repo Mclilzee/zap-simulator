@@ -184,7 +184,7 @@ button:hover.darkMode {
 }
 
 .zapped {
-  background-image: url(./myThunderAttempt.png);
+  background-image: url(./zap.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 40%;
