@@ -28,6 +28,7 @@ body {
   position: fixed;
   top: 0;
   width: 10%;
+  display: flex;
 }
 
 .odinHeadIcon {
@@ -168,6 +169,18 @@ button:hover {
 
 .hidden {
   display: none;
+}
+
+#darkModeIcon {
+  font-size: 2em;
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: #fff;
+  align-self: center;
+  box-shadow: none;
 }
 
 @media (min-width: 600px) {
