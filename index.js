@@ -1,4 +1,4 @@
-const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
+/* const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let tierList = [0, 1, 2, 3, 4];
 let currentZapPoints = 0;
 
@@ -118,3 +118,35 @@ darkModeButton.addEventListener("click", () => {
   });
   swapIcon();
 });
+*/ 
+const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
+
+const svg_paths = {
+  red: "",
+  blue: "",
+  green: "",
+  yellow: "",
+  alien: ""
+}
+const generate_level = (color, o_tier, c_tier, skip = false) => {
+  return {
+    color: color,
+    o_tier: o_tier,
+    skip: skip,
+    c_tier: c_tier,
+    add_tier: function() {
+      this.c_tier++
+    },
+    is_skip: function() {
+      this.skip = false
+    }
+  }
+}
+const create_levels = () => {
+  return Object.keys(tierPoints).map((tier) => (
+   Object.keys(svg_paths).map((color) => (
+       generate_level(color, tier, tier, tier == 0)
+    ))
+  ))
+}
+const levels = create_levels().flat();
