@@ -132,20 +132,16 @@ const generate_level = (color, o_tier, c_tier, skip = false) => {
   return {
     color: color,
     o_tier: o_tier,
-    skip: skip,
     c_tier: c_tier,
     add_tier: function() {
       this.c_tier++
-    },
-    is_skip: function() {
-      this.skip = false
     }
   }
 }
 const create_levels = () => {
   return Object.keys(tierPoints).map((tier) => (
    Object.keys(svg_paths).map((color) => (
-       generate_level(color, tier, tier, tier == 0)
+       generate_level(color, tier, tier)
     ))
   ))
 }
