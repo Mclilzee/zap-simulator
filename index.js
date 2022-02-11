@@ -120,7 +120,7 @@ darkModeButton.addEventListener("click", () => {
 });
 */ 
 const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-
+let total_points = 0;
 const svg_paths = {
   red: "",
   blue: "",
@@ -146,3 +146,25 @@ const create_levels = () => {
   ))
 }
 const levels = create_levels().flat();
+
+const zapButtons = document.querySelector(".zapButtons");
+
+zapButtons.addEventListener("click", (e) => {
+  const index = Number(e.target.id.slice(-1));
+    document.querySelector(`.lvl${index}`).classList.remove("hidden")
+});
+
+const lvl_buttons = document.querySelectorAll(".levels button")
+lvl_buttons.forEach(button => {
+  button.addEventListener("click", (e) => {
+    const classes = e.target.classList
+    const color = classes[1]
+    const tier = Number(classes[0].slice(-1))
+    const obj = levels.find(level => (
+      level.color == color && level.o_tier == tier 
+    ))
+    total_points += tierPoints[obj.c_tier]
+    obj.add_tier()
+    console.log(total_points)
+  })
+})
