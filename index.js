@@ -121,18 +121,20 @@ darkModeButton.addEventListener("click", () => {
 */ 
 const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
+let form;
+
 const svg_paths = {
-  red: "",
-  blue: "",
-  green: "",
-  yellow: "",
-  alien: ""
+  red: "./zap.svg",
+  blue: "./zap.svg",
+  green: "./zap.svg",
+  orange: "./zap.svg",
+  black: "./zap.svg"
 }
-const generate_level = (color, o_tier, c_tier, skip = false) => {
+const generate_level = (color, o_tier, c_tier) => {
   return {
     color: color,
-    o_tier: o_tier,
-    c_tier: c_tier,
+    o_tier: Number(o_tier),
+    c_tier: Number(c_tier),
     add_tier: function() {
       this.c_tier++
     }
@@ -151,8 +153,57 @@ const zapButtons = document.querySelector(".zapButtons");
 
 zapButtons.addEventListener("click", (e) => {
   const index = Number(e.target.id.slice(-1));
-    document.querySelector(`.lvl${index}`).classList.remove("hidden")
+    form = document.querySelector(`.lvl${index}`)
+    form.classList.remove("hidden")
 });
+
+const get_object = (color, tier) => {
+  return levels.find(level => (
+    level.color == color && level.o_tier == tier 
+  ))
+}
+
+const get_stats = (obj, offense) => {
+  const points = document.createElement("div")
+  const name = document.createElement("div")
+  const c_points = document.createElement("div")
+  points.classList.add("t_points")
+  points.textContent = `Current Zap Points: ${total_points}`
+  name.textContent = `Last offense committed: ${offense}`
+  c_points.textContent = `${offense}'s tier moved: ${tierPoints[obj.c_tier]} => ${tierPoints[obj.c_tier + 1]}`
+  return [points, name, c_points]
+}
+
+const update_stats = (obj, offense) => {
+  total_points += tierPoints[obj.c_tier]
+  const display_stats = document.querySelector(".zapPointsLabel")
+  const stats = get_stats(obj, offense)
+  display_stats.textContent = ""
+  stats.forEach(stat => {
+    display_stats.appendChild(stat)
+  })
+}
+
+const update_object = (obj) => {
+    obj.add_tier()
+}
+
+const update_chart = (obj) => {
+  const image = document.createElement("img")
+  image.src = svg_paths[obj.color]
+  image.classList.add("zap_img")
+  document.querySelector(`#t${obj.o_tier}${obj.c_tier}`).appendChild(image)
+}
+
+const getBanned = () => {
+  document.querySelector(".bannMessage").classList.remove("hidden");
+}
+
+const check_ban = () => {
+  if(total_points > 9){
+    getBanned()
+  }
+}
 
 const lvl_buttons = document.querySelectorAll(".levels button")
 lvl_buttons.forEach(button => {
@@ -160,11 +211,66 @@ lvl_buttons.forEach(button => {
     const classes = e.target.classList
     const color = classes[1]
     const tier = Number(classes[0].slice(-1))
-    const obj = levels.find(level => (
-      level.color == color && level.o_tier == tier 
-    ))
-    total_points += tierPoints[obj.c_tier]
-    obj.add_tier()
-    console.log(total_points)
+    const obj = get_object(color, tier)
+    update_chart(obj)
+    update_stats(obj, e.target.textContent)
+    check_ban()
+    update_object(obj)
+    form.classList.add("hidden")
   })
 })
+
+const tryAgainButton = document.querySelector(".tryAgainButton");
+tryAgainButton.addEventListener("click", () => {
+  levels = create_levels().flat();
+  document.querySelectorAll(".cell").forEach(cell => {
+    cell.textContent = ""
+  })
+  document.querySelector(".zapPointsLabel").textContent = ""
+  document.querySelector(".bannMessage").classList.add("hidden");
+})
+
+const timeTravelButton = document.querySelector(".timeTravelButton");
+
+timeTravelButton.addEventListener("click", () => {
+  total_points < 1 ? total_points : total_points--
+  const points = document.querySelector(".t_points")
+  points ? points.textContent = `Current Zap Points: ${total_points}` : null
+});
+
+const darkModeButton = document.querySelector("#darkModeIcon");
+isMoon = true;
+function swapIcon() {
+  if (isMoon) {
+    isMoon = false;
+    darkModeButton.textContent = `🌞`;
+  } else {
+    isMoon = true;
+    darkModeButton.textContent = `🌙`;
+  }
+}
+darkModeButton.addEventListener("click", () => {
+  const divs = document.querySelectorAll("div");
+  const buttons = document.querySelectorAll("button");
+  const cells = document.querySelectorAll(".cell");
+  const zapLabels = document.querySelectorAll(".zapLabel");
+  const pointsLabels = document.querySelectorAll(".pointsLabel");
+  const body = document.querySelector("body");
+  body.classList.toggle("darkMode");
+  divs.forEach((element) => {
+    element.classList.toggle("darkMode");
+  });
+  buttons.forEach((element) => {
+    element.classList.toggle("darkMode");
+  });
+  cells.forEach((element) => {
+    element.classList.toggle("darkMode");
+  });
+  zapLabels.forEach((element) => {
+    element.classList.toggle("darkMode");
+  });
+  pointsLabels.forEach((element) => {
+    element.classList.toggle("darkMode");
+  });
+  swapIcon();
+});
