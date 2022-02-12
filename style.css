@@ -35,7 +35,6 @@ body {
 
 .odinHeadIcon {
   height: 100%;
-  width: 15%
 }
 
 #darkModeIcon{
@@ -65,12 +64,17 @@ body {
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
 }
 
+.sun{
+  stroke: white;
+  height: 24px;
+  width: 24px;
+}
 
 
 button {
   height: 80%;
   width: 80%;
-  font-size: 1vw;
+  font-size: 10px;
   padding: 2%;
   background-color: #6abfc3;
   text-align: center;
@@ -82,6 +86,11 @@ button {
   box-shadow: 0 0.05rem 0.25rem 0 rgb(0 0 0 / 50%);
   letter-spacing: 0.2px;
   border: none;
+}
+
+button:hover{
+  opacity: 0.8;
+  transition: all 300ms;
 }
 
 .buttonContainer{
@@ -210,7 +219,18 @@ body.dark{
 
 ref.dark, .statBox.dark, .title.dark{
   color: white;
-} 
+}
+
+svg:hover{
+  filter: 
+    invert(0.5)
+    sepia(1)
+    hue-rotate(200deg)
+    saturate(4)
+    brightness(1);
+
+}
+
 
 .blue{
   background-color: blue;

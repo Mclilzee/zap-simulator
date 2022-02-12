@@ -262,21 +262,29 @@ timeTravelButton.addEventListener("click", () => {
   points ? points.textContent = `Current Zap Points: ${total_points}` : null
 });
 
-const darkModeButton = document.querySelector("#darkModeIcon");
-isMoon = true;
-function swapIcon() {
-  if (isMoon) {
-    isMoon = false;
-    darkModeButton.textContent = `🌞`;
-  } else {
-    isMoon = true;
-    darkModeButton.textContent = `🌙`;
+const sun = document.querySelector(".sun").content.cloneNode(true)
+const moon = document.querySelector(".moon").content.cloneNode(true)
+
+const darkModeButton = document.querySelector(".dmb");
+
+const swap = (e) => {
+  if(e.target.id == "moon" || e.target.id == "init"){
+    darkModeButton.textContent = ""
+    console.log("yay")
+    darkModeButton.appendChild(sun)
+  }
+  else{
+    darkModeButton.textContent = ""
+    darkModeButton.appendChild(moon)
   }
 }
-darkModeButton.addEventListener("click", () => {
+
+darkModeButton.addEventListener("click", (e) => {
   const lights = document.querySelectorAll(".light")
   lights.forEach(light => {
     light.classList.toggle("dark")
   })
-  swapIcon()
+  console.log(e.target.id)
+  swap(e)
 })
+
