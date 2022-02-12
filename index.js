@@ -149,13 +149,15 @@ const create_levels = () => {
 }
 const levels = create_levels().flat();
 
-const zapButtons = document.querySelector(".zapButtons");
+const zapButtons = document.querySelectorAll(".zapButton");
 
-zapButtons.addEventListener("click", (e) => {
+zapButtons.forEach(button => {
+  button.addEventListener("click", (e) => {
   const index = Number(e.target.id.slice(-1));
     form = document.querySelector(`.lvl${index}`)
     form.classList.remove("hidden")
-});
+})
+})
 
 const get_object = (color, tier) => {
   return levels.find(level => (
