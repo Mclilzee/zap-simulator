@@ -4,7 +4,7 @@
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    border: black solid 1px;
+ 
 }
 
 
@@ -13,6 +13,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: rgba(238, 238, 238, 0.774);
 }
 
 .header{
@@ -23,9 +24,13 @@ body {
   padding: 0 1%;
 }
 
-.hidden {
-  display: none;
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
 }
+
 
 .odinHeadIcon {
   height: 100%;
@@ -38,6 +43,10 @@ body {
 
 .title{
   font-size: large;
+}
+
+.cell{
+  overflow: hidden;
 }
 
 .main{
@@ -55,9 +64,7 @@ body {
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
 }
 
-.footer{
-  height: 10%;
-}
+
 
 button {
   height: 80%;
@@ -88,15 +95,119 @@ button {
   font-weight: light;
   text-align: center;
 }
+
+.skipped {
+  background-color: black;
+}
+
+.statBox{
+  height: 40%;
+  width: 17%;
+  margin: 1%;
+  font-size: 1vw;
+  color: #4a4a4a;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat{
+  margin: 1%;
+}
+
+.danger{
+  background-color: hsla(360, 84%, 60%, 0.5);
+}
+
+.form, .bannMessage{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  transition: all 500ms;
+}
+
+.form{
+  background-color: rgba(149, 161, 189, 0.7)
+}
+
+.form > button {
+  height: 7%;
+  width: 15%;
+  margin: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hidden {
+  height: 0px;
+  transition: all 500ms;
+}
+
+.cell{
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border: solid black 1px;
+}
+
+.img-container{
+  height: 100%;
+  position: absolute;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.timeTravelButton {
+  margin: auto;
+  height: 30%;
+  background-color:#cc9543;
+  color: #fff;
+}
+
+.ref{
+  color: rgba(74, 74, 74, 0.7);
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.link{
+  text-decoration: none;
+  color: #cc9543;
+  font-weight: bold;
+}
+
+.link:hover{
+  color: #fd9800;
+}
+
+.blue{
+  background-color: blue;
+}
+.green{
+  background-color: green;
+}
+.red{
+  background-color: red;
+}
+.orange{
+  background-color: orange;
+}
+.black{
+  background-color: black;
+}
+
 /*
 body.darkMode {
 background-color: #121212;
 color: #b3b3b3;
 }
-.zap_img{
-  height: 50%;
-  width: 50%;
-}
+
 
 .header {
   align-self: flex-start;
@@ -132,7 +243,7 @@ td.darkMode {
 }
 
 .pointsLabel {
-  color: #cc9543;
+  
   font-size: 3vw;
   font-weight: light;
 }
@@ -193,7 +304,7 @@ button:hover.darkMode {
 }
 
 #currentPointsRank1 {
-  color: #4a4a4a;
+
 }
 
 #currentPointsRank2 {
@@ -210,10 +321,7 @@ button:hover.darkMode {
   color: rgba(0, 0, 0, 0.63);
 }
 
-.timeTravelButton.darkMode {
-  background-color: #6abfc3;
-  color: #fff;
-}
+
 
 .timeTravelButton:hover {
   background-color: #eeeeee;

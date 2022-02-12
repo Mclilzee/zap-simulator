@@ -147,7 +147,7 @@ const create_levels = () => {
     ))
   ))
 }
-const levels = create_levels().flat();
+let levels = create_levels().flat();
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
@@ -167,6 +167,7 @@ const get_object = (color, tier) => {
 
 const get_stats = (obj, offense) => {
   const points = document.createElement("div")
+  points.style.fontWeight = "bold"
   const name = document.createElement("div")
   const c_points = document.createElement("div")
   points.classList.add("t_points")
@@ -182,6 +183,7 @@ const update_stats = (obj, offense) => {
   const stats = get_stats(obj, offense)
   display_stats.textContent = ""
   stats.forEach(stat => {
+    stat.classList.add("stat")
     display_stats.appendChild(stat)
   })
 }
@@ -190,11 +192,30 @@ const update_object = (obj) => {
     obj.add_tier()
 }
 
+const set_images = (cell_imgs) => {
+  const factor = 17;
+  const new_set = []
+  const length = cell_imgs.length;
+  for(let i = length - 1 ; i >= 0; i--){
+    const img = cell_imgs[length - (i + 1)]
+    img.style.width = `${100 - (i * factor)}%`
+    new_set.push(img)
+  }
+  return new_set
+}
+
 const update_chart = (obj) => {
-  const image = document.createElement("img")
-  image.src = svg_paths[obj.color]
-  image.classList.add("zap_img")
-  document.querySelector(`#t${obj.o_tier}${obj.c_tier}`).appendChild(image)
+  const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`)
+  const div = document.createElement("div")
+  div.classList.add("img-container")
+  div.style.backgroundImage = `url(${svg_paths[obj.color]})`
+  cell.appendChild(div)
+  const cell_imgs = document.querySelectorAll(`#t${obj.o_tier}${obj.c_tier} > div`)
+  const set_imgs = set_images(cell_imgs)
+  cell.textContent = ""
+  set_imgs.forEach(image => {
+    cell.appendChild(image)
+  })
 }
 
 const getBanned = () => {
@@ -225,6 +246,7 @@ lvl_buttons.forEach(button => {
 const tryAgainButton = document.querySelector(".tryAgainButton");
 tryAgainButton.addEventListener("click", () => {
   levels = create_levels().flat();
+  total_points = 0;
   document.querySelectorAll(".cell").forEach(cell => {
     cell.textContent = ""
   })
@@ -232,7 +254,7 @@ tryAgainButton.addEventListener("click", () => {
   document.querySelector(".bannMessage").classList.add("hidden");
 })
 
-const timeTravelButton = document.querySelector(".timeTravelButton");
+ const timeTravelButton = document.querySelector(".timeTravelButton");
 
 timeTravelButton.addEventListener("click", () => {
   total_points < 1 ? total_points : total_points--
