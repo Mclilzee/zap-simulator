@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./style.css" />
     <script src="./index.js" defer></script>
   </head>
-  <body>
+  <body class="light">
     <div class="bannMessage hidden">
       <div class="bannTitle">You just got banned!</div>
       <button class="tryAgainButton">Try again to behave</button>
@@ -28,43 +28,43 @@
       </tr>
       <tr class="row">
         <div class="zapLabel">Zap 0</div>
-        <div class="cell" id="t00"></div>
-        <div class="cell" id="t01"></div>
-        <div class="cell" id="t02"></div>
-        <div class="cell" id="t03"></div>
-        <div class="cell" id="t04"></div>
+        <div class="cell light" id="t00"></div>
+        <div class="cell light" id="t01"></div>
+        <div class="cell light" id="t02"></div>
+        <div class="cell light" id="t03"></div>
+        <div class="cell light" id="t04"></div>
       </tr>
       <tr class="row">
         <div class="zapLabel">Zap 1</div>
-        <div class="cell skipped" id="10"></div>
-        <div class="cell" id="t11"></div>
-        <div class="cell" id="t12"></div>
-        <div class="cell" id="t13"></div>
-        <div class="cell" id="t14"></div>
+        <div class="cell light skipped" id="10"></div>
+        <div class="cell light" id="t11"></div>
+        <div class="cell light" id="t12"></div>
+        <div class="cell light" id="t13"></div>
+        <div class="cell light" id="t14"></div>
       </tr>
       <tr class="row">
         <div class="zapLabel">Zap 2</div>
-        <div class="cell skipped" id="t20"></div>
-        <div class="cell skipped" id="t21"></div>
-        <div class="cell" id="t22"></div>
-        <div class="cell" id="t23"></div>
-        <div class="cell" id="t24"></div>
+        <div class="cell light skipped" id="t20"></div>
+        <div class="cell light skipped" id="t21"></div>
+        <div class="cell light" id="t22"></div>
+        <div class="cell light" id="t23"></div>
+        <div class="cell light" id="t24"></div>
       </tr>
       <tr class="row">
         <div class="zapLabel">Zap 5</div>
-        <div class="cell skipped" id="t30"></div>
-        <div class="cell skipped" id="t31"></div>
-        <div class="cell skipped" id="t32"></div>
-        <div class="cell" id="t33"></div>
-        <div class="cell" id="t34"></div>
+        <div class="cell light skipped" id="t30"></div>
+        <div class="cell light skipped" id="t31"></div>
+        <div class="cell light skipped" id="t32"></div>
+        <div class="cell light" id="t33"></div>
+        <div class="cell light" id="t34"></div>
       </tr>
       <tr class="row">
         <div class="zapLabel">Zap 10</div>
-        <div class="cell skipped" id="t40"></div>
-        <div class="cell skipped" id="t41"></div>
-        <div class="cell skipped" id="t42"></div>
-        <div class="cell skipped" id="t43"></div>
-        <div class="cell" id="t44"></div>
+        <div class="cell light skipped" id="t40"></div>
+        <div class="cell light skipped" id="t41"></div>
+        <div class="cell light skipped" id="t42"></div>
+        <div class="cell light skipped" id="t43"></div>
+        <div class="cell light" id="t44"></div>
       </tr>
     </table>
     
@@ -117,7 +117,7 @@
 
   <header class="header">
     <img class="odinHeadIcon" src="./images/og-logo.png" alt="dive Odin Head">
-    <div class="title">Zap Simulator</div>
+    <div class="title light">Zap Simulator</div>
     <button id="darkModeIcon">&#127769;</button>
   </header>
   <main class="main">
@@ -132,55 +132,55 @@
           <div class="buttonContainer">
           <button class= "zapButton" id="zapIndex0">Commit Zap Tier 0</button>
         </div>
-          <div class="cell" id="t00"></div>
-          <div class="cell" id="t01"></div>
-          <div class="cell" id="t02"></div>
-          <div class="cell" id="t03"></div>
-          <div class="cell danger" id="t04"></div>
+          <div class="cell light" id="t00"></div>
+          <div class="cell light" id="t01"></div>
+          <div class="cell light" id="t02"></div>
+          <div class="cell light" id="t03"></div>
+          <div class="cell light danger" id="t04"></div>
 
           <div class="buttonContainer">
             <button class= "zapButton" id="zapIndex1">Commit Zap Tier 1</button>
           </div>
-          <div class="cell skipped" id="t10"></div>
-          <div class="cell" id="t11"></div>
-          <div class="cell" id="t12"></div>
-          <div class="cell" id="t13"></div>
-          <div class="cell danger" id="t14"></div>
+          <div class="cell light skipped" id="t10"></div>
+          <div class="cell light" id="t11"></div>
+          <div class="cell light" id="t12"></div>
+          <div class="cell light" id="t13"></div>
+          <div class="cell light danger" id="t14"></div>
           
           <div class="buttonContainer">
             <button class= "zapButton" id="zapIndex2">Commit Zap Tier 2</button>
           </div>
-          <div class="cell skipped" id="t20"></div>
-          <div class="cell skipped" id="t21"></div>
-          <div class="cell" id="t22"></div>
-          <div class="cell" id="t23"></div>
-          <div class="cell danger" id="t24"></div>
+          <div class="cell light skipped" id="t20"></div>
+          <div class="cell light skipped" id="t21"></div>
+          <div class="cell light" id="t22"></div>
+          <div class="cell light" id="t23"></div>
+          <div class="cell light danger" id="t24"></div>
 
           <div class="buttonContainer">
             <button class= "zapButton" id="zapIndex3">Commit Zap Tier 5</button>
           </div>
-          <div class="cell skipped" id="t30"></div>
-          <div class="cell skipped" id="t31"></div>
-          <div class="cell skipped" id="t32"></div>
-          <div class="cell" id="t33"></div>
-          <div class="cell danger" id="t34"></div>
+          <div class="cell light skipped" id="t30"></div>
+          <div class="cell light skipped" id="t31"></div>
+          <div class="cell light skipped" id="t32"></div>
+          <div class="cell light" id="t33"></div>
+          <div class="cell light danger" id="t34"></div>
 
           <div class="buttonContainer">
             <button class= "zapButton" id="zapIndex4">Commit Zap Tier 10</button>
           </div>
-          <div class="cell skipped" id="t40"></div>
-          <div class="cell skipped" id="t41"></div>
-          <div class="cell skipped" id="t42"></div>
-          <div class="cell skipped" id="t43"></div>
-          <div class="cell danger" id="t44"></div>
+          <div class="cell light skipped" id="t40"></div>
+          <div class="cell light skipped" id="t41"></div>
+          <div class="cell light skipped" id="t42"></div>
+          <div class="cell light skipped" id="t43"></div>
+          <div class="cell light danger" id="t44"></div>
     </div>
-    <div class="statBox">
+    <div class="statBox light">
       <div id="currentPointsRank1" class="zapPointsLabel">Welcome, you are clean af rn</div>
       <button class="timeTravelButton">Fastforward time by one Week</button>
     </div>
   </main>
-  <footer class="footer">
-    <div class="ref">This simulator is a direct representation of The Odin Project's <a href="" class="link">Moderation_Matrix</a> </div>
+  <footer class="footer light">
+    <div class="ref light">This simulator is a direct representation of The Odin Project's <a href="" class="link">Moderation_Matrix</a> </div>
   </footer>
   </body>
 </html>

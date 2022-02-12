@@ -29,6 +29,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: rgb(255, 255, 255);
+  padding: 1%;
 }
 
 
@@ -42,7 +43,7 @@ body {
 }
 
 .title{
-  font-size: large;
+  font-size: 32px;
 }
 
 .cell{
@@ -135,7 +136,12 @@ button {
   background-color: rgba(149, 161, 189, 0.7)
 }
 
-.form > button {
+.bannMessage{
+  color: white;
+  background-color: rgba(201, 138, 43, 0.8);
+}
+
+.form > button, .bannMessage > button {
   height: 7%;
   width: 15%;
   margin: 1%;
@@ -164,7 +170,7 @@ button {
 }
 
 .timeTravelButton {
-  margin: auto;
+  margin-top: auto;
   height: 30%;
   background-color:#cc9543;
   color: #fff;
@@ -185,6 +191,26 @@ button {
 .link:hover{
   color: #fd9800;
 }
+
+body.dark{
+  background-color: rgba(32, 34, 32, 1);
+}
+
+.footer.dark{
+  background-color: black;
+}
+
+.skipped.dark{
+  background-color: rgba(214, 205, 205, 0.7);
+}
+
+.cell.dark{
+  border-color: rgba(214, 205, 205, 0.7);
+}
+
+ref.dark, .statBox.dark, .title.dark{
+  color: white;
+} 
 
 .blue{
   background-color: blue;
