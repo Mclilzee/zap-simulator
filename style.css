@@ -159,6 +159,10 @@ button:hover{
   justify-content: center;
 }
 
+.bannMessage > button {
+  margin-top: 20px;
+}
+
 
 .hidden {
   height: 0px;
