@@ -21,7 +21,7 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 13%;
-  padding: 0 1%;
+  padding: 1%;
 }
 
 .footer{
@@ -37,8 +37,8 @@ body {
   height: 100%;
 }
 
-#darkModeIcon{
-  width: 15%;
+.dmb{
+  margin-right: 20px;
 }
 
 .title{
@@ -114,14 +114,14 @@ button:hover{
   height: 40%;
   width: 17%;
   margin: 1%;
-  font-size: 1vw;
+  font-size: 15px;
   color: #4a4a4a;
   display: flex;
   flex-direction: column;
 }
 
 .stat{
-  margin: 1%;
+  margin: 2%;
 }
 
 .danger{
@@ -152,7 +152,7 @@ button:hover{
 
 .form > button, .bannMessage > button {
   height: 7%;
-  width: 15%;
+  width: 120px;
   margin: 1%;
   display: flex;
   align-items: center;
@@ -217,7 +217,7 @@ body.dark{
   border-color: rgba(214, 205, 205, 0.7);
 }
 
-ref.dark, .statBox.dark, .title.dark{
+.ref.dark, .statBox.dark, .title.dark{
   color: white;
 }
 
@@ -255,11 +255,10 @@ svg:hover{
   .statBox{
     width: 100%;
     align-items: center;
-    font-size: 2vw;
+    font-size: 15px;
   }
   .timeTravelButton{
-    width: 150px;
-    font-size: 10px;
+    transform: scale(0.5,0.7)
   }
   .footer, .ref, .link{
     font-size: 2vw;
@@ -273,9 +272,11 @@ svg:hover{
 }
 
 @media only screen and (max-width: 480px) {
-  .grid, .statBox{
-    transform: scale(0.5, 0.5)
+  .grid{
+    transform: scale(0.5, 0.5);
+    margin-bottom: -100px;
   }
+  
 }
 /*
 body.darkMode {
@@ -336,12 +337,7 @@ td.darkMode {
   color: #ec761f;
 }
 
-.zapButtons {
-  display: flex;
-  gap: 3vw;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+
 
 button {
   background-color: #6abfc3;
