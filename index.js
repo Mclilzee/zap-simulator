@@ -93,29 +93,14 @@ function swapIcon() {
     darkModeButton.textContent = `🌙`;
   }
 }
-darkModeButton.addEventListener("click", () => {
-  const divs = document.querySelectorAll("div");
-  const buttons = document.querySelectorAll("button");
-  const cells = document.querySelectorAll(".cell");
-  const zapLabels = document.querySelectorAll(".zapLabel");
-  const pointsLabels = document.querySelectorAll(".pointsLabel");
-  const body = document.querySelector("body");
-  body.classList.toggle("darkMode");
-  divs.forEach((element) => {
-    element.classList.toggle("darkMode");
-  });
-  buttons.forEach((element) => {
-    element.classList.toggle("darkMode");
-  });
-  cells.forEach((element) => {
-    element.classList.toggle("darkMode");
-  });
-  zapLabels.forEach((element) => {
-    element.classList.toggle("darkMode");
-  });
-  pointsLabels.forEach((element) => {
-    element.classList.toggle("darkMode");
-  });
+darkModeButton.addEventListener("click", (e) => {
+  if (e.target.getAttribute("data-theme") === "light") {
+    e.target.setAttribute("data-theme", "dark");
+    document.documentElement.setAttribute("data-theme", "dark");
+  } else {
+    e.target.setAttribute("data-theme", "light");
+    document.documentElement.setAttribute("data-theme", "light");
+  }
   swapIcon();
 });
 */ 
