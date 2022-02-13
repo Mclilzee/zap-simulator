@@ -36,28 +36,315 @@
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-html {
-  height: 100%;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
+
 
 body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(238, 238, 238, 0.774);
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 13%;
+  padding: 1%;
+}
+
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  padding: 1%;
+}
+
+
+.odinHeadIcon {
   height: 100%;
+}
+
+.dmb{
+  margin-right: 20px;
+}
+
+.title{
+  font-size: 32px;
+}
+
+.cell{
+  overflow: hidden;
+}
+
+.main{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid{
+  height: 80%;
+  aspect-ratio: 4/3;
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 2fr 2fr 2fr;
+  grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
+}
+
+.sunSvg{
+  stroke: white;
+  height: 24px;
+  width: 24px;
+}
+
+
+button {
+  height: 80%;
+  width: 80%;
+  font-size: 10px;
+  padding: 2%;
+  background-color: #6abfc3;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.2rem;
+  box-shadow: 0 0.05rem 0.25rem 0 rgb(0 0 0 / 50%);
+  letter-spacing: 0.2px;
+  border: none;
+}
+
+button:hover{
+  opacity: 0.8;
+  transition: all 300ms;
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pointsLabel {
+  color: #cc9543;
+  font-size: 80%;
+  font-weight: light;
+  text-align: center;
+}
+
+.skipped {
+  background-color: black;
+}
+
+.statBox{
+  height: 40%;
+  width: 17%;
+  margin: 1%;
+  font-size: 15px;
+  color: #4a4a4a;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat{
+  margin: 2%;
+}
+
+.danger{
+  background-color: hsla(360, 84%, 60%, 0.5);
+}
+
+.form, .bannMessage{
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: var(--body-bg);
   justify-content: center;
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  transition: all ease-out 500ms;
 }
 
+.form{
+  background-color: rgba(149, 161, 189, 0.7)
+}
+
+.bannMessage{
+  color: white;
+  background-color: rgba(201, 138, 43, 0.8);
+}
+
+.form > button, .bannMessage > button {
+  height: 7%;
+  width: 200px;
+  margin: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bannMessage > button {
+  margin-top: 20px;
+}
+
+
+.hidden {
+  height: 0px;
+  transition: all 500ms;
+}
+
+.cell{
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border: solid black 1px;
+}
+
+.img-container{
+  height: 100%;
+  position: absolute;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.timeTravelButton {
+  margin-top: auto;
+  height: 30%;
+  background-color:#cc9543;
+  color: #fff;
+}
+
+.ref{
+  color: rgba(74, 74, 74, 0.7);
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.link{
+  text-decoration: none;
+  color: #cc9543;
+  font-weight: bold;
+}
+
+.link:hover{
+  color: #fd9800;
+}
+
+body.dark{
+  background-color: rgba(32, 34, 32, 1);
+}
+
+.footer.dark{
+  background-color: black;
+}
+
+.skipped.dark{
+  background-color: rgba(214, 205, 205, 0.7);
+}
+
+.cell.dark{
+  border-color: rgba(214, 205, 205, 0.7);
+}
+
+.ref.dark, .statBox.dark, .title.dark{
+  color: white;
+}
+
+.timeTravelButton.dark{
+  
+  background-color: #6abfc3;
+}
+
+.zapButton.dark{
+  background-color: #cc9543;
+}
+
+svg:hover{
+  filter: 
+    invert(0.5)
+    sepia(1)
+    hue-rotate(200deg)
+    saturate(4)
+    brightness(1);
+
+}
+
+
+
+.blue{
+  background-color: blue;
+}
+.green{
+  background-color: green;
+}
+.red{
+  background-color: red;
+}
+.orange{
+  background-color: orange;
+}
+.black{
+  background-color: black;
+}
+
+.dark{
+  transition: background ease-in 200ms, border-color ease-out 500ms;
+}
+
+.light{
+  transition: background ease-in 200ms, border-color ease-out 500ms;
+}
+
+@media only screen and (max-width: 680px) {
+  .main {
+    flex-direction: column;
+  }
+  .statBox{
+    width: 100%;
+    align-items: center;
+    font-size: 15px;
+  }
+  .timeTravelButton{
+    transform: scale(0.5,0.7)
+  }
+  .footer, .ref, .link{
+    font-size: 2vw;
+  }
+  .title, .odinHeadIcon{
+    transform: scale(0.5, 0.5)
+  }
+  .form > button, .bannMessage > button{
+    width: 130px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .grid{
+    transform: scale(0.5, 0.5);
+    margin-top: -80px;
+  }
+  .statBox{
+    margin-top: -80px;
+  }
+
+  .pointsLabel{
+    font-weight: bold;
+  }
+  
+}
+/*
 body.darkMode {
   background-color: #121212;
   color: #b3b3b3;
 }
+
 
 .header {
   align-self: flex-start;
@@ -67,10 +354,7 @@ body.darkMode {
   display: flex;
 }
 
-.odinHeadIcon {
-  margin: 10px 10px;
-  max-width: 100%;
-}
+
 
 .content {
   display: flex;
@@ -106,12 +390,7 @@ td.darkMode {
   color: var(--text-primary);
 }
 
-.zapButtons {
-  display: flex;
-  gap: 3vw;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+
 
 button {
   background-color: var(--button-primary);
@@ -139,7 +418,7 @@ button:hover {
 }
 
 #currentPointsRank1 {
-  color: #4a4a4a;
+
 }
 
 #currentPointsRank2 {
@@ -210,9 +489,6 @@ button:hover {
   padding: 50px;
 }
 
-.hidden {
-  display: none;
-}
 
 #darkModeIcon {
   font-size: 2em;
@@ -289,3 +565,4 @@ button:hover {
     transform: scale(35%) translateY(-95%);
   }
 }
+*/
