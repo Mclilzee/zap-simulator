@@ -158,6 +158,12 @@ button:hover{
   align-items: center;
   justify-content: center;
 }
+
+.bannMessage > button{
+  width: 200px;
+  margin-top: 30px;
+}
+
 .hidden {
   height: 0px;
   transition: all 500ms;
@@ -239,6 +245,7 @@ svg:hover{
     brightness(1);
 
 }
+
 
 
 .blue{
