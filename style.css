@@ -248,6 +248,32 @@ svg:hover{
   background-color: black;
 }
 
+@media only screen and (max-width: 680px) {
+  .main {
+    flex-direction: column;
+  }
+  .statBox{
+    width: 100%;
+    align-items: center;
+    font-size: 2vw;
+  }
+  .timeTravelButton{
+    width: 150px;
+    font-size: 10px;
+  }
+  .footer, .ref, .link{
+    font-size: 2vw;
+  }
+  .header{
+    transform: scaleY(0.8)
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .grid, .statBox{
+    transform: scale(0.7, 0.7)
+  }
+}
 /*
 body.darkMode {
 background-color: #121212;
