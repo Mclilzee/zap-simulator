@@ -221,6 +221,15 @@ body.dark{
   color: white;
 }
 
+.timeTravelButton.dark{
+  
+  background-color: #6abfc3;
+}
+
+.zapButton.dark{
+  background-color: #cc9543;
+}
+
 svg:hover{
   filter: 
     invert(0.5)
@@ -263,9 +272,6 @@ svg:hover{
   .footer, .ref, .link{
     font-size: 2vw;
   }
-  .header{
-    transform: scaleY(0.8)
-  }
   .title, .odinHeadIcon{
     transform: scale(0.5, 0.5)
   }
@@ -274,7 +280,7 @@ svg:hover{
 @media only screen and (max-width: 480px) {
   .grid{
     transform: scale(0.5, 0.5);
-    margin-bottom: -100px;
+    margin-bottom: -80px;
   }
   
 }
