@@ -262,19 +262,25 @@ timeTravelButton.addEventListener("click", () => {
   points ? points.textContent = `Current Zap Points: ${total_points}` : null
 });
 
-const sun = document.querySelector(".sun").content.cloneNode(true)
-const moon = document.querySelector(".moon").content.cloneNode(true)
+
+
+
+const verify = (e) => {
+  return [...e.target.classList].includes("moonSvg")
+}
 
 const darkModeButton = document.querySelector(".dmb");
 
 const swap = (e) => {
-  if(e.target.id == "moon" || e.target.id == "init"){
+  if(verify(e)){
     darkModeButton.textContent = ""
     console.log("yay")
+    const sun = document.querySelector(".sun").content.cloneNode(true)
     darkModeButton.appendChild(sun)
   }
   else{
     darkModeButton.textContent = ""
+    const moon = document.querySelector(".moon").content.cloneNode(true)
     darkModeButton.appendChild(moon)
   }
 }

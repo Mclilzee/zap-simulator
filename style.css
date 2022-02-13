@@ -64,7 +64,7 @@ body {
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
 }
 
-.sun{
+.sunSvg{
   stroke: white;
   height: 24px;
   width: 24px;
