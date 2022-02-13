@@ -299,6 +299,10 @@ svg:hover{
   .statBox{
     margin-top: -80px;
   }
+
+  .pointsLabel{
+    font-weight: bold;
+  }
   
 }
 /*
