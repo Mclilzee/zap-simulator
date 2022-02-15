@@ -203,6 +203,7 @@ button:hover{
   display: flex;
   position: relative;
   overflow: hidden;
+  align-items: center;
   border: solid black 1px;
 }
 
@@ -210,8 +211,7 @@ button:hover{
   height: 100%;
   position: absolute;
   background-position: center;
-  background-origin: content-box;
-  background-size: 60% 100%;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 

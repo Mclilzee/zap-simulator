@@ -188,6 +188,7 @@ const set_images = (cell_imgs) => {
   for(let i = 0; i < cell_imgs.length; i++){
     const img = cell_imgs[i]
     img.style.width = `${100 - factor}%`
+    img.style.height = `${100 - (factor/2)}%`
     img.style.marginLeft = `${factor * (i/cell_imgs.length)}%`
     new_set.push(img)
   }
