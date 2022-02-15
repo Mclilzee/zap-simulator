@@ -103,186 +103,199 @@ darkModeButton.addEventListener("click", (e) => {
   }
   swapIcon();
 });
-*/ 
+*/
 const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
-  red: "./TOPzap-shade-1.svg",    //tier 0  #ffdc2f
-  blue: "./TOPzap-shade-2.svg",   //tier 1  #eeb434
-  green: "./TOPzap-shade-3.svg",  //tier 2  #e09034
+  red: "./TOPzap-shade-1.svg", //tier 0  #ffdc2f
+  blue: "./TOPzap-shade-2.svg", //tier 1  #eeb434
+  green: "./TOPzap-shade-3.svg", //tier 2  #e09034
   orange: "./TOPzap-shade-4.svg", //tier 5  #d47032
-  black: "./TOPzap-shade-5.svg"   //tier 10 #be1e2d
-}
+  black: "./TOPzap-shade-5.svg", //tier 10 #be1e2d
+};
 const generate_level = (color, o_tier, c_tier) => {
   return {
     color: color,
     o_tier: Number(o_tier),
     c_tier: Number(c_tier),
-    add_tier: function() {
-      this.c_tier++
-    }
-  }
-}
+    add_tier: function () {
+      this.c_tier++;
+    },
+  };
+};
 const create_levels = () => {
-  return Object.keys(tierPoints).map((tier) => (
-   Object.keys(svg_paths).map((color) => (
-       generate_level(color, tier, tier)
-    ))
-  ))
-}
+  return Object.keys(tierPoints).map((tier) =>
+    Object.keys(svg_paths).map((color) => generate_level(color, tier, tier))
+  );
+};
 let levels = create_levels().flat();
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
-zapButtons.forEach(button => {
+zapButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
-  const index = Number(e.target.id.slice(-1));
-    form = document.querySelector(`.lvl${index}`)
-    form.classList.remove("hidden")
-})
-})
+    const index = Number(e.target.id.slice(-1));
+    form = document.querySelector(`.lvl${index}`);
+    form.classList.remove("hidden");
+  });
+});
 
 const get_object = (color, tier) => {
-  return levels.find(level => (
-    level.color == color && level.o_tier == tier 
-  ))
-}
+  return levels.find((level) => level.color == color && level.o_tier == tier);
+};
 
 const get_stats = (obj, offense) => {
-  const points = document.createElement("div")
-  points.style.fontWeight = "bold"
-  const name = document.createElement("div")
-  const c_points = document.createElement("div")
-  points.classList.add("t_points")
-  points.textContent = `Current Zap Points: ${total_points}`
-  name.textContent = `Last offense committed: ${offense}`
-  c_points.textContent = `${offense}'s tier moved: ${tierPoints[obj.c_tier]} => ${tierPoints[obj.c_tier + 1]}`
-  return [points, name, c_points]
-}
+  const points = document.createElement("div");
+  points.style.fontWeight = "bold";
+  const name = document.createElement("div");
+  const c_points = document.createElement("div");
+  points.classList.add("t_points");
+  points.textContent = `Current Zap Points: ${total_points}`;
+  name.textContent = `Last offense committed: ${offense}`;
+  c_points.textContent = `${offense}'s tier moved: ${
+    tierPoints[obj.c_tier]
+  } => ${tierPoints[obj.c_tier + 1]}`;
+  return [points, name, c_points];
+};
 
 const update_stats = (obj, offense) => {
-  total_points += tierPoints[obj.c_tier]
-  const display_stats = document.querySelector(".zapPointsLabel")
-  const stats = get_stats(obj, offense)
-  display_stats.textContent = ""
-  stats.forEach(stat => {
-    stat.classList.add("stat")
-    display_stats.appendChild(stat)
-  })
-}
+  total_points += tierPoints[obj.c_tier];
+  const display_stats = document.querySelector(".zapPointsLabel");
+  const stats = get_stats(obj, offense);
+  display_stats.textContent = "";
+  stats.forEach((stat) => {
+    stat.classList.add("stat");
+    display_stats.appendChild(stat);
+  });
+};
 
 const update_object = (obj) => {
-    obj.add_tier()
-}
+  obj.add_tier();
+};
 
 const get_factor = (cell_imgs) => {
-  const set_factor = 10 // Gap between each svg
-  return set_factor * (cell_imgs.length - 1)
-}
+  const set_factor = 10; // Gap between each svg
+  return set_factor * (cell_imgs.length - 1);
+};
 
 const set_images = (cell_imgs) => {
-  const factor = get_factor(cell_imgs)
-  const new_set = []
-  for(let i = 0; i < cell_imgs.length; i++){
-    const img = cell_imgs[i]
-    img.style.width = `${100 - factor}%`
-    img.style.height = `${100 - (factor/2)}%`
-    img.style.marginLeft = `${factor * (i/cell_imgs.length)}%`
-    new_set.push(img)
+  const factor = get_factor(cell_imgs);
+  const new_set = [];
+  for (let i = 0; i < cell_imgs.length; i++) {
+    const img = cell_imgs[i];
+    img.style.width = `${100 - factor}%`;
+    img.style.height = `${100 - factor / 2}%`;
+    img.style.marginLeft = `${factor * (i / cell_imgs.length)}%`;
+    new_set.push(img);
   }
-  return new_set
-}
+  return new_set;
+};
 
 const update_chart = (obj) => {
-  const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`)
-  const div = document.createElement("div")
-  div.classList.add("img-container")
-  div.style.backgroundImage = `url(${svg_paths[obj.color]})`
-  cell.appendChild(div)
-  const cell_imgs = document.querySelectorAll(`#t${obj.o_tier}${obj.c_tier} > div`)
-  const set_imgs = set_images(cell_imgs)
-  cell.textContent = ""
-  set_imgs.forEach(image => {
-    cell.appendChild(image)
-  })
-}
+  const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`);
+  const div = document.createElement("div");
+  div.classList.add("img-container");
+  div.style.backgroundImage = `url(${svg_paths[obj.color]})`;
+  cell.appendChild(div);
+  const cell_imgs = document.querySelectorAll(
+    `#t${obj.o_tier}${obj.c_tier} > div`
+  );
+  const set_imgs = set_images(cell_imgs);
+  cell.textContent = "";
+  set_imgs.forEach((image) => {
+    cell.appendChild(image);
+  });
+};
 
 const getBanned = () => {
   document.querySelector(".bannMessage").classList.remove("hidden");
-}
+};
 
 const check_ban = () => {
-  if(total_points > 9){
-    getBanned()
+  if (total_points > 9) {
+    getBanned();
   }
-}
+};
 
-const lvl_buttons = document.querySelectorAll(".levels button")
-lvl_buttons.forEach(button => {
-  button.addEventListener("click", (e) => {
-    const classes = e.target.classList
-    const color = classes[1]
-    const tier = Number(classes[0].slice(-1))
-    const obj = get_object(color, tier)
-    update_chart(obj)
-    update_stats(obj, e.target.textContent)
-    check_ban()
-    update_object(obj)
-    form.classList.add("hidden")
-  })
-})
+// const lvl_buttons = document.querySelectorAll(".levels button")
+// lvl_buttons.forEach(button => {
+//   button.addEventListener("click", (e) => {
+//     const classes = e.target.classList
+//     const color = classes[1]
+//     const tier = Number(classes[0].slice(-1))
+//     const obj = get_object(color, tier)
+//     update_chart(obj)
+//     update_stats(obj, e.target.textContent)
+//     check_ban()
+//     update_object(obj)
+//     form.classList.add("hidden")
+//   })
+// })
+
+const forms = document.querySelectorAll(".form");
+forms.forEach((eachForm) => {
+  // eachForm is to avoid name conflict with form
+  eachForm.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+      const classes = e.target.classList;
+      const color = classes[1];
+      const tier = Number(classes[0].slice(-1));
+      const obj = get_object(color, tier);
+      update_chart(obj);
+      update_stats(obj, e.target.textContent);
+      check_ban();
+      update_object(obj);
+    }
+    form.classList.add("hidden");
+  });
+});
 
 const tryAgainButton = document.querySelector(".tryAgainButton");
 tryAgainButton.addEventListener("click", () => {
   levels = create_levels().flat();
   total_points = 0;
-  document.querySelectorAll(".cell").forEach(cell => {
-    cell.textContent = ""
-  })
-  document.querySelector(".zapPointsLabel").textContent = ""
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.textContent = "";
+  });
+  document.querySelector(".zapPointsLabel").textContent = "";
   document.querySelector(".bannMessage").classList.add("hidden");
-})
-
- const timeTravelButton = document.querySelector(".timeTravelButton");
-
-timeTravelButton.addEventListener("click", () => {
-  total_points < 1 ? total_points : total_points--
-  const points = document.querySelector(".t_points")
-  points ? points.textContent = `Current Zap Points: ${total_points}` : null
 });
 
+const timeTravelButton = document.querySelector(".timeTravelButton");
 
-
+timeTravelButton.addEventListener("click", () => {
+  total_points < 1 ? total_points : total_points--;
+  const points = document.querySelector(".t_points");
+  points ? (points.textContent = `Current Zap Points: ${total_points}`) : null;
+});
 
 const verify = (e) => {
-  return [...e.target.classList].includes("moonSvg")
-}
+  return [...e.target.classList].includes("moonSvg");
+};
 
 const darkModeButton = document.querySelector(".dmb");
 
 const swap = (e) => {
-  if(verify(e)){
-    darkModeButton.textContent = ""
-    console.log("yay")
-    const sun = document.querySelector(".sun").content.cloneNode(true)
-    darkModeButton.appendChild(sun)
+  if (verify(e)) {
+    darkModeButton.textContent = "";
+    console.log("yay");
+    const sun = document.querySelector(".sun").content.cloneNode(true);
+    darkModeButton.appendChild(sun);
+  } else {
+    darkModeButton.textContent = "";
+    const moon = document.querySelector(".moon").content.cloneNode(true);
+    darkModeButton.appendChild(moon);
   }
-  else{
-    darkModeButton.textContent = ""
-    const moon = document.querySelector(".moon").content.cloneNode(true)
-    darkModeButton.appendChild(moon)
-  }
-}
+};
 
 darkModeButton.addEventListener("click", (e) => {
-  const lights = document.querySelectorAll(".light")
-  lights.forEach(light => {
-    light.classList.toggle("dark")
-  })
-  console.log(e.target.id)
-  swap(e)
-})
-
+  const lights = document.querySelectorAll(".light");
+  lights.forEach((light) => {
+    light.classList.toggle("dark");
+  });
+  console.log(e.target.id);
+  swap(e);
+});
