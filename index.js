@@ -109,11 +109,11 @@ let total_points = 0;
 let form;
 
 const svg_paths = {
-  red: "./zap.svg",
-  blue: "./zap.svg",
-  green: "./zap.svg",
-  orange: "./zap.svg",
-  black: "./zap.svg"
+  red: "./TOPzap-shade-1.svg",
+  blue: "./TOPzap-shade-2.svg",
+  green: "./TOPzap-shade-3.svg",
+  orange: "./TOPzap-shade-4.svg",
+  black: "./TOPzap-shade-5.svg"
 }
 const generate_level = (color, o_tier, c_tier) => {
   return {
