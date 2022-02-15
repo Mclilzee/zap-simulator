@@ -108,12 +108,13 @@ const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
+//if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
-  red: "./zap.svg",
-  blue: "./zap.svg",
-  green: "./zap.svg",
-  orange: "./zap.svg",
-  black: "./zap.svg"
+  red: "./TOPzap-shade-1.svg",    //tier 0  #ffdc2f
+  blue: "./TOPzap-shade-2.svg",   //tier 1  #eeb434
+  green: "./TOPzap-shade-3.svg",  //tier 2  #e09034
+  orange: "./TOPzap-shade-4.svg", //tier 5  #d47032
+  black: "./TOPzap-shade-5.svg"   //tier 10 #be1e2d
 }
 const generate_level = (color, o_tier, c_tier) => {
   return {
