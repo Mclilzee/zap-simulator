@@ -110,11 +110,11 @@ let form;
 
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
-  red: "./TOPzap-shade-1.svg",    //tier 0
-  blue: "./TOPzap-shade-2.svg",   //tier 1
-  green: "./TOPzap-shade-3.svg",  //tier 2
-  orange: "./TOPzap-shade-4.svg", //tier 5
-  black: "./TOPzap-shade-5.svg"   //tier 10
+  red: "./TOPzap-shade-1.svg",    //tier 0  #ffdc2f
+  blue: "./TOPzap-shade-2.svg",   //tier 1  #eeb434
+  green: "./TOPzap-shade-3.svg",  //tier 2  #e09034
+  orange: "./TOPzap-shade-4.svg", //tier 5  #d47032
+  black: "./TOPzap-shade-5.svg"   //tier 10 #be1e2d
 }
 const generate_level = (color, o_tier, c_tier) => {
   return {
