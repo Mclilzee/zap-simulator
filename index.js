@@ -177,13 +177,18 @@ const update_object = (obj) => {
     obj.add_tier()
 }
 
+const get_factor = (cell_imgs) => {
+  const set_factor = 10 // Gap between each svg
+  return set_factor * (cell_imgs.length - 1)
+}
+
 const set_images = (cell_imgs) => {
-  const factor = 17;
+  const factor = get_factor(cell_imgs)
   const new_set = []
-  const length = cell_imgs.length;
-  for(let i = length - 1 ; i >= 0; i--){
-    const img = cell_imgs[length - (i + 1)]
-    img.style.width = `${100 - (i * factor)}%`
+  for(let i = 0; i < cell_imgs.length; i++){
+    const img = cell_imgs[i]
+    img.style.width = `${100 - factor}%`
+    img.style.marginLeft = `${factor * (i/cell_imgs.length)}%`
     new_set.push(img)
   }
   return new_set

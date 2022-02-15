@@ -210,7 +210,8 @@ button:hover{
   height: 100%;
   position: absolute;
   background-position: center;
-  background-size: contain;
+  background-origin: content-box;
+  background-size: 60% 100%;
   background-repeat: no-repeat;
 }
 
