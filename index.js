@@ -2,6 +2,15 @@ const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
+(function(){
+  const buttons = document.querySelectorAll(".levels button")
+  buttons.forEach(button => {
+    const tag = document.createElement("span");
+    tag.classList.add("tier-tag")
+    button.parentNode.insertBefore(tag, button.nextSibling)
+  })
+})()
+
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
   "0": "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
@@ -46,7 +55,8 @@ const update_buttons = (form) => {
   buttons.forEach(button => {
     const classes = button.classList
     const obj = get_object(classes[1][1], classes[0][1])
-    button.style.backgroundColor = color_codes[`${obj.c_tier}`] 
+    button.style.backgroundColor = color_codes[`${obj.c_tier}`]
+    button.nextSibling.textContent = `Current tier: ${obj.c_tier}`
   })
 }
 
