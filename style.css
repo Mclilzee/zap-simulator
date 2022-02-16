@@ -199,6 +199,13 @@ button:hover{
   transition: all 500ms;
 }
 
+.levels button{
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: 5px solid;
+  border-radius: 0%;
+}
+
 .cell{
   display: flex;
   position: relative;

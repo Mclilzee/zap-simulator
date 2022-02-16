@@ -55,7 +55,7 @@ const update_buttons = (form) => {
   buttons.forEach(button => {
     const classes = button.classList
     const obj = get_object(classes[1][1], classes[0][1])
-    button.style.backgroundColor = color_codes[`${obj.c_tier}`]
+    button.style.borderColor = color_codes[`${obj.c_tier}`]
     button.nextSibling.textContent = `Current tier: ${obj.c_tier}`
   })
 }
