@@ -1,124 +1,36 @@
-/* const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-let tierList = [0, 1, 2, 3, 4];
-let currentZapPoints = 0;
-
-const zapButtons = document.querySelector(".zapButtons");
-
-zapButtons.addEventListener("click", (e) => {
-  const index = Number(e.target.id.slice(-1));
-
-  commitZap(index);
-});
-
-const timeTravelButton = document.querySelector(".timeTravelButton");
-
-timeTravelButton.addEventListener("click", () => {
-  currentZapPoints--;
-
-  if (currentZapPoints < 0) {
-    currentZapPoints = 0;
-  }
-
-  setZapPointsLabel();
-});
-
-const tryAgainButton = document.querySelector(".tryAgainButton");
-
-tryAgainButton.addEventListener("click", () => {
-  document.querySelector(".bannMessage").classList.add("hidden");
-
-  currentZapPoints = 0;
-  setZapPointsLabel();
-  resetBoard();
-});
-
-function resetBoard() {
-  tierList = [0, 1, 2, 3, 4];
-  emptyAllCells();
-}
-
-function emptyAllCells() {
-  document.querySelectorAll(".cell").forEach((cell) => {
-    cell.classList.remove("zapped");
-  });
-}
-
-function commitZap(index) {
-  const zapRank = tierList[index];
-  const zapResult = tierPoints[zapRank];
-  tierList[index] += 1;
-
-  currentZapPoints += zapResult;
-
-  updateBoard(index, zapRank);
-
-  if (currentZapPoints >= 10) {
-    getBanned();
-  }
-}
-
-function updateBoard(index, zapRank) {
-  setZapPointsLabel();
-
-  const cellId = "" + index + zapRank;
-  const cellToUpdate = document.getElementById(cellId);
-  cellToUpdate.classList.add("zapped");
-}
-
-function setZapPointsLabel() {
-  const zapPointsLabel = document.querySelector(".zapPointsLabel");
-  zapPointsLabel.textContent = "Current Zap Points: " + currentZapPoints;
-
-  if (currentZapPoints >= 10) {
-    zapPointsLabel.id = "currentPointsRank3";
-  } else if (currentZapPoints >= 5) {
-    zapPointsLabel.id = "currentPointsRank2";
-  } else {
-    zapPointsLabel.id = "currentPointsRank1";
-  }
-}
-
-function getBanned() {
-  document.querySelector(".bannMessage").classList.remove("hidden");
-}
-
-const darkModeButton = document.querySelector("#darkModeIcon");
-isMoon = true;
-function swapIcon() {
-  if (isMoon) {
-    isMoon = false;
-    darkModeButton.textContent = `🌞`;
-  } else {
-    isMoon = true;
-    darkModeButton.textContent = `🌙`;
-  }
-}
-darkModeButton.addEventListener("click", (e) => {
-  if (e.target.getAttribute("data-theme") === "light") {
-    e.target.setAttribute("data-theme", "dark");
-    document.documentElement.setAttribute("data-theme", "dark");
-  } else {
-    e.target.setAttribute("data-theme", "light");
-    document.documentElement.setAttribute("data-theme", "light");
-  }
-  swapIcon();
-});
-*/
 const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
+(function(){ //adds tier tags
+  const buttons = document.querySelectorAll(".levels button")
+  buttons.forEach(button => {
+    const tag = document.createElement("span");
+    tag.classList.add("tier-tag")
+    button.parentNode.insertBefore(tag, button.nextSibling)
+  })
+})()
+
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
-  red: "./TOPzap-shade-1.svg", //tier 0  #ffdc2f
-  blue: "./TOPzap-shade-2.svg", //tier 1  #eeb434
-  green: "./TOPzap-shade-3.svg", //tier 2  #e09034
-  orange: "./TOPzap-shade-4.svg", //tier 5  #d47032
-  black: "./TOPzap-shade-5.svg", //tier 10 #be1e2d
+  "0": "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
+  "1": "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
+  "2": "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
+  "3": "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
+  "4": "./images/zaps/TOPzap-shade-5.svg" //tier 10 #be1e2d
 };
-const generate_level = (color, o_tier, c_tier) => {
+
+const color_codes = {
+  "0": "#ffdc2f",
+  "1": "#eeb434",
+  "2": "#e09034",
+  "3": "#d47032",
+  "4": "#be1e2d"
+};
+
+const generate_level = (ind, o_tier, c_tier) => {
   return {
-    color: color,
+    ind: ind,
     o_tier: Number(o_tier),
     c_tier: Number(c_tier),
     add_tier: function () {
@@ -128,10 +40,25 @@ const generate_level = (color, o_tier, c_tier) => {
 };
 const create_levels = () => {
   return Object.keys(tierPoints).map((tier) =>
-    Object.keys(svg_paths).map((color) => generate_level(color, tier, tier))
+    Object.keys(svg_paths).map((ind) => generate_level(ind, tier, tier))
   );
 };
+
 let levels = create_levels().flat();
+
+const get_object = (ind, tier) => {
+  return levels.find((level) => level.ind == ind && level.o_tier == tier);
+};
+
+const update_buttons = (form) => {
+  const buttons = [...form.childNodes].filter(node => node.tagName == "BUTTON")
+  buttons.forEach(button => {
+    const classes = button.classList
+    const obj = get_object(classes[1][1], classes[0][1])
+    button.style.borderColor = color_codes[`${obj.c_tier}`]
+    button.nextSibling.textContent = `Current tier: ${obj.c_tier}`
+  })
+}
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
@@ -139,13 +66,10 @@ zapButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const index = Number(e.target.id.slice(-1));
     form = document.querySelector(`.lvl${index}`);
+    update_buttons(form)
     form.classList.remove("hidden");
   });
 });
-
-const get_object = (color, tier) => {
-  return levels.find((level) => level.color == color && level.o_tier == tier);
-};
 
 const get_stats = (obj, offense) => {
   const points = document.createElement("div");
@@ -198,7 +122,7 @@ const update_chart = (obj) => {
   const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`);
   const div = document.createElement("div");
   div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svg_paths[obj.color]})`;
+  div.style.backgroundImage = `url(${svg_paths[obj.c_tier]})`;
   cell.appendChild(div);
   const cell_imgs = document.querySelectorAll(
     `#t${obj.o_tier}${obj.c_tier} > div`
@@ -220,30 +144,15 @@ const check_ban = () => {
   }
 };
 
-// const lvl_buttons = document.querySelectorAll(".levels button")
-// lvl_buttons.forEach(button => {
-//   button.addEventListener("click", (e) => {
-//     const classes = e.target.classList
-//     const color = classes[1]
-//     const tier = Number(classes[0].slice(-1))
-//     const obj = get_object(color, tier)
-//     update_chart(obj)
-//     update_stats(obj, e.target.textContent)
-//     check_ban()
-//     update_object(obj)
-//     form.classList.add("hidden")
-//   })
-// })
-
 const forms = document.querySelectorAll(".form");
 forms.forEach((eachForm) => {
   // eachForm is to avoid name conflict with form
   eachForm.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
       const classes = e.target.classList;
-      const color = classes[1];
+      const ind = classes[1][1];
       const tier = Number(classes[0].slice(-1));
-      const obj = get_object(color, tier);
+      const obj = get_object(ind, tier);
       update_chart(obj);
       update_stats(obj, e.target.textContent);
       check_ban();
