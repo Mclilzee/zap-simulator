@@ -2,7 +2,7 @@ const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
-(function(){
+(function(){ //adds tier tags
   const buttons = document.querySelectorAll(".levels button")
   buttons.forEach(button => {
     const tag = document.createElement("span");
