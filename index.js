@@ -2,30 +2,31 @@ const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
 let total_points = 0;
 let form;
 
-(function(){ //adds tier tags
-  const buttons = document.querySelectorAll(".levels button")
-  buttons.forEach(button => {
+(function () {
+  //adds tier tags
+  const buttons = document.querySelectorAll(".levels button");
+  buttons.forEach((button) => {
     const tag = document.createElement("span");
-    tag.classList.add("tier-tag")
-    button.parentNode.insertBefore(tag, button.nextSibling)
-  })
-})()
+    tag.classList.add("tier-tag");
+    button.parentNode.insertBefore(tag, button.nextSibling);
+  });
+})();
 
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svg_paths = {
-  "0": "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
-  "1": "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
-  "2": "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
-  "3": "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
-  "4": "./images/zaps/TOPzap-shade-5.svg" //tier 10 #be1e2d
+  0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
+  1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
+  2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
+  3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
+  4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
 };
 
 const color_codes = {
-  "0": "#ffdc2f",
-  "1": "#eeb434",
-  "2": "#e09034",
-  "3": "#d47032",
-  "4": "#be1e2d"
+  0: "#ffdc2f",
+  1: "#eeb434",
+  2: "#e09034",
+  3: "#d47032",
+  4: "#be1e2d",
 };
 
 const generate_level = (ind, o_tier, c_tier) => {
@@ -51,14 +52,16 @@ const get_object = (ind, tier) => {
 };
 
 const update_buttons = (form) => {
-  const buttons = [...form.childNodes].filter(node => node.tagName == "BUTTON")
-  buttons.forEach(button => {
-    const classes = button.classList
-    const obj = get_object(classes[1][1], classes[0][1])
-    button.style.borderColor = color_codes[`${obj.c_tier}`]
-    button.nextSibling.textContent = `Current tier: ${obj.c_tier}`
-  })
-}
+  const buttons = [...form.childNodes].filter(
+    (node) => node.tagName == "BUTTON"
+  );
+  buttons.forEach((button) => {
+    const classes = button.classList;
+    const obj = get_object(classes[1][1], classes[0][1]);
+    button.style.borderColor = color_codes[`${obj.c_tier}`];
+    button.nextSibling.textContent = `Current tier: ${obj.c_tier}`;
+  });
+};
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
@@ -66,7 +69,7 @@ zapButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const index = Number(e.target.id.slice(-1));
     form = document.querySelector(`.lvl${index}`);
-    update_buttons(form)
+    update_buttons(form);
     form.classList.remove("hidden");
   });
 });
@@ -162,16 +165,22 @@ forms.forEach((eachForm) => {
   });
 });
 
-const tryAgainButton = document.querySelector(".tryAgainButton");
-tryAgainButton.addEventListener("click", () => {
+const resetSimulator = () => {
   levels = create_levels().flat();
   total_points = 0;
   document.querySelectorAll(".cell").forEach((cell) => {
     cell.textContent = "";
   });
-  document.querySelector(".zapPointsLabel").textContent = "";
+  document.querySelector(".zapPointsLabel").textContent =
+    "Welcome, you are clean right now";
   document.querySelector(".bannMessage").classList.add("hidden");
-});
+};
+
+const tryAgainButton = document.querySelector(".tryAgainButton");
+tryAgainButton.addEventListener("click", resetSimulator);
+
+const resetButton = document.querySelector(".resetButton");
+resetButton.addEventListener("click", resetSimulator);
 
 const timeTravelButton = document.querySelector(".timeTravelButton");
 
