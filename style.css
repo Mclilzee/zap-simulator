@@ -13,7 +13,7 @@
   --grid-border: #000;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --body-bg: #121212;
   --sm-text-primary: #b3b3b3;
   --button-primary: #cc9543;
@@ -32,8 +32,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 body {
@@ -94,6 +94,13 @@ body {
   stroke: white;
   height: 24px;
   width: 24px;
+}
+
+.closeSvg {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
 }
 
 button {
