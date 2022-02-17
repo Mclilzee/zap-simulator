@@ -190,14 +190,18 @@ timeTravelButton.addEventListener('click', () => {
   points ? (points.textContent = `Current Zap Points: ${total_points}`) : null;
 });
 
-const verify = (e) => {
-  return [...e.target.classList].includes('moonSvg');
+const verifyForSun = (e) => {
+  return e.target.classList.contains("sunSvg");
+};
+
+const verifyForMoon = (e) => {
+  return e.target.classList.contains("moonSvg");
 };
 
 const darkModeButton = document.querySelector('.dmb');
 
 const swap = (e) => {
-  if (verify(e)) {
+  if (verifyForMoon(e)) {
     darkModeButton.textContent = '';
     console.log('yay');
     const sun = document.querySelector('.sun').content.cloneNode(true);
@@ -210,10 +214,12 @@ const swap = (e) => {
 };
 
 darkModeButton.addEventListener('click', (e) => {
+  if(verifyForMoon(e) || verifyForSun(e)){
   const lights = document.querySelectorAll('.light');
   lights.forEach((light) => {
     light.classList.toggle('dark');
   });
   console.log(e.target.id);
   swap(e);
+}
 });
