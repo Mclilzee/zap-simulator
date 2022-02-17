@@ -1,31 +1,16 @@
 :root {
-  --body-bg: #fff;
-  --sm-text-primary: #cc9543;
+  --body-bg: rgba(238, 238, 238, 0.774);
+  --color-accent: #cc9543;
+  --color-gray: rgba(214, 205, 205, 0.7);
   --button-primary: #6abfc3;
-  --button-primary-hover: #87cbce;
-  --button-opacity-hover: 1;
   --text-primary: #4a4a4a;
-  --button-lg: #eeeeee;
-  --button-lg-hover: #eeeeee;
-  --button-lg-text: rgba(0, 0, 0, 0.63);
-  --button-lg-text-hover: #000;
-  --grid-skipped-bg: #000;
-  --grid-border: #000;
 }
 
 [data-theme='dark'] {
   --body-bg: #121212;
-  --sm-text-primary: #b3b3b3;
+  --color-accent: #b3b3b3;
   --button-primary: #cc9543;
-  --button-primary-hover: #cc9543;
-  --button-opacity-hover: 0.8;
   --text-primary: #ec761f;
-  --button-lg: #6abfc3;
-  --button-lg-hover: #6abfc3;
-  --button-lg-text: #fff;
-  --button-lg-text-hover: #fff;
-  --grid-skipped-bg: #3b3b3b;
-  --grid-border: #3b3b3b;
 }
 
 * {
@@ -40,7 +25,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: rgba(238, 238, 238, 0.774);
+  background-color: var(--body-bg);
 }
 
 .header {
@@ -108,7 +93,7 @@ button {
   width: 80%;
   font-size: 10px;
   padding: 2%;
-  background-color: #6abfc3;
+  background-color: var(--button-primary);
   text-align: center;
   text-decoration: none;
   font-weight: bold;
@@ -132,7 +117,7 @@ button:hover {
 }
 
 .pointsLabel {
-  color: #cc9543;
+  color: var(--color-accent);
   font-size: 80%;
   font-weight: light;
   text-align: center;
@@ -147,7 +132,7 @@ button:hover {
   width: 17%;
   margin: 1%;
   font-size: 15px;
-  color: #4a4a4a;
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
 }
@@ -167,7 +152,6 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--body-bg);
   justify-content: center;
   position: absolute;
   z-index: 2;
@@ -237,7 +221,7 @@ button:hover {
 .resetButton {
   margin-top: auto;
   height: 30%;
-  background-color: #cc9543;
+  background-color:var(--color-accent);
   color: #fff;
 }
 
@@ -249,7 +233,7 @@ button:hover {
 
 .link {
   text-decoration: none;
-  color: #cc9543;
+  color: var(--color-accent);
   font-weight: bold;
 }
 
@@ -266,11 +250,11 @@ body.dark {
 }
 
 .skipped.dark {
-  background-color: rgba(214, 205, 205, 0.7);
+  background-color: var(--color-gray);
 }
 
 .cell.dark {
-  border-color: rgba(214, 205, 205, 0.7);
+  border-color: var(--color-gray);
 }
 
 .ref.dark,
@@ -281,11 +265,11 @@ body.dark {
 
 .timeTravelButton.dark,
 .resetButton.dark {
-  background-color: #6abfc3;
+  background-color: var(--button-primary);
 }
 
 .zapButton.dark {
-  background-color: #cc9543;
+  background-color: var(--color-accent);
 }
 
 svg:hover {
