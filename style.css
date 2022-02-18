@@ -203,6 +203,7 @@ button:hover {
   z-index: 2;
   overflow: hidden;
   transition: all ease-out 500ms;
+  backdrop-filter: blur(5px);
 }
 
 .form {
