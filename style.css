@@ -1,16 +1,29 @@
 :root {
   --body-bg: rgba(238, 238, 238, 0.774);
   --color-accent: #cc9543;
-  --color-gray: rgba(214, 205, 205, 0.7);
+  --skipped-color: black;
+  --gray-color: rgba(214, 205, 205, 0.7);
   --button-primary: #6abfc3;
+  --button-secondary: #cc9543;
   --text-primary: #4a4a4a;
+  --disclaimer-message-bg: rgba(255, 255, 255, 0.89);
+  --footer-bg: rgb(255, 255, 255);
+  --white-black: black;
+  --ref-color: rgba(74, 74, 74, 0.7);
+  --level-buttons: rgb(255, 255, 255);
 }
 
-[data-theme="dark"] {
-  --body-bg: #121212;
-  --color-accent: #b3b3b3;
+:root.dark {
+  --skipped-color: rgb(179, 177, 177);
+  --body-bg: rgba(32, 34, 32, 1);
   --button-primary: #cc9543;
+  --button-secondary: #6abfc3;
   --text-primary: #ec761f;
+  --disclaimer-message-bg: rgb(54, 52, 52);
+  --footer-bg: black;
+  --white-black: white;
+  --ref-color: white;
+  --level-buttons: #4b4747;
 }
 
 * {
@@ -19,6 +32,7 @@
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  transition: background ease-in 200ms, border-color ease-out 500ms;
 }
 
 body {
@@ -36,11 +50,30 @@ body {
   padding: 1%;
 }
 
+.disclaimerScreen {
+  background-color: rgba(128, 128, 128, 0.849);
+}
+
+.disclaimerMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 50%;
+  background-color: var(--disclaimer-message-bg);
+  color: var(--white-black);
+  border-radius: 10% 20% 10% 20%;
+  padding: 5%;
+  font-weight: bold;
+  font-size: min(32px, 2vw);
+  box-shadow: 0 0.05rem 0.25rem 0 rgb(0 0 0 / 50%);
+}
+
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--footer-bg);
   padding: 1%;
 }
 
@@ -75,10 +108,11 @@ body {
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
 }
 
-.sunSvg {
-  stroke: white;
-  height: 24px;
+.themeSvg {
+  color: var(--white-black);
   width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 
 .closeSvg {
@@ -124,10 +158,6 @@ button:hover {
   align-self: center;
 }
 
-.skipped {
-  background-color: black;
-}
-
 .statBox {
   height: 40%;
   width: 17%;
@@ -146,8 +176,23 @@ button:hover {
   background-color: hsla(360, 84%, 60%, 0.5);
 }
 
+.skipped {
+  background-color: var(--skipped-color);
+}
+
+.cell {
+  border-color: var(--color-gray);
+}
+
+.ref,
+.statBox,
+.title {
+  color: var(--white-black);
+}
+
 .form,
-.bannMessage {
+.bannMessage,
+.disclaimerScreen {
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -170,7 +215,8 @@ button:hover {
 }
 
 .form > button,
-.bannMessage > button {
+.bannMessage > button,
+.disclaimerConfirmButton {
   height: 7%;
   width: 200px;
   margin: 1%;
@@ -189,10 +235,10 @@ button:hover {
 }
 
 .levels button {
-  background-color: rgb(255, 255, 255);
-  color: black;
+  background-color: var(--level-buttons);
+  color: var(--white-black);
   border: 5px solid;
-  border-radius: 0%;
+  border-radius: 5% 20%;
 }
 
 .cell {
@@ -200,13 +246,13 @@ button:hover {
   position: relative;
   overflow: hidden;
   align-items: center;
-  border: solid black 1px;
+  border: solid var(--skipped-color) 1px;
 }
 
 .tier-tag {
   font-size: 15px;
   font-weight: bold;
-  color: #070708;
+  color: var(--white-black);
   margin-bottom: 8px;
 }
 
@@ -222,13 +268,12 @@ button:hover {
 .resetButton {
   margin-top: auto;
   height: 30%;
-  background-color: var(--color-accent);
+  background-color: var(--button-secondary);
   color: #fff;
   margin: 0.5em 0;
 }
 
 .ref {
-  color: rgba(74, 74, 74, 0.7);
   font-weight: bold;
   font-size: 15px;
 }
@@ -243,47 +288,12 @@ button:hover {
   color: #fd9800;
 }
 
-body.dark {
-  background-color: rgba(32, 34, 32, 1);
-}
-
-.footer.dark {
-  background-color: black;
-}
-
-.skipped.dark {
-  background-color: var(--color-gray);
-}
-
-.cell.dark {
-  border-color: var(--color-gray);
-}
-
-.ref.dark,
-.statBox.dark,
-.title.dark {
-  color: white;
-}
-
-.timeTravelButton.dark,
-.resetButton.dark {
-  background-color: var(--button-primary);
-}
-
-.zapButton.dark {
-  background-color: var(--color-accent);
-}
-
 svg:hover {
   filter: invert(0.5) sepia(1) hue-rotate(200deg) saturate(4) brightness(1);
 }
 
-.dark {
-  transition: background ease-in 200ms, border-color ease-out 500ms;
-}
-
-.light {
-  transition: background ease-in 200ms, border-color ease-out 500ms;
+.notDisplayed {
+  display: none;
 }
 
 @media only screen and (max-width: 680px) {
