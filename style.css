@@ -108,10 +108,10 @@ body {
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
 }
 
-.sunSvg {
-  stroke: white;
-  height: 24px;
+.themeSvg {
+  color: var(--white-black);
   width: 24px;
+  height: 24px;
   cursor: pointer;
 }
 
@@ -152,7 +152,7 @@ button:hover {
 
 .pointsLabel {
   color: var(--color-accent);
-  font-size: 80%;
+  font-size: 0.9rem;
   font-weight: light;
   text-align: center;
 }
@@ -288,7 +288,6 @@ button:hover {
 
 svg:hover {
   filter: invert(0.5) sepia(1) hue-rotate(200deg) saturate(4) brightness(1);
-  cursor: pointer;
 }
 
 .notDisplayed {
