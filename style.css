@@ -73,7 +73,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--footer-bg);
+  background-color: rgb(255, 255, 255);
   padding: 1%;
 }
 
@@ -101,11 +101,12 @@ body {
 }
 
 .grid {
-  height: 80%;
+  width: 80%;
   aspect-ratio: 4/3;
   display: grid;
   grid-template-columns: 4fr 2fr 2fr 2fr 2fr 2fr;
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
+  max-width: 650px;
 }
 
 .themeSvg {
@@ -159,7 +160,7 @@ button:hover {
 
 .statBox {
   height: 40%;
-  width: 17%;
+  width: 20%;
   margin: 1%;
   font-size: 15px;
   color: var(--text-primary);
@@ -303,10 +304,10 @@ svg:hover {
     align-items: center;
     font-size: 15px;
   }
-  .timeTravelButton,
+  /*.timeTravelButton,
   .resetButton {
     transform: scale(0.5, 0.7);
-  }
+  }*/
   .footer,
   .ref,
   .link {
@@ -324,12 +325,14 @@ svg:hover {
 
 @media only screen and (max-width: 480px) {
   .grid {
-    transform: scale(0.5, 0.5);
-    margin-top: -80px;
+    width: 95vw;
+    min-width: 304px;
+    /* transform: scale(0.5, 0.5); */
+    /* margin-top: -80px; */
   }
-  .statBox {
+  /*.statBox {
     margin-top: -80px;
-  }
+  }*/
 
   .pointsLabel {
     font-weight: bold;
