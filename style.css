@@ -73,7 +73,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--footer-bg);
+  background-color: rgb(255, 255, 255);
   padding: 1%;
 }
 
@@ -101,11 +101,12 @@ body {
 }
 
 .grid {
-  height: 80%;
+  width: 80%;
   aspect-ratio: 4/3;
   display: grid;
   grid-template-columns: 4fr 2fr 2fr 2fr 2fr 2fr;
   grid-template-rows: 1fr 2fr 2fr 2fr 2fr 2fr;
+  max-width: 650px;
 }
 
 .themeSvg {
@@ -160,7 +161,7 @@ button:hover {
 
 .statBox {
   height: 40%;
-  width: 17%;
+  width: 20%;
   margin: 1%;
   font-size: 15px;
   color: var(--text-primary);
@@ -203,6 +204,7 @@ button:hover {
   z-index: 2;
   overflow: hidden;
   transition: all ease-out 500ms;
+  backdrop-filter: blur(5px);
 }
 .zapButton {
   padding: 0.2em 0.4em;
@@ -320,7 +322,10 @@ svg:hover {
   .timeTravelButton,
   .resetButton {
     height: 20%;
-  }
+ }
+
+  
+
   .footer,
   .ref,
   .link {
@@ -341,7 +346,6 @@ svg:hover {
     width: 100%;
     height: 50%;
   }
-
   .pointsLabel {
     font-weight: bold;
   }
