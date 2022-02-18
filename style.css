@@ -204,6 +204,9 @@ button:hover {
   overflow: hidden;
   transition: all ease-out 500ms;
 }
+.zapButton {
+  padding: 0.2em 0.4em;
+}
 
 .form {
   background-color: rgba(149, 161, 189, 0.7);
