@@ -126,7 +126,7 @@ body {
 button {
   height: 80%;
   width: 80%;
-  font-size: 10px;
+  font-size: clamp(0.625rem, 0.4375rem + 0.8333vw, 0.875rem);
   padding: 2%;
   background-color: var(--button-primary);
   text-align: center;
@@ -153,9 +153,10 @@ button:hover {
 
 .pointsLabel {
   color: var(--color-accent);
-  font-size: 0.9rem;
+  font-size: clamp(0.625rem, 0.3906rem + 1.0417vw, 0.9375rem);
   font-weight: light;
   text-align: center;
+  align-self: center;
 }
 
 .statBox {
@@ -204,6 +205,9 @@ button:hover {
   overflow: hidden;
   transition: all ease-out 500ms;
   backdrop-filter: blur(5px);
+}
+.zapButton {
+  padding: 0.2em 0.4em;
 }
 
 .form {
@@ -271,6 +275,7 @@ button:hover {
   height: 30%;
   background-color: var(--button-secondary);
   color: #fff;
+  margin: 0.5em 0;
 }
 
 .ref {
@@ -297,22 +302,34 @@ svg:hover {
 }
 
 @media only screen and (max-width: 680px) {
+  body {
+    gap: 0.5em;
+  }
+  .header {
+    height: 10%;
+  }
   .main {
     flex-direction: column;
+    width: 95%;
+    margin: 0 auto;
   }
   .statBox {
     width: 100%;
     align-items: center;
+    justify-content: center;
     font-size: 15px;
   }
-  /*.timeTravelButton,
+  .timeTravelButton,
   .resetButton {
-    transform: scale(0.5, 0.7);
-  }*/
+    height: 20%;
+ }
+
+  
+
   .footer,
   .ref,
   .link {
-    font-size: 2vw;
+    font-size: 2.3vw;
   }
   .title,
   .odinHeadIcon {
@@ -326,15 +343,9 @@ svg:hover {
 
 @media only screen and (max-width: 480px) {
   .grid {
-    width: 95vw;
-    min-width: 304px;
-    /* transform: scale(0.5, 0.5); */
-    /* margin-top: -80px; */
+    width: 100%;
+    height: 50%;
   }
-  /*.statBox {
-    margin-top: -80px;
-  }*/
-
   .pointsLabel {
     font-weight: bold;
   }
