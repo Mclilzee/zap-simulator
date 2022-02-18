@@ -66,7 +66,7 @@ const update_buttons = (form) => {
     const classes = button.classList;
     const obj = get_object(classes[1][1], classes[0][1]);
     button.style.borderColor = color_codes[`${obj.c_tier}`];
-    button.nextSibling.textContent = `Current tier: ${obj.c_tier}`;
+    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.c_tier]}`;
   });
 };
 
@@ -197,36 +197,14 @@ timeTravelButton.addEventListener("click", () => {
   points ? (points.textContent = `Current Zap Points: ${total_points}`) : null;
 });
 
-const verifyForSun = (e) => {
-  return e.target.classList.contains("sunSvg");
-};
+const themeIconsButton = document.querySelector(".themeIcons");
 
-const verifyForMoon = (e) => {
-  return e.target.classList.contains("moonSvg");
-};
-
-const darkModeButton = document.querySelector(".dmb");
-
-const swap = (e) => {
-  if (verifyForMoon(e)) {
-    darkModeButton.textContent = "";
-    console.log("yay");
-    const sun = document.querySelector(".sun").content.cloneNode(true);
-    darkModeButton.appendChild(sun);
-  } else {
-    darkModeButton.textContent = "";
-    const moon = document.querySelector(".moon").content.cloneNode(true);
-    darkModeButton.appendChild(moon);
-  }
-};
-
-darkModeButton.addEventListener("click", (e) => {
-  if (verifyForMoon(e) || verifyForSun(e)) {
-    const lights = document.querySelectorAll(".light");
-    lights.forEach((light) => {
-      light.classList.toggle("dark");
-    });
-    console.log(e.target.id);
-    swap(e);
-  }
+themeIconsButton.addEventListener("click", () => {
+  document.documentElement.classList.toggle("dark");
+  swapThemeIcon();
 });
+
+const swapThemeIcon = () => {
+  const themeIcons = document.querySelectorAll(".themeSvg");
+  themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
+};
