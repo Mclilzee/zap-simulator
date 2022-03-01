@@ -16,7 +16,7 @@
   --fs-small: clamp(0.83rem, calc(0.78rem + 0.28vw), 1.31rem);
   --fs-base: clamp(1rem, calc(0.92rem + 0.44vw), 1.75rem);
   --fs-large: clamp(1.2rem, calc(1.07rem + 0.67vw), 2.33rem);
-  --fs-heading: clamp(2.07rem, calc(1.69rem + 2.05vw), 5.53rem);
+  --fs-heading: clamp(1.73rem, calc(1.46rem + 1.43vw), 4.14rem);
 }
 
 :root.dark {
