@@ -111,6 +111,7 @@ body {
   display: grid;
   grid-template-columns: 2fr repeat(5, 1fr);
   grid-template-rows: 1fr repeat(5, 2fr);
+  aspect-ratio: 4/3;
 }
 
 .themeSvg {
@@ -185,7 +186,6 @@ button:hover {
 }
 
 .cell {
-  aspect-ratio: 1;
   border-color: var(--color-gray);
 }
 
@@ -326,6 +326,10 @@ svg:hover {
     width: 95%;
     margin: 0 auto;
     padding: 0;
+  }
+
+  .cell {
+    aspect-ratio: 1;
   }
 
   .statBox {
