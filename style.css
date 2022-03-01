@@ -108,7 +108,6 @@ body {
 }
 
 .grid {
-  aspect-ratio: 4/3;
   display: grid;
   grid-template-columns: 2fr repeat(5, 1fr);
   grid-template-rows: 1fr repeat(5, 2fr);
@@ -186,6 +185,7 @@ button:hover {
 }
 
 .cell {
+  aspect-ratio: 1;
   border-color: var(--color-gray);
 }
 
@@ -229,11 +229,15 @@ button:hover {
 .bannMessage > button,
 .disclaimerConfirmButton {
   padding: 0.8em 1em;
-  min-width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--fs-base);
+}
+
+.form > button,
+.bannMessage > button {
+  min-width: 200px;
 }
 
 .bannMessage > button {
@@ -286,7 +290,7 @@ button:hover {
   color: #fff;
   margin: 0.5em 0;
   padding: 1em 2em;
-  max-width: 60%;
+  max-width: 70%;
 }
 
 .ref {
@@ -323,6 +327,7 @@ svg:hover {
     margin: 0 auto;
     padding: 0;
   }
+
   .statBox {
     width: 100%;
     align-items: center;
@@ -330,16 +335,16 @@ svg:hover {
     font-size: 15px;
   }
 
-  .title,
-  .odinHeadIcon {
-    transform: scale(0.5, 0.5);
-  }
   .disclaimerMessageContainer {
     width: 70%;
   }
 }
 
 @media only screen and (max-width: 480px) {
+  .title,
+  .odinHeadIcon {
+    transform: scale(0.65, 0.65);
+  }
   .pointsLabel {
     font-weight: bold;
   }
@@ -348,5 +353,20 @@ svg:hover {
   }
   .disclaimerConfirmButton {
     font-size: var(--fs-button);
+  }
+}
+
+@media only screen and (min-width: 1500px) {
+  .main {
+    flex-grow: 1;
+  }
+  .grid {
+    height: 60vh;
+  }
+  button {
+    font-size: var(--fs-base);
+  }
+  .pointsLabel {
+    font-size: var(--fs-base);
   }
 }
