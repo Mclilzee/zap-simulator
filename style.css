@@ -254,6 +254,7 @@ button:hover {
   color: var(--white-black);
   border: 5px solid;
   border-radius: 5% 20%;
+  width: clamp(320px, 60vw, 400px);
 }
 
 .cell {
