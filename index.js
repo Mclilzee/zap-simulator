@@ -3,37 +3,39 @@ let totalPoints = 0;
 let form;
 
 const disclaimerConfirmButton = document.querySelector(
-  '.disclaimerConfirmButton'
+  ".disclaimerConfirmButton"
 );
-disclaimerConfirmButton.addEventListener('click', () => {
-  document.querySelector('.disclaimerScreen').remove();
+disclaimerConfirmButton.addEventListener("click", () => {
+  document.querySelector(".disclaimerScreen").remove();
 });
 
 (function () {
   //adds tier tags
-  const buttons = document.querySelectorAll('.levels button');
+  const buttons = document.querySelectorAll(
+    ".levels .combinedOffencesContainer .offenceContainer button"
+  );
   buttons.forEach((button) => {
-    const tag = document.createElement('span');
-    tag.classList.add('tier-tag');
+    const tag = document.createElement("span");
+    tag.classList.add("tier-tag");
     button.parentNode.insertBefore(tag, button.nextSibling);
   });
 })();
 
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
 const svgPaths = {
-  0: './images/zaps/TOPzap-shade-1.svg', //tier 0  #ffdc2f
-  1: './images/zaps/TOPzap-shade-2.svg', //tier 1  #eeb434
-  2: './images/zaps/TOPzap-shade-3.svg', //tier 2  #e09034
-  3: './images/zaps/TOPzap-shade-4.svg', //tier 5  #d47032
-  4: './images/zaps/TOPzap-shade-5.svg', //tier 10 #be1e2d
+  0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
+  1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
+  2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
+  3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
+  4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
 };
 
 const colorCodes = {
-  0: '#ffdc2f',
-  1: '#eeb434',
-  2: '#e09034',
-  3: '#d47032',
-  4: '#be1e2d',
+  0: "#ffdc2f",
+  1: "#eeb434",
+  2: "#e09034",
+  3: "#d47032",
+  4: "#be1e2d",
 };
 
 const generateLevel = (ind, o_tier, c_tier) => {
@@ -59,9 +61,16 @@ const getObject = (ind, tier) => {
 };
 
 const updateButtons = (form) => {
-  const buttons = [...form.childNodes].filter(
-    (node) => node.tagName == 'BUTTON'
-  );
+  const combinedOffencesContainer = form.lastElementChild;
+
+  let buttons = [];
+  [...combinedOffencesContainer.childNodes].forEach((element) => {
+    const button = [...element.childNodes].filter(
+      (node) => node.tagName == "BUTTON"
+    );
+    buttons = [...buttons, ...button];
+  });
+
   buttons.forEach((button) => {
     const classes = button.classList;
     const obj = getObject(classes[1][1], classes[0][1]);
@@ -70,23 +79,23 @@ const updateButtons = (form) => {
   });
 };
 
-const zapButtons = document.querySelectorAll('.zapButton');
+const zapButtons = document.querySelectorAll(".zapButton");
 
 zapButtons.forEach((button) => {
-  button.addEventListener('click', (e) => {
+  button.addEventListener("click", (e) => {
     const index = Number(e.target.id.slice(-1));
     form = document.querySelector(`.lvl${index}`);
     updateButtons(form);
-    form.classList.remove('hidden');
+    form.classList.remove("hidden");
   });
 });
 
 const getStats = (obj, offense) => {
-  const points = document.createElement('div');
-  points.style.fontWeight = 'bold';
-  const name = document.createElement('div');
-  const cPoints = document.createElement('div');
-  points.classList.add('t_points');
+  const points = document.createElement("div");
+  points.style.fontWeight = "bold";
+  const name = document.createElement("div");
+  const cPoints = document.createElement("div");
+  points.classList.add("t_points");
   points.textContent = `Current Zap Points: ${totalPoints}`;
   name.textContent = `Last offense committed: ${offense}`;
   cPoints.textContent = `${offense}'s tier moved: ${
@@ -97,11 +106,11 @@ const getStats = (obj, offense) => {
 
 const updateStats = (obj, offense) => {
   totalPoints += tierPoints[obj.c_tier];
-  const displayStats = document.querySelector('.zapPointsLabel');
+  const displayStats = document.querySelector(".zapPointsLabel");
   const stats = getStats(obj, offense);
-  displayStats.textContent = '';
+  displayStats.textContent = "";
   stats.forEach((stat) => {
-    stat.classList.add('stat');
+    stat.classList.add("stat");
     displayStats.appendChild(stat);
   });
 };
@@ -130,22 +139,22 @@ const setImages = (cellImgs) => {
 
 const updateChart = (obj) => {
   const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`);
-  const div = document.createElement('div');
-  div.classList.add('img-container');
+  const div = document.createElement("div");
+  div.classList.add("img-container");
   div.style.backgroundImage = `url(${svgPaths[obj.c_tier]})`;
   cell.appendChild(div);
   const cellImgs = document.querySelectorAll(
     `#t${obj.o_tier}${obj.c_tier} > div`
   );
   const setImgs = setImages(cellImgs);
-  cell.textContent = '';
+  cell.textContent = "";
   setImgs.forEach((image) => {
     cell.appendChild(image);
   });
 };
 
 const getBanned = () => {
-  document.querySelector('.bannMessage').classList.remove('hidden');
+  document.querySelector(".bannMessage").classList.remove("hidden");
 };
 
 const checkBan = () => {
@@ -154,11 +163,11 @@ const checkBan = () => {
   }
 };
 
-const forms = document.querySelectorAll('.form');
+const forms = document.querySelectorAll(".form");
 forms.forEach((eachForm) => {
   // eachForm is to avoid name conflict with form
-  eachForm.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
+  eachForm.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
       const classes = e.target.classList;
       const ind = classes[1][1];
       const tier = Number(classes[0].slice(-1));
@@ -168,56 +177,56 @@ forms.forEach((eachForm) => {
       checkBan();
       updateObject(obj);
     }
-    form.classList.add('hidden');
+    form.classList.add("hidden");
   });
 });
 
 const resetSimulator = () => {
   levels = createLevels().flat();
   totalPoints = 0;
-  document.querySelectorAll('.cell').forEach((cell) => {
-    cell.textContent = '';
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.textContent = "";
   });
-  document.querySelector('.zapPointsLabel').textContent =
-    'Welcome, you are clean right now';
-  document.querySelector('.bannMessage').classList.add('hidden');
+  document.querySelector(".zapPointsLabel").textContent =
+    "Welcome, you are clean right now";
+  document.querySelector(".bannMessage").classList.add("hidden");
 };
 
-const tryAgainButton = document.querySelector('.tryAgainButton');
-tryAgainButton.addEventListener('click', resetSimulator);
+const tryAgainButton = document.querySelector(".tryAgainButton");
+tryAgainButton.addEventListener("click", resetSimulator);
 
-const resetButton = document.querySelector('.resetButton');
-resetButton.addEventListener('click', resetSimulator);
+const resetButton = document.querySelector(".resetButton");
+resetButton.addEventListener("click", resetSimulator);
 
-const timeTravelButton = document.querySelector('.timeTravelButton');
+const timeTravelButton = document.querySelector(".timeTravelButton");
 
-timeTravelButton.addEventListener('click', () => {
+timeTravelButton.addEventListener("click", () => {
   totalPoints < 1 ? totalPoints : totalPoints--;
-  const points = document.querySelector('.t_points');
+  const points = document.querySelector(".t_points");
   points ? (points.textContent = `Current Zap Points: ${totalPoints}`) : null;
 });
 
-const themeIconsButton = document.querySelector('.themeIcons');
+const themeIconsButton = document.querySelector(".themeIcons");
 
-themeIconsButton.addEventListener('click', () => {
-  document.documentElement.classList.toggle('dark');
+themeIconsButton.addEventListener("click", () => {
+  document.documentElement.classList.toggle("dark");
   swapThemeIcon();
 
-  if (document.documentElement.classList.contains('dark')) {
-    localStorage.setItem('dark-mode', 'true');
+  if (document.documentElement.classList.contains("dark")) {
+    localStorage.setItem("dark-mode", "true");
   } else {
-    localStorage.setItem('dark-mode', 'false');
+    localStorage.setItem("dark-mode", "false");
   }
 });
 
 const swapThemeIcon = () => {
-  const themeIcons = document.querySelectorAll('.themeSvg');
-  themeIcons.forEach((icon) => icon.classList.toggle('notDisplayed'));
+  const themeIcons = document.querySelectorAll(".themeSvg");
+  themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
 };
 
-if (localStorage.getItem('dark-mode') === 'true') {
-  document.documentElement.classList.add('dark');
+if (localStorage.getItem("dark-mode") === "true") {
+  document.documentElement.classList.add("dark");
   swapThemeIcon();
 } else {
-  document.documentElement.classList.remove('dark');
+  document.documentElement.classList.remove("dark");
 }
