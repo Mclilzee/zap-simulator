@@ -38,9 +38,9 @@ const colorCodes = {
   4: "#be1e2d",
 };
 
-const generateLevel = (ind, offenseTier, tierAfterOffense) => {
+const generateLevel = (offenseFormButton, offenseTier, tierAfterOffense) => {
   return {
-    ind: ind,
+    offenseFormButton: offenseFormButton,
     offenseTier: Number(offenseTier),
     tierAfterOffense: Number(tierAfterOffense),
     add_tier: function () {
@@ -50,14 +50,14 @@ const generateLevel = (ind, offenseTier, tierAfterOffense) => {
 };
 const createLevels = () => {
   return Object.keys(tierPoints).map((tier) =>
-    Object.keys(svgPaths).map((ind) => generateLevel(ind, tier, tier))
+    Object.keys(svgPaths).map((offenseFormButton) => generateLevel(offenseFormButton, tier, tier))
   );
 };
 
 let levels = createLevels().flat();
 
-const getObject = (ind, tier) => {
-  return levels.find((level) => level.ind == ind && level.offenseTier == tier);
+const getObject = (offenseFormButton, tier) => {
+  return levels.find((level) => level.offenseFormButton == offenseFormButton && level.offenseTier == tier);
 };
 
 const updateButtons = (form) => {
@@ -169,9 +169,9 @@ forms.forEach((eachForm) => {
   eachForm.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
       const classes = e.target.classList;
-      const ind = classes[1][1];
+      const offenseFormButton = classes[1][1];
       const tier = Number(classes[0].slice(-1));
-      const obj = getObject(ind, tier);
+      const obj = getObject(offenseFormButton, tier);
       updateChart(obj);
       updateStats(obj, e.target.textContent);
       checkBan();
