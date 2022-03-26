@@ -105,7 +105,7 @@ const getStats = (obj, offenseType) => {
 };
 
 const updateStats = (offenseObject, offenseType) => {
-  totalPoints += tierPoints[offenseObject.pointsAfterType];
+  totalPoints += tierPoints[offenseObject.pointsAfterOffense];
   const displayStats = document.querySelector(".zapPointsLabel");
   const stats = getStats(offenseObject, offenseType);
   displayStats.textContent = "";
