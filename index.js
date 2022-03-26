@@ -94,14 +94,14 @@ const getStats = (obj, offense) => {
   const points = document.createElement("div");
   points.style.fontWeight = "bold";
   const name = document.createElement("div");
-  const cPoints = document.createElement("div");
+  const afterOffensePoints = document.createElement("div");
   points.classList.add("t_points");
   points.textContent = `Current Zap Points: ${totalPoints}`;
   name.textContent = `Last offense committed: ${offense}`;
-  cPoints.textContent = `${offense}'s tier moved: ${
+  afterOffensePoints.textContent = `${offense}'s tier moved: ${
     tierPoints[obj.tierAfterOffense]
   } => ${tierPoints[obj.tierAfterOffense + 1]}`;
-  return [points, name, cPoints];
+  return [points, name, afterOffensePoints];
 };
 
 const updateStats = (obj, offense) => {
