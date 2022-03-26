@@ -171,11 +171,11 @@ forms.forEach((eachForm) => {
       const classes = e.target.classList;
       const offenseButtonIndex = classes[1][1];
       const tier = Number(classes[0].slice(-1));
-      const obj = getObject(offenseButtonIndex, tier);
-      updateChart(obj);
-      updateStats(obj, e.target.textContent);
+      const offenseObject = getObject(offenseButtonIndex, tier);
+      updateChart(offenseObject);
+      updateStats(offenseObject, e.target.textContent);
       checkBan();
-      updateObject(obj);
+      updateObject(offenseObject);
     }
     form.classList.add("hidden");
   });
