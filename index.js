@@ -91,17 +91,17 @@ zapButtons.forEach((button) => {
 });
 
 const getStats = (obj, offense) => {
-  const points = document.createElement("div");
-  points.style.fontWeight = "bold";
+  const currentPoints = document.createElement("div");
+  currentPoints.style.fontWeight = "bold";
   const name = document.createElement("div");
   const afterOffensePoints = document.createElement("div");
-  points.classList.add("t_points");
-  points.textContent = `Current Zap Points: ${totalPoints}`;
+  currentPoints.classList.add("t_points");
+  currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
   name.textContent = `Last offense committed: ${offense}`;
   afterOffensePoints.textContent = `${offense}'s tier moved: ${
     tierPoints[obj.tierAfterOffense]
   } => ${tierPoints[obj.tierAfterOffense + 1]}`;
-  return [points, name, afterOffensePoints];
+  return [currentPoints, name, afterOffensePoints];
 };
 
 const updateStats = (obj, offense) => {
