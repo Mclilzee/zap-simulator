@@ -90,15 +90,15 @@ zapButtons.forEach((button) => {
   });
 });
 
-const getStats = (obj, offense) => {
+const getStats = (obj, offenseType) => {
   const currentPoints = document.createElement("div");
   currentPoints.style.fontWeight = "bold";
   const name = document.createElement("div");
   const afterOffensePoints = document.createElement("div");
   currentPoints.classList.add("t_points");
   currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
-  name.textContent = `Last offense committed: ${offense}`;
-  afterOffensePoints.textContent = `${offense}'s tier moved: ${
+  name.textContent = `Last offense committed: ${offenseType}`;
+  afterOffensePoints.textContent = `${offenseType}'s tier moved: ${
     tierPoints[obj.tierAfterOffense]
   } => ${tierPoints[obj.tierAfterOffense + 1]}`;
   return [currentPoints, name, afterOffensePoints];
