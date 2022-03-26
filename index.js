@@ -38,10 +38,10 @@ const colorCodes = {
   4: "#be1e2d",
 };
 
-const generateLevel = (ind, o_tier, c_tier) => {
+const generateLevel = (ind, offenseTier, c_tier) => {
   return {
     ind: ind,
-    o_tier: Number(o_tier),
+    offenseTier: Number(offenseTier),
     c_tier: Number(c_tier),
     add_tier: function () {
       this.c_tier++;
@@ -57,7 +57,7 @@ const createLevels = () => {
 let levels = createLevels().flat();
 
 const getObject = (ind, tier) => {
-  return levels.find((level) => level.ind == ind && level.o_tier == tier);
+  return levels.find((level) => level.ind == ind && level.offenseTier == tier);
 };
 
 const updateButtons = (form) => {
@@ -138,13 +138,13 @@ const setImages = (allCellImages) => {
 };
 
 const updateChart = (obj) => {
-  const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`);
+  const cell = document.querySelector(`#t${obj.offenseTier}${obj.c_tier}`);
   const div = document.createElement("div");
   div.classList.add("img-container");
   div.style.backgroundImage = `url(${svgPaths[obj.c_tier]})`;
   cell.appendChild(div);
   const allCellImages = document.querySelectorAll(
-    `#t${obj.o_tier}${obj.c_tier} > div`
+    `#t${obj.offenseTier}${obj.c_tier} > div`
   );
   const setImgs = setImages(allCellImages);
   cell.textContent = "";
