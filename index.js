@@ -104,10 +104,10 @@ const getStats = (obj, offenseType) => {
   return [currentPoints, name, afterOffensePoints];
 };
 
-const updateStats = (obj, offenseType) => {
-  totalPoints += tierPoints[obj.pointsAfterType];
+const updateStats = (offenseObject, offenseType) => {
+  totalPoints += tierPoints[offenseObject.pointsAfterType];
   const displayStats = document.querySelector(".zapPointsLabel");
-  const stats = getStats(obj, offenseType);
+  const stats = getStats(offenseObject, offenseType);
   displayStats.textContent = "";
   stats.forEach((stat) => {
     stat.classList.add("stat");
@@ -115,8 +115,8 @@ const updateStats = (obj, offenseType) => {
   });
 };
 
-const updateObject = (obj) => {
-  obj.add_tier();
+const updateObject = (offenseObject) => {
+  offenseObject.add_tier();
 };
 
 const getFactor = (allCellImages) => {
@@ -137,14 +137,14 @@ const setImages = (allCellImages) => {
   return newSet;
 };
 
-const updateChart = (obj) => {
-  const cell = document.querySelector(`#t${obj.offenseTier}${obj.pointsAfterOffense}`);
+const updateChart = (offenseObject) => {
+  const cell = document.querySelector(`#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`);
   const div = document.createElement("div");
   div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svgPaths[obj.pointsAfterOffense]})`;
+  div.style.backgroundImage = `url(${svgPaths[offenseObject.pointsAfterOffense]})`;
   cell.appendChild(div);
   const allCellImages = document.querySelectorAll(
-    `#t${obj.offenseTier}${obj.pointsAfterOffense} > div`
+    `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense} > div`
   );
   const setImgs = setImages(allCellImages);
   cell.textContent = "";
