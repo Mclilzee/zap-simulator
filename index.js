@@ -128,11 +128,11 @@ const setImages = (allCellImages) => {
   const factor = getFactor(allCellImages);
   const newSet = [];
   for (let i = 0; i < allCellImages.length; i++) {
-    const img = allCellImages[i];
-    img.style.width = `${100 - factor}%`;
-    img.style.height = `${100 - factor / 2}%`;
-    img.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
-    newSet.push(img);
+    const currentImage = allCellImages[i];
+    currentImage.style.width = `${100 - factor}%`;
+    currentImage.style.height = `${100 - factor / 2}%`;
+    currentImage.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
+    newSet.push(currentImage);
   }
   return newSet;
 };
