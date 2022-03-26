@@ -119,19 +119,19 @@ const updateObject = (obj) => {
   obj.add_tier();
 };
 
-const getFactor = (cellImgs) => {
+const getFactor = (allCellImages) => {
   const setFactor = 10; // Gap between each svg
-  return setFactor * (cellImgs.length - 1);
+  return setFactor * (allCellImages.length - 1);
 };
 
-const setImages = (cellImgs) => {
-  const factor = getFactor(cellImgs);
+const setImages = (allCellImages) => {
+  const factor = getFactor(allCellImages);
   const newSet = [];
-  for (let i = 0; i < cellImgs.length; i++) {
-    const img = cellImgs[i];
+  for (let i = 0; i < allCellImages.length; i++) {
+    const img = allCellImages[i];
     img.style.width = `${100 - factor}%`;
     img.style.height = `${100 - factor / 2}%`;
-    img.style.marginLeft = `${factor * (i / cellImgs.length)}%`;
+    img.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
     newSet.push(img);
   }
   return newSet;
@@ -143,10 +143,10 @@ const updateChart = (obj) => {
   div.classList.add("img-container");
   div.style.backgroundImage = `url(${svgPaths[obj.c_tier]})`;
   cell.appendChild(div);
-  const cellImgs = document.querySelectorAll(
+  const allCellImages = document.querySelectorAll(
     `#t${obj.o_tier}${obj.c_tier} > div`
   );
-  const setImgs = setImages(cellImgs);
+  const setImgs = setImages(allCellImages);
   cell.textContent = "";
   setImgs.forEach((image) => {
     cell.appendChild(image);
