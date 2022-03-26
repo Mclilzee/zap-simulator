@@ -38,13 +38,13 @@ const colorCodes = {
   4: "#be1e2d",
 };
 
-const generateLevel = (ind, offenseTier, c_tier) => {
+const generateLevel = (ind, offenseTier, tierAfterOffense) => {
   return {
     ind: ind,
     offenseTier: Number(offenseTier),
-    c_tier: Number(c_tier),
+    tierAfterOffense: Number(tierAfterOffense),
     add_tier: function () {
-      this.c_tier++;
+      this.tierAfterOffense++;
     },
   };
 };
@@ -74,8 +74,8 @@ const updateButtons = (form) => {
   buttons.forEach((button) => {
     const classes = button.classList;
     const obj = getObject(classes[1][1], classes[0][1]);
-    button.style.borderColor = colorCodes[`${obj.c_tier}`];
-    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.c_tier]}`;
+    button.style.borderColor = colorCodes[`${obj.tierAfterOffense}`];
+    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.tierAfterOffense]}`;
   });
 };
 
@@ -99,13 +99,13 @@ const getStats = (obj, offense) => {
   points.textContent = `Current Zap Points: ${totalPoints}`;
   name.textContent = `Last offense committed: ${offense}`;
   cPoints.textContent = `${offense}'s tier moved: ${
-    tierPoints[obj.c_tier]
-  } => ${tierPoints[obj.c_tier + 1]}`;
+    tierPoints[obj.tierAfterOffense]
+  } => ${tierPoints[obj.tierAfterOffense + 1]}`;
   return [points, name, cPoints];
 };
 
 const updateStats = (obj, offense) => {
-  totalPoints += tierPoints[obj.c_tier];
+  totalPoints += tierPoints[obj.tierAfterOffense];
   const displayStats = document.querySelector(".zapPointsLabel");
   const stats = getStats(obj, offense);
   displayStats.textContent = "";
@@ -138,13 +138,13 @@ const setImages = (allCellImages) => {
 };
 
 const updateChart = (obj) => {
-  const cell = document.querySelector(`#t${obj.offenseTier}${obj.c_tier}`);
+  const cell = document.querySelector(`#t${obj.offenseTier}${obj.tierAfterOffense}`);
   const div = document.createElement("div");
   div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svgPaths[obj.c_tier]})`;
+  div.style.backgroundImage = `url(${svgPaths[obj.tierAfterOffense]})`;
   cell.appendChild(div);
   const allCellImages = document.querySelectorAll(
-    `#t${obj.offenseTier}${obj.c_tier} > div`
+    `#t${obj.offenseTier}${obj.tierAfterOffense} > div`
   );
   const setImgs = setImages(allCellImages);
   cell.textContent = "";
