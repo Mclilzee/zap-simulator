@@ -38,26 +38,26 @@ const colorCodes = {
   4: "#be1e2d",
 };
 
-const generateLevel = (ind, o_tier, c_tier) => {
+const generateLevel = (offenseButtonIndex, offenseTier, pointsAfterOffense) => {
   return {
-    ind: ind,
-    o_tier: Number(o_tier),
-    c_tier: Number(c_tier),
+    offenseButtonIndex: offenseButtonIndex,
+    offenseTier: Number(offenseTier),
+    pointsAfterOffense: Number(pointsAfterOffense),
     add_tier: function () {
-      this.c_tier++;
+      this.pointsAfterOffense++;
     },
   };
 };
 const createLevels = () => {
   return Object.keys(tierPoints).map((tier) =>
-    Object.keys(svgPaths).map((ind) => generateLevel(ind, tier, tier))
+    Object.keys(svgPaths).map((offenseButtonIndex) => generateLevel(offenseButtonIndex, tier, tier))
   );
 };
 
 let levels = createLevels().flat();
 
-const getObject = (ind, tier) => {
-  return levels.find((level) => level.ind == ind && level.o_tier == tier);
+const getObject = (offenseButtonIndex, tier) => {
+  return levels.find((level) => level.offenseButtonIndex == offenseButtonIndex && level.offenseTier == tier);
 };
 
 const updateButtons = (form) => {
@@ -74,8 +74,8 @@ const updateButtons = (form) => {
   buttons.forEach((button) => {
     const classes = button.classList;
     const obj = getObject(classes[1][1], classes[0][1]);
-    button.style.borderColor = colorCodes[`${obj.c_tier}`];
-    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.c_tier]}`;
+    button.style.borderColor = colorCodes[`${obj.pointsAfterOffense}`];
+    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.pointsAfterOffense]}`;
   });
 };
 
@@ -90,24 +90,24 @@ zapButtons.forEach((button) => {
   });
 });
 
-const getStats = (obj, offense) => {
-  const points = document.createElement("div");
-  points.style.fontWeight = "bold";
+const getStats = (obj, offenseType) => {
+  const currentPoints = document.createElement("div");
+  currentPoints.style.fontWeight = "bold";
   const name = document.createElement("div");
-  const cPoints = document.createElement("div");
-  points.classList.add("t_points");
-  points.textContent = `Current Zap Points: ${totalPoints}`;
-  name.textContent = `Last offense committed: ${offense}`;
-  cPoints.textContent = `${offense}'s tier moved: ${
-    tierPoints[obj.c_tier]
-  } => ${tierPoints[obj.c_tier + 1]}`;
-  return [points, name, cPoints];
+  const afterOffensePoints = document.createElement("div");
+  currentPoints.classList.add("t_points");
+  currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
+  name.textContent = `Last offense committed: ${offenseType}`;
+  afterOffensePoints.textContent = `${offenseType}'s tier moved: ${
+    tierPoints[obj.pointsAfterOffense]
+  } => ${tierPoints[obj.pointsAfterOffense + 1]}`;
+  return [currentPoints, name, afterOffensePoints];
 };
 
-const updateStats = (obj, offense) => {
-  totalPoints += tierPoints[obj.c_tier];
+const updateStats = (offenseObject, offenseType) => {
+  totalPoints += tierPoints[offenseObject.pointsAfterOffense];
   const displayStats = document.querySelector(".zapPointsLabel");
-  const stats = getStats(obj, offense);
+  const stats = getStats(offenseObject, offenseType);
   displayStats.textContent = "";
   stats.forEach((stat) => {
     stat.classList.add("stat");
@@ -115,38 +115,38 @@ const updateStats = (obj, offense) => {
   });
 };
 
-const updateObject = (obj) => {
-  obj.add_tier();
+const updateObject = (offenseObject) => {
+  offenseObject.add_tier();
 };
 
-const getFactor = (cellImgs) => {
+const getFactor = (allCellImages) => {
   const setFactor = 10; // Gap between each svg
-  return setFactor * (cellImgs.length - 1);
+  return setFactor * (allCellImages.length - 1);
 };
 
-const setImages = (cellImgs) => {
-  const factor = getFactor(cellImgs);
+const setImages = (allCellImages) => {
+  const factor = getFactor(allCellImages);
   const newSet = [];
-  for (let i = 0; i < cellImgs.length; i++) {
-    const img = cellImgs[i];
-    img.style.width = `${100 - factor}%`;
-    img.style.height = `${100 - factor / 2}%`;
-    img.style.marginLeft = `${factor * (i / cellImgs.length)}%`;
-    newSet.push(img);
+  for (let i = 0; i < allCellImages.length; i++) {
+    const currentImage = allCellImages[i];
+    currentImage.style.width = `${100 - factor}%`;
+    currentImage.style.height = `${100 - factor / 2}%`;
+    currentImage.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
+    newSet.push(currentImage);
   }
   return newSet;
 };
 
-const updateChart = (obj) => {
-  const cell = document.querySelector(`#t${obj.o_tier}${obj.c_tier}`);
+const updateChart = (offenseObject) => {
+  const cell = document.querySelector(`#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`);
   const div = document.createElement("div");
   div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svgPaths[obj.c_tier]})`;
+  div.style.backgroundImage = `url(${svgPaths[offenseObject.pointsAfterOffense]})`;
   cell.appendChild(div);
-  const cellImgs = document.querySelectorAll(
-    `#t${obj.o_tier}${obj.c_tier} > div`
+  const allCellImages = document.querySelectorAll(
+    `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense} > div`
   );
-  const setImgs = setImages(cellImgs);
+  const setImgs = setImages(allCellImages);
   cell.textContent = "";
   setImgs.forEach((image) => {
     cell.appendChild(image);
@@ -169,13 +169,13 @@ forms.forEach((eachForm) => {
   eachForm.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
       const classes = e.target.classList;
-      const ind = classes[1][1];
+      const offenseButtonIndex = classes[1][1];
       const tier = Number(classes[0].slice(-1));
-      const obj = getObject(ind, tier);
-      updateChart(obj);
-      updateStats(obj, e.target.textContent);
+      const offenseObject = getObject(offenseButtonIndex, tier);
+      updateChart(offenseObject);
+      updateStats(offenseObject, e.target.textContent);
       checkBan();
-      updateObject(obj);
+      updateObject(offenseObject);
     }
     form.classList.add("hidden");
   });
