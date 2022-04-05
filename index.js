@@ -92,14 +92,18 @@ const updateButtons = (form) => {
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
+const displayFormWithUpdatedPoints = (event) => {
+  const index = Number(event.target.id.slice(-1));
+  form = document.querySelector(`.lvl${index}`);
+  updateButtons(form);
+  form.classList.remove("hidden");
+};
+
 // pulls up form and updates spans to indicate how many points will be added
 zapButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const index = Number(e.target.id.slice(-1));
-    form = document.querySelector(`.lvl${index}`);
-    updateButtons(form);
-    form.classList.remove("hidden");
-  });
+  button.addEventListener("click", (event) =>
+    displayFormWithUpdatedPoints(event)
+  );
 });
 
 const getStats = (obj, offenseType) => {
@@ -183,21 +187,24 @@ const forms = document.querySelectorAll(".form");
 // triggers an offence by adding event listeners to offense buttons.
 // updates chart, stats, checks for ban, then adds points to object for next
 // offense
+
+const addOffenseAndUpdateDOM = (event) => {
+  if (event.target.tagName === "BUTTON") {
+    const classes = event.target.classList;
+    const offenseButtonIndex = classes[1][1];
+    const tier = Number(classes[0].slice(-1));
+    const offenseObject = getObject(offenseButtonIndex, tier);
+    updateChart(offenseObject);
+    updateStats(offenseObject, event.target.textContent);
+    checkBan();
+    updateObject(offenseObject);
+  }
+  form.classList.add("hidden");
+};
+
 forms.forEach((eachForm) => {
   // eachForm is to avoid name conflict with form
-  eachForm.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON") {
-      const classes = e.target.classList;
-      const offenseButtonIndex = classes[1][1];
-      const tier = Number(classes[0].slice(-1));
-      const offenseObject = getObject(offenseButtonIndex, tier);
-      updateChart(offenseObject);
-      updateStats(offenseObject, e.target.textContent);
-      checkBan();
-      updateObject(offenseObject);
-    }
-    form.classList.add("hidden");
-  });
+  eachForm.addEventListener("click", (event) => addOffenseAndUpdateDOM(event));
 });
 
 const resetSimulator = () => {
