@@ -12,8 +12,7 @@ const dismissDisclaimerScreen = () => {
 
 disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
 
-(function () {
-  //adds tier tags
+(function addTierTags() {
   const buttons = document.querySelectorAll(
     ".levels .combinedOffencesContainer .offenceContainer button"
   );
