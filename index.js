@@ -26,16 +26,20 @@ const addOffenseAndUpdateDOM = (event) => {
 };
 
 const resetSimulator = () => {
-  Levels.levels = Levels.createLevels().flat();
+  Levels.reset()
   totalPoints = 0;
+  // resets chart
   document.querySelectorAll(".cell").forEach((cell) => {
     cell.textContent = "";
   });
+  // resets Stats
   document.querySelector(".zapPointsLabel").textContent =
     "Welcome, you are clean right now";
+  // hides ban message
   document.querySelector(".bannMessage").classList.add("hidden");
 };
 
+/* I think this might be more aptly named "offenses" */
 const Levels = (function() {
   const generateLevel = (offenseButtonIndex, offenseTier, pointsAfterOffense) => {
     return {
@@ -64,13 +68,15 @@ const Levels = (function() {
     );
   };
 
+  const reset = () => {
+    levels = createLevels().flat()
+  }
+
   let levels = createLevels().flat();
 
   return {
     getObject,
-    createLevels,
-    get levels() {return levels},
-    set levels(newLevels) {levels = newLevels}
+    reset,
   }
 })()
 
