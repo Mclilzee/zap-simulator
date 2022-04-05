@@ -5,6 +5,7 @@ let form;
 const disclaimerConfirmButton = document.querySelector(
   ".disclaimerConfirmButton"
 );
+// dissmisses disclaimer screen
 disclaimerConfirmButton.addEventListener("click", () => {
   document.querySelector(".disclaimerScreen").remove();
 });
@@ -81,6 +82,7 @@ const updateButtons = (form) => {
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
+// pulls up form and updates spans to indicate how many points will be added
 zapButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const index = Number(e.target.id.slice(-1));
@@ -164,6 +166,9 @@ const checkBan = () => {
 };
 
 const forms = document.querySelectorAll(".form");
+// triggers an offence by adding event listeners to offense buttons.
+// updates chart, stats, checks for ban, then adds points to object for next 
+// offense
 forms.forEach((eachForm) => {
   // eachForm is to avoid name conflict with form
   eachForm.addEventListener("click", (e) => {
@@ -198,8 +203,10 @@ tryAgainButton.addEventListener("click", resetSimulator);
 const resetButton = document.querySelector(".resetButton");
 resetButton.addEventListener("click", resetSimulator);
 
+
 const timeTravelButton = document.querySelector(".timeTravelButton");
 
+// reduces one point for every press, then updates DOM in stats area
 timeTravelButton.addEventListener("click", () => {
   totalPoints < 1 ? totalPoints : totalPoints--;
   const points = document.querySelector(".t_points");
@@ -208,6 +215,7 @@ timeTravelButton.addEventListener("click", () => {
 
 const themeIconsButton = document.querySelector(".themeIcons");
 
+// changes theme and icon, and saves preferences to local storage
 themeIconsButton.addEventListener("click", () => {
   document.documentElement.classList.toggle("dark");
   swapThemeIcon();
@@ -224,6 +232,8 @@ const swapThemeIcon = () => {
   themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
 };
 
+// random bit of code outside of functions that checks localstorage state for
+// theme on page load
 if (localStorage.getItem("dark-mode") === "true") {
   document.documentElement.classList.add("dark");
   swapThemeIcon();
