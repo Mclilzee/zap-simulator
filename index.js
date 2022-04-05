@@ -10,10 +10,6 @@ const svgPaths = {
   4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
 };
 
-const updateObject = (offenseObject) => {
-  offenseObject.add_tier();
-};
-
 /* These Two Functions use functions a variety of modules. */
 const addOffenseAndUpdateDOM = (event) => {
   if (event.target.tagName === "BUTTON") {
@@ -24,7 +20,7 @@ const addOffenseAndUpdateDOM = (event) => {
     ChartController.updateChart(offenseObject);
     StatsController.updateStats(offenseObject, event.target.textContent);
     FormController.checkBan();
-    updateObject(offenseObject);
+    offenseObject.add_tier();
   }
   FormController.form.classList.add("hidden");
 };
