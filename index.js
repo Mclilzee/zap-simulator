@@ -5,9 +5,12 @@ let form;
 const disclaimerConfirmButton = document.querySelector(
   ".disclaimerConfirmButton"
 );
-disclaimerConfirmButton.addEventListener("click", () => {
+
+const dismissDisclaimerScreen = () => {
   document.querySelector(".disclaimerScreen").remove();
-});
+};
+
+disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
 
 (function () {
   //adds tier tags
@@ -50,14 +53,20 @@ const generateLevel = (offenseButtonIndex, offenseTier, pointsAfterOffense) => {
 };
 const createLevels = () => {
   return Object.keys(tierPoints).map((tier) =>
-    Object.keys(svgPaths).map((offenseButtonIndex) => generateLevel(offenseButtonIndex, tier, tier))
+    Object.keys(svgPaths).map((offenseButtonIndex) =>
+      generateLevel(offenseButtonIndex, tier, tier)
+    )
   );
 };
 
 let levels = createLevels().flat();
 
 const getObject = (offenseButtonIndex, tier) => {
-  return levels.find((level) => level.offenseButtonIndex == offenseButtonIndex && level.offenseTier == tier);
+  return levels.find(
+    (level) =>
+      level.offenseButtonIndex == offenseButtonIndex &&
+      level.offenseTier == tier
+  );
 };
 
 const updateButtons = (form) => {
@@ -75,19 +84,26 @@ const updateButtons = (form) => {
     const classes = button.classList;
     const obj = getObject(classes[1][1], classes[0][1]);
     button.style.borderColor = colorCodes[`${obj.pointsAfterOffense}`];
-    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.pointsAfterOffense]}`;
+    button.nextSibling.textContent = `Add Points: ${
+      tierPoints[obj.pointsAfterOffense]
+    }`;
   });
 };
 
 const zapButtons = document.querySelectorAll(".zapButton");
 
+const displayFormWithUpdatedPoints = (event) => {
+  const index = Number(event.target.id.slice(-1));
+  form = document.querySelector(`.lvl${index}`);
+  updateButtons(form);
+  form.classList.remove("hidden");
+};
+
+// pulls up form and updates spans to indicate how many points will be added
 zapButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const index = Number(e.target.id.slice(-1));
-    form = document.querySelector(`.lvl${index}`);
-    updateButtons(form);
-    form.classList.remove("hidden");
-  });
+  button.addEventListener("click", (event) =>
+    displayFormWithUpdatedPoints(event)
+  );
 });
 
 const getStats = (obj, offenseType) => {
@@ -138,10 +154,14 @@ const setImages = (allCellImages) => {
 };
 
 const updateChart = (offenseObject) => {
-  const cell = document.querySelector(`#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`);
+  const cell = document.querySelector(
+    `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`
+  );
   const div = document.createElement("div");
   div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svgPaths[offenseObject.pointsAfterOffense]})`;
+  div.style.backgroundImage = `url(${
+    svgPaths[offenseObject.pointsAfterOffense]
+  })`;
   cell.appendChild(div);
   const allCellImages = document.querySelectorAll(
     `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense} > div`
@@ -164,21 +184,27 @@ const checkBan = () => {
 };
 
 const forms = document.querySelectorAll(".form");
+// triggers an offence by adding event listeners to offense buttons.
+// updates chart, stats, checks for ban, then adds points to object for next
+// offense
+
+const addOffenseAndUpdateDOM = (event) => {
+  if (event.target.tagName === "BUTTON") {
+    const classes = event.target.classList;
+    const offenseButtonIndex = classes[1][1];
+    const tier = Number(classes[0].slice(-1));
+    const offenseObject = getObject(offenseButtonIndex, tier);
+    updateChart(offenseObject);
+    updateStats(offenseObject, event.target.textContent);
+    checkBan();
+    updateObject(offenseObject);
+  }
+  form.classList.add("hidden");
+};
+
 forms.forEach((eachForm) => {
   // eachForm is to avoid name conflict with form
-  eachForm.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON") {
-      const classes = e.target.classList;
-      const offenseButtonIndex = classes[1][1];
-      const tier = Number(classes[0].slice(-1));
-      const offenseObject = getObject(offenseButtonIndex, tier);
-      updateChart(offenseObject);
-      updateStats(offenseObject, e.target.textContent);
-      checkBan();
-      updateObject(offenseObject);
-    }
-    form.classList.add("hidden");
-  });
+  eachForm.addEventListener("click", (event) => addOffenseAndUpdateDOM(event));
 });
 
 const resetSimulator = () => {
@@ -200,15 +226,22 @@ resetButton.addEventListener("click", resetSimulator);
 
 const timeTravelButton = document.querySelector(".timeTravelButton");
 
-timeTravelButton.addEventListener("click", () => {
+const reducePointAndUpdateDOM = () => {
   totalPoints < 1 ? totalPoints : totalPoints--;
   const points = document.querySelector(".t_points");
   points ? (points.textContent = `Current Zap Points: ${totalPoints}`) : null;
-});
+};
+
+timeTravelButton.addEventListener("click", reducePointAndUpdateDOM);
 
 const themeIconsButton = document.querySelector(".themeIcons");
 
-themeIconsButton.addEventListener("click", () => {
+const swapThemeIcon = () => {
+  const themeIcons = document.querySelectorAll(".themeSvg");
+  themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
+};
+
+const changeThemeAndSave = () => {
   document.documentElement.classList.toggle("dark");
   swapThemeIcon();
 
@@ -217,16 +250,17 @@ themeIconsButton.addEventListener("click", () => {
   } else {
     localStorage.setItem("dark-mode", "false");
   }
-});
-
-const swapThemeIcon = () => {
-  const themeIcons = document.querySelectorAll(".themeSvg");
-  themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
 };
 
-if (localStorage.getItem("dark-mode") === "true") {
-  document.documentElement.classList.add("dark");
-  swapThemeIcon();
-} else {
-  document.documentElement.classList.remove("dark");
-}
+themeIconsButton.addEventListener("click", changeThemeAndSave);
+
+const checkLocalStorageTheme = () => {
+  if (localStorage.getItem("dark-mode") === "true") {
+    document.documentElement.classList.add("dark");
+    swapThemeIcon();
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+};
+
+checkLocalStorageTheme();
