@@ -1,7 +1,8 @@
+//tuck inside of ZapSimulator factory when it's no longer needout outside of it.
 const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-let totalPoints = 0;
 
 //if you go with the tier level I suggest the below order for Tier 0 to 10:
+//belongs in Chart once we move away from the Levels module.
 const svgPaths = {
   0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
   1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
@@ -10,8 +11,52 @@ const svgPaths = {
   4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
 };
 
-const offenses = {
-  //"offenseName": offenseTier
+/*~~~~~~~~~~~~~~~~~~Code in this block should be phased out~~~~~~~~~~~~~~~~~~*/
+let totalPoints = 0;
+
+const Levels = (function() {
+  const generateLevel = (offenceButtonIndex, offenceTier, pointsAfterOffence) => {
+    return {
+      offenceButtonIndex: offenceButtonIndex,
+      offenceTier: Number(offenceTier),
+      pointsAfterOffence: Number(pointsAfterOffence),
+      add_tier: function () {
+        this.pointsAfterOffence++;
+      },
+    };
+  };
+
+  const createLevels = () => {
+    return Object.keys(tierPoints).map((tier) =>
+      Object.keys(svgPaths).map((offenceButtonIndex) =>
+        generateLevel(offenceButtonIndex, tier, tier)
+      )
+    );
+  };
+
+  const getObject = (offenceButtonIndex, tier) => {
+    return levels.find(
+      (level) =>
+        level.offenceButtonIndex == offenceButtonIndex &&
+        level.offenceTier == tier
+    );
+  };
+
+  const reset = () => {
+    levels = createLevels().flat()
+  }
+
+  let levels = createLevels().flat();
+
+  return {
+    getObject,
+    reset,
+  }
+})()
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+const offences = {
+  //"offenceName": offenceTier
   "dogpiling": 0,
   "discussing windows": 0,
   "chat bombing": 0,
@@ -39,35 +84,36 @@ const offenses = {
   "doxxing": 4,
 }
 
-function Offense(offenseName, offenseTier) {
+function Offence(offenceName, offenceTier) {
   return {
-    offenseName, 
-    offenseTier: Number(offenseTier),
-    pointsAfterOffense: Number(offenseTier),
+    offenceName, 
+    offenceTier: Number(offenceTier),
+    pointsAfterOffence: Number(offenceTier),
     addTier: function () {
-      if(this.pointsAfterOffense < 4) {
-        this.pointsAfterOffense++;
+      if(this.pointsAfterOffence < 4) {
+        this.pointsAfterOffence++;
       }
     },
   };
 };
 
-function createOffenseList(offenses) {
-  const offenseList = [];
-  for(const offenseName in offenses) {
-    offenseList.push(Offense(offenseName, offenses[offenseName]))
+function createOffenceList(offences) {
+  const offenceList = [];
+  for(const offenceName in offences) {
+    offenceList.push(Offence(offenceName, offences[offenceName]))
   }
-  return offenseList
+  return offenceList
 }
 
-function zapSimulator(offenses) {
+// Meant to be used as a factory function with 'offences' object
+function ZapSimulator(offences) {
   const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-  const offenseList = createOffenseList(offenses)
+  const offenceList = createOffenceList(offences)
   let points = 0
 
-  function _findoffense(offenseName) {
-    return offenseList.find((offense) => {
-      return offense.offenseName === offenseName
+  function _findOffence(offenceName) {
+    return offenceList.find((offence) => {
+      return offence.offenceName === offenceName
     });
   };
 
@@ -87,15 +133,15 @@ function zapSimulator(offenses) {
     }
   }
 
-  function commitOffense(offenseName) {
-    const offense = _findoffense(offenseName)
-    const pointsToAdd = tierPoints[offense.pointsAfterOffense]
+  function commitOffence(offenceName) {
+    const offence = _findOffence(offenceName)
+    const pointsToAdd = tierPoints[offence.pointsAfterOffence]
     points += pointsToAdd
-    offense.addTier()
-    const nextPoints = tierPoints[offense.pointsAfterOffense]
+    offence.addTier()
+    const nextPoints = tierPoints[offence.pointsAfterOffence]
     return {
       points,
-      offenseCommitted: offense.offenseName,
+      offenceCommitted: offence.offenceName,
       addedPoints: pointsToAdd,
       nextPoints,
       isBanned: _isBanned()
@@ -103,24 +149,24 @@ function zapSimulator(offenses) {
   }
 
   return Object.freeze({
-    commitOffense,
+    commitOffence,
     waitOneWeek: _reducePoint,
-    get offenses() { return offenseList.map(offense => offense.offenseName) },
+    get offences() { return offenceList.map(offence => offence.offenceName) },
     get points() {return points}
   })
 }
 
 /* These Two Functions use functions a variety of modules. */
-const addOffenseAndUpdateDOM = (event) => {
+const addOffenceAndUpdateDOM = (event) => {
   if (event.target.tagName === "BUTTON") {
     const classes = event.target.classList;
-    const offenseButtonIndex = classes[1][1];
+    const offenceButtonIndex = classes[1][1];
     const tier = Number(classes[0].slice(-1));
-    const offenseObject = Levels.getObject(offenseButtonIndex, tier);
-    ChartController.updateChart(offenseObject);
-    StatsController.updateStats(offenseObject, event.target.textContent);
+    const offenceObject = Levels.getObject(offenceButtonIndex, tier);
+    ChartController.updateChart(offenceObject);
+    StatsController.updateStats(offenceObject, event.target.textContent);
     FormController.checkBan();
-    offenseObject.add_tier();
+    offenceObject.add_tier();
   }
   FormController.form.classList.add("hidden");
 };
@@ -138,47 +184,6 @@ const resetSimulator = () => {
   // hides ban message
   document.querySelector(".bannMessage").classList.add("hidden");
 };
-
-/* I think this might be more aptly named "offenses" */
-const Levels = (function() {
-  const generateLevel = (offenseButtonIndex, offenseTier, pointsAfterOffense) => {
-    return {
-      offenseButtonIndex: offenseButtonIndex,
-      offenseTier: Number(offenseTier),
-      pointsAfterOffense: Number(pointsAfterOffense),
-      add_tier: function () {
-        this.pointsAfterOffense++;
-      },
-    };
-  };
-
-  const createLevels = () => {
-    return Object.keys(tierPoints).map((tier) =>
-      Object.keys(svgPaths).map((offenseButtonIndex) =>
-        generateLevel(offenseButtonIndex, tier, tier)
-      )
-    );
-  };
-
-  const getObject = (offenseButtonIndex, tier) => {
-    return levels.find(
-      (level) =>
-        level.offenseButtonIndex == offenseButtonIndex &&
-        level.offenseTier == tier
-    );
-  };
-
-  const reset = () => {
-    levels = createLevels().flat()
-  }
-
-  let levels = createLevels().flat();
-
-  return {
-    getObject,
-    reset,
-  }
-})()
 
 const FormController = (function() {
   let form;
@@ -204,9 +209,9 @@ const FormController = (function() {
     buttons.forEach((button) => {
       const classes = button.classList;
       const obj = Levels.getObject(classes[1][1], classes[0][1]);
-      button.style.borderColor = colorCodes[`${obj.pointsAfterOffense}`];
+      button.style.borderColor = colorCodes[`${obj.pointsAfterOffence}`];
       button.nextSibling.textContent = `Add Points: ${
-        tierPoints[obj.pointsAfterOffense]
+        tierPoints[obj.pointsAfterOffence]
       }`;
     });
   };
@@ -240,7 +245,7 @@ const FormController = (function() {
   const forms = document.querySelectorAll(".form");
   forms.forEach((eachForm) => {
     // eachForm is to avoid name conflict with form
-    eachForm.addEventListener("click", (event) => addOffenseAndUpdateDOM(event));
+    eachForm.addEventListener("click", (event) => addOffenceAndUpdateDOM(event));
   });
 
   const zapButtons = document.querySelectorAll(".zapButton");
@@ -289,18 +294,18 @@ const ChartController = (function() {
     return newSet;
   };
 
-  const updateChart = (offenseObject) => {
+  const updateChart = (offenceObject) => {
     const cell = document.querySelector(
-      `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`
+      `#t${offenceObject.offenceTier}${offenceObject.pointsAfterOffence}`
     );
     const div = document.createElement("div");
     div.classList.add("img-container");
     div.style.backgroundImage = `url(${
-      svgPaths[offenseObject.pointsAfterOffense]
+      svgPaths[offenceObject.pointsAfterOffence]
     })`;
     cell.appendChild(div);
     const allCellImages = document.querySelectorAll(
-      `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense} > div`
+      `#t${offenceObject.offenceTier}${offenceObject.pointsAfterOffence} > div`
     );
     const setImgs = setImages(allCellImages);
     cell.textContent = "";
@@ -315,24 +320,24 @@ const ChartController = (function() {
 })()
 
 const StatsController = (function() {
-  const getStats = (obj, offenseType) => {
+  const getStats = (obj, offenceType) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
     const name = document.createElement("div");
-    const afterOffensePoints = document.createElement("div");
+    const afterOffencePoints = document.createElement("div");
     currentPoints.classList.add("t_points");
     currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
-    name.textContent = `Last offense committed: ${offenseType}`;
-    afterOffensePoints.textContent = `${offenseType}'s tier moved: ${
-      tierPoints[obj.pointsAfterOffense]
-    } => ${tierPoints[obj.pointsAfterOffense + 1]}`;
-    return [currentPoints, name, afterOffensePoints];
+    name.textContent = `Last offence committed: ${offenceType}`;
+    afterOffencePoints.textContent = `${offenceType}'s tier moved: ${
+      tierPoints[obj.pointsAfterOffence]
+    } => ${tierPoints[obj.pointsAfterOffence + 1]}`;
+    return [currentPoints, name, afterOffencePoints];
   };
 
-  const updateStats = (offenseObject, offenseType) => {
-    totalPoints += tierPoints[offenseObject.pointsAfterOffense];
+  const updateStats = (offenceObject, offenceType) => {
+    totalPoints += tierPoints[offenceObject.pointsAfterOffence];
     const displayStats = document.querySelector(".zapPointsLabel");
-    const stats = getStats(offenseObject, offenseType);
+    const stats = getStats(offenceObject, offenceType);
     displayStats.textContent = "";
     stats.forEach((stat) => {
       stat.classList.add("stat");
