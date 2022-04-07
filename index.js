@@ -60,6 +60,56 @@ function createOffenseList(offenses) {
   return offenseList
 }
 
+function zapSimulator(offenses) {
+  const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
+  const offenseList = createOffenseList(offenses)
+  let points = 0
+
+  function _findoffense(offenseName) {
+    return offenseList.find((offense) => {
+      return offense.offenseName === offenseName
+    });
+  };
+
+  function _isBanned() {
+    if(points >= 10) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function _reducePoint() {
+    if(points > 0) {
+      return --points
+    } else {
+      return points
+    }
+  }
+
+  function commitOffense(offenseName) {
+    const offense = _findoffense(offenseName)
+    const pointsToAdd = tierPoints[offense.pointsAfterOffense]
+    points += pointsToAdd
+    offense.addTier()
+    const nextPoints = tierPoints[offense.pointsAfterOffense]
+    return {
+      points,
+      offenseCommitted: offense.offenseName,
+      addedPoints: pointsToAdd,
+      nextPoints,
+      isBanned: _isBanned()
+    }
+  }
+
+  return Object.freeze({
+    commitOffense,
+    waitOneWeek: _reducePoint,
+    get offenses() { return offenseList.map(offense => offense.offenseName) },
+    get points() {return points}
+  })
+}
+
 /* These Two Functions use functions a variety of modules. */
 const addOffenseAndUpdateDOM = (event) => {
   if (event.target.tagName === "BUTTON") {
