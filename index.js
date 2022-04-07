@@ -10,6 +10,35 @@ const svgPaths = {
   4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
 };
 
+const offenses = {
+  //"offenseName": offenseTier
+  "dogpiling": 0,
+  "discussing windows": 0,
+  "chat bombing": 0,
+  "discussing mental health issues": 0,
+  "inappropriate profile": 0,
+
+  "mini-modding": 1,
+  "requesting out of scope help": 1,
+  "mild unprofessionalism": 1,
+
+  "discussing piracy": 2,
+  "unsolicited pings/dms": 2,
+  "discussing politics/religion": 2,
+  "mild toxicity": 2,
+  "self promoting without permission": 2,
+
+  "discussing illegal activities": 3,
+  "arguing over moderation": 3,
+  "excessive toxicity": 3,
+
+  "bigotry": 4,
+  "continued harrassment": 4,
+  "nsfw or highly offensive content": 4,
+  "spamming": 4,
+  "doxxing": 4,
+}
+
 function Offense(offenseName, offenseTier) {
   return {
     offenseName, 
