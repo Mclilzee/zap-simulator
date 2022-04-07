@@ -52,6 +52,14 @@ function Offense(offenseName, offenseTier) {
   };
 };
 
+function createOffenseList(offenses) {
+  const offenseList = [];
+  for(const offenseName in offenses) {
+    offenseList.push(Offense(offenseName, offenses[offenseName]))
+  }
+  return offenseList
+}
+
 /* These Two Functions use functions a variety of modules. */
 const addOffenseAndUpdateDOM = (event) => {
   if (event.target.tagName === "BUTTON") {
