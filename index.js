@@ -1,64 +1,3 @@
-//tuck inside of ZapSimulator factory when it's no longer needout outside of it.
-const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-
-//if you go with the tier level I suggest the below order for Tier 0 to 10:
-//belongs in Chart once we move away from the Levels module.
-const svgPaths = {
-  0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
-  1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
-  2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
-  3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
-  4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
-};
-
-/*~~~~~~~~~~~~~~~~~~Code in this block should be phased out~~~~~~~~~~~~~~~~~~*/
-let totalPoints = 0;
-
-const Levels = (function () {
-  const generateLevel = (
-    offenceButtonIndex,
-    offenceTier,
-    pointsAfterOffence
-  ) => {
-    return {
-      offenceButtonIndex: offenceButtonIndex,
-      offenceTier: Number(offenceTier),
-      pointsAfterOffence: Number(pointsAfterOffence),
-      add_tier: function () {
-        this.pointsAfterOffence++;
-      },
-    };
-  };
-
-  const createLevels = () => {
-    return Object.keys(tierPoints).map((tier) =>
-      Object.keys(svgPaths).map((offenceButtonIndex) =>
-        generateLevel(offenceButtonIndex, tier, tier)
-      )
-    );
-  };
-
-  const getObject = (offenceButtonIndex, tier) => {
-    return levels.find(
-      (level) =>
-        level.offenceButtonIndex == offenceButtonIndex &&
-        level.offenceTier == tier
-    );
-  };
-
-  const reset = () => {
-    levels = createLevels().flat();
-  };
-
-  let levels = createLevels().flat();
-
-  return {
-    getObject,
-    reset,
-  };
-})();
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 const offences = {
   //"offenceName": offenceTier
   dogpiling: 0,
@@ -112,7 +51,7 @@ function createOffenceList(offences) {
 // Meant to be used as a factory function with 'offences' object
 function ZapSimulator(offences) {
   const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-  const offenceList = createOffenceList(offences);
+  let offenceList = createOffenceList(offences);
   let points = 0;
 
   function _findOffence(offenceName) {
@@ -155,35 +94,40 @@ function ZapSimulator(offences) {
     };
   }
 
+  function resetSimulator() {
+    points = 0;
+    offenceList = createOffenceList(offences);
+    // resets chart
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.textContent = "";
+    });
+    // resets Stats
+    document.querySelector(".zapPointsLabel").textContent =
+      "Welcome, you are clean right now";
+    // hides ban message
+    document.querySelector(".bannMessage").classList.add("hidden");
+  }
+
   return Object.freeze({
     commitOffence,
+    resetSimulator,
     waitOneWeek: _reducePoint,
     get offences() {
       return offenceList.map((offence) => offence.offenceName);
     },
+    get offencesList() {
+      return offenceList;
+    },
     get points() {
       return points;
+    },
+    get tierPoints() {
+      return tierPoints;
     },
   });
 }
 
-/* These Two Functions use functions a variety of modules. */
-
-const resetSimulator = () => {
-  Levels.reset();
-  totalPoints = 0;
-  // resets chart
-  document.querySelectorAll(".cell").forEach((cell) => {
-    cell.textContent = "";
-  });
-  // resets Stats
-  document.querySelector(".zapPointsLabel").textContent =
-    "Welcome, you are clean right now";
-  // hides ban message
-  document.querySelector(".bannMessage").classList.add("hidden");
-};
-
-const FormController = function () {
+const FormController = function (app) {
   let form;
   const colorCodes = {
     0: "#ffdc2f",
@@ -196,6 +140,8 @@ const FormController = function () {
   const updateButtons = (form) => {
     const combinedOffencesContainer = form.lastElementChild;
 
+    const offencesList = app.offencesList;
+
     let buttons = [];
     [...combinedOffencesContainer.childNodes].forEach((element) => {
       const button = [...element.childNodes].filter(
@@ -205,23 +151,16 @@ const FormController = function () {
     });
 
     buttons.forEach((button) => {
-      const classes = button.classList;
-      const obj = Levels.getObject(classes[1][1], classes[0][1]);
-      button.style.borderColor = colorCodes[`${obj.pointsAfterOffence}`];
+      const offenceName = button.textContent.toLowerCase();
+      const offence = offencesList.find(
+        (offence) => offence.offenceName === offenceName
+      );
+
+      button.style.borderColor = colorCodes[`${offence.pointsAfterOffence}`];
       button.nextSibling.textContent = `Add Points: ${
-        tierPoints[obj.pointsAfterOffence]
+        app.tierPoints[offence.pointsAfterOffence]
       }`;
     });
-  };
-
-  const getBanned = () => {
-    document.querySelector(".bannMessage").classList.remove("hidden");
-  };
-
-  const checkBan = () => {
-    if (totalPoints > 9) {
-      getBanned();
-    }
   };
 
   const displayFormWithUpdatedPoints = (event) => {
@@ -239,7 +178,7 @@ const FormController = function () {
   });
 
   const tryAgainButton = document.querySelector(".tryAgainButton");
-  tryAgainButton.addEventListener("click", resetSimulator);
+  tryAgainButton.addEventListener("click", app.resetSimulator);
 
   (function addTierTags() {
     const buttons = document.querySelectorAll(
@@ -253,7 +192,6 @@ const FormController = function () {
   })();
 
   return {
-    checkBan,
     get form() {
       return form;
     },
@@ -261,6 +199,14 @@ const FormController = function () {
 };
 
 const ChartController = function () {
+  const svgPaths = {
+    0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
+    1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
+    2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
+    3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
+    4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
+  };
+
   const getFactor = (allCellImages) => {
     const setFactor = 10; // Gap between each svg
     return setFactor * (allCellImages.length - 1);
@@ -302,7 +248,7 @@ const ChartController = function () {
   };
 };
 
-const StatsController = function () {
+const StatsController = function (app) {
   const getStats = (obj, offenceType) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
@@ -316,7 +262,6 @@ const StatsController = function () {
   };
 
   const updateStats = (offenceObject, offenceType) => {
-    totalPoints += tierPoints[offenceObject.pointsAfterOffence];
     const displayStats = document.querySelector(".zapPointsLabel");
     const stats = getStats(offenceObject, offenceType);
     displayStats.textContent = "";
@@ -327,9 +272,9 @@ const StatsController = function () {
   };
 
   const reducePointAndUpdateDOM = () => {
-    totalPoints < 1 ? totalPoints : totalPoints--;
+    app.waitOneWeek();
     const points = document.querySelector(".t_points");
-    points ? (points.textContent = `Current Zap Points: ${totalPoints}`) : null;
+    points ? (points.textContent = `Current Zap Points: ${app.points}`) : null;
   };
 
   const timeTravelButton = document.querySelector(".timeTravelButton");
@@ -340,7 +285,7 @@ const StatsController = function () {
   };
 };
 
-const ThemeController = function () {
+const ThemeController = (function () {
   const changeThemeAndSave = () => {
     document.documentElement.classList.toggle("dark");
     swapThemeIcon();
@@ -369,17 +314,16 @@ const ThemeController = function () {
   const themeIconsButton = document.querySelector(".themeIcons");
   themeIconsButton.addEventListener("click", changeThemeAndSave);
   checkLocalStorageTheme();
-};
+})();
 
 const ScreenController = (function () {
   const app = ZapSimulator(offences);
-  const form = FormController();
+  const form = FormController(app);
   const chart = ChartController();
-  const stats = StatsController();
-  const theme = ThemeController();
+  const stats = StatsController(app);
 
   const resetButton = document.querySelector(".resetButton");
-  resetButton.addEventListener("click", resetSimulator);
+  resetButton.addEventListener("click", app.resetSimulator);
 
   const dismissDisclaimerScreen = () => {
     document.querySelector(".disclaimerScreen").remove();
@@ -412,7 +356,4 @@ const ScreenController = (function () {
       addOffenceAndUpdateDOM(event)
     );
   });
-
-  // To make development easier
-  dismissDisclaimerScreen();
 })();
