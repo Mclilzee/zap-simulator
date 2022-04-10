@@ -14,8 +14,12 @@ const svgPaths = {
 /*~~~~~~~~~~~~~~~~~~Code in this block should be phased out~~~~~~~~~~~~~~~~~~*/
 let totalPoints = 0;
 
-const Levels = (function() {
-  const generateLevel = (offenceButtonIndex, offenceTier, pointsAfterOffence) => {
+const Levels = (function () {
+  const generateLevel = (
+    offenceButtonIndex,
+    offenceTier,
+    pointsAfterOffence
+  ) => {
     return {
       offenceButtonIndex: offenceButtonIndex,
       offenceTier: Number(offenceTier),
@@ -43,21 +47,21 @@ const Levels = (function() {
   };
 
   const reset = () => {
-    levels = createLevels().flat()
-  }
+    levels = createLevels().flat();
+  };
 
   let levels = createLevels().flat();
 
   return {
     getObject,
     reset,
-  }
-})()
+  };
+})();
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 const offences = {
   //"offenceName": offenceTier
-  "dogpiling": 0,
+  dogpiling: 0,
   "discussing windows": 0,
   "chat bombing": 0,
   "discussing mental health issues": 0,
@@ -77,102 +81,93 @@ const offences = {
   "arguing over moderation": 3,
   "excessive toxicity": 3,
 
-  "bigotry": 4,
+  bigotry: 4,
   "continued harrassment": 4,
   "nsfw or highly offensive content": 4,
-  "spamming": 4,
-  "doxxing": 4,
-}
+  spamming: 4,
+  doxxing: 4,
+};
 
 function Offence(offenceName, offenceTier) {
   return {
-    offenceName, 
+    offenceName,
     offenceTier: Number(offenceTier),
     pointsAfterOffence: Number(offenceTier),
     addTier: function () {
-      if(this.pointsAfterOffence < 4) {
+      if (this.pointsAfterOffence < 4) {
         this.pointsAfterOffence++;
       }
     },
   };
-};
+}
 
 function createOffenceList(offences) {
   const offenceList = [];
-  for(const offenceName in offences) {
-    offenceList.push(Offence(offenceName, offences[offenceName]))
+  for (const offenceName in offences) {
+    offenceList.push(Offence(offenceName, offences[offenceName]));
   }
-  return offenceList
+  return offenceList;
 }
 
 // Meant to be used as a factory function with 'offences' object
 function ZapSimulator(offences) {
   const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-  const offenceList = createOffenceList(offences)
-  let points = 0
+  const offenceList = createOffenceList(offences);
+  let points = 0;
 
   function _findOffence(offenceName) {
     return offenceList.find((offence) => {
-      return offence.offenceName === offenceName
+      return offence.offenceName === offenceName;
     });
-  };
+  }
 
   function _isBanned() {
-    if(points >= 10) {
-      return true
+    if (points >= 10) {
+      return true;
     } else {
-      return false
+      return false;
     }
   }
 
   function _reducePoint() {
-    if(points > 0) {
-      return --points
+    if (points > 0) {
+      return --points;
     } else {
-      return points
+      return points;
     }
   }
 
   function commitOffence(offenceName) {
-    const offence = _findOffence(offenceName)
-    const pointsToAdd = tierPoints[offence.pointsAfterOffence]
-    points += pointsToAdd
-    offence.addTier()
-    const nextPoints = tierPoints[offence.pointsAfterOffence]
+    const offence = _findOffence(offenceName);
+    const pointsToAdd = tierPoints[offence.pointsAfterOffence];
+    points += pointsToAdd;
+    offence.addTier();
+    const nextPoints = tierPoints[offence.pointsAfterOffence];
     return {
       points,
       offenceCommitted: offence.offenceName,
       addedPoints: pointsToAdd,
       nextPoints,
-      isBanned: _isBanned()
-    }
+      isBanned: _isBanned(),
+    };
   }
 
   return Object.freeze({
     commitOffence,
     waitOneWeek: _reducePoint,
-    get offences() { return offenceList.map(offence => offence.offenceName) },
-    get points() {return points}
-  })
+    get offences() {
+      return offenceList.map((offence) => offence.offenceName);
+    },
+    get points() {
+      return points;
+    },
+  });
 }
 
 /* These Two Functions use functions a variety of modules. */
-const addOffenceAndUpdateDOM = (event) => {
-  if (event.target.tagName === "BUTTON") {
-    const classes = event.target.classList;
-    const offenceButtonIndex = classes[1][1];
-    const tier = Number(classes[0].slice(-1));
-    const offenceObject = Levels.getObject(offenceButtonIndex, tier);
-    ChartController.updateChart(offenceObject);
-    StatsController.updateStats(offenceObject, event.target.textContent);
-    FormController.checkBan();
-    offenceObject.add_tier();
-  }
-  FormController.form.classList.add("hidden");
-};
 
 const resetSimulator = () => {
-  Levels.reset()
+  Levels.reset();
   totalPoints = 0;
   // resets chart
   document.querySelectorAll(".cell").forEach((cell) => {
@@ -185,7 +180,7 @@ const resetSimulator = () => {
   document.querySelector(".bannMessage").classList.add("hidden");
 };
 
-const FormController = (function() {
+const FormController = function () {
   let form;
   const colorCodes = {
     0: "#ffdc2f",
@@ -197,7 +192,7 @@ const FormController = (function() {
 
   const updateButtons = (form) => {
     const combinedOffencesContainer = form.lastElementChild;
-  
+
     let buttons = [];
     [...combinedOffencesContainer.childNodes].forEach((element) => {
       const button = [...element.childNodes].filter(
@@ -205,7 +200,7 @@ const FormController = (function() {
       );
       buttons = [...buttons, ...button];
     });
-  
+
     buttons.forEach((button) => {
       const classes = button.classList;
       const obj = Levels.getObject(classes[1][1], classes[0][1]);
@@ -226,27 +221,12 @@ const FormController = (function() {
     }
   };
 
-  const dismissDisclaimerScreen = () => {
-    document.querySelector(".disclaimerScreen").remove();
-  };
-
   const displayFormWithUpdatedPoints = (event) => {
     const index = Number(event.target.id.slice(-1));
     form = document.querySelector(`.lvl${index}`);
     updateButtons(form);
     form.classList.remove("hidden");
   };
-
-  const disclaimerConfirmButton = document.querySelector(
-    ".disclaimerConfirmButton"
-  );
-  disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
-
-  const forms = document.querySelectorAll(".form");
-  forms.forEach((eachForm) => {
-    // eachForm is to avoid name conflict with form
-    eachForm.addEventListener("click", (event) => addOffenceAndUpdateDOM(event));
-  });
 
   const zapButtons = document.querySelectorAll(".zapButton");
   zapButtons.forEach((button) => {
@@ -271,11 +251,13 @@ const FormController = (function() {
 
   return {
     checkBan,
-    get form() {return form}
-  }
-})()
+    get form() {
+      return form;
+    },
+  };
+};
 
-const ChartController = (function() {
+const ChartController = function () {
   const getFactor = (allCellImages) => {
     const setFactor = 10; // Gap between each svg
     return setFactor * (allCellImages.length - 1);
@@ -315,11 +297,11 @@ const ChartController = (function() {
   };
 
   return {
-    updateChart
-  }
-})()
+    updateChart,
+  };
+};
 
-const StatsController = (function() {
+const StatsController = function () {
   const getStats = (obj, offenceType) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
@@ -351,18 +333,15 @@ const StatsController = (function() {
     points ? (points.textContent = `Current Zap Points: ${totalPoints}`) : null;
   };
 
-  const resetButton = document.querySelector(".resetButton");
-  resetButton.addEventListener("click", resetSimulator);
-
   const timeTravelButton = document.querySelector(".timeTravelButton");
   timeTravelButton.addEventListener("click", reducePointAndUpdateDOM);
 
   return {
-    updateStats
-  }
-})()
+    updateStats,
+  };
+};
 
-const ThemeController = (function() {
+const ThemeController = function () {
   const changeThemeAndSave = () => {
     document.documentElement.classList.toggle("dark");
     swapThemeIcon();
@@ -391,4 +370,48 @@ const ThemeController = (function() {
   const themeIconsButton = document.querySelector(".themeIcons");
   themeIconsButton.addEventListener("click", changeThemeAndSave);
   checkLocalStorageTheme();
-})()
+};
+
+const ScreenController = (function () {
+  const form = FormController();
+  const chart = ChartController();
+  const stats = StatsController();
+  const theme = ThemeController();
+
+  const resetButton = document.querySelector(".resetButton");
+  resetButton.addEventListener("click", resetSimulator);
+
+  const dismissDisclaimerScreen = () => {
+    document.querySelector(".disclaimerScreen").remove();
+  };
+
+  const disclaimerConfirmButton = document.querySelector(
+    ".disclaimerConfirmButton"
+  );
+  disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
+
+  const addOffenceAndUpdateDOM = (event) => {
+    if (event.target.tagName === "BUTTON") {
+      const classes = event.target.classList;
+      const offenceButtonIndex = classes[1][1];
+      const tier = Number(classes[0].slice(-1));
+      const offenceObject = Levels.getObject(offenceButtonIndex, tier);
+      chart.updateChart(offenceObject);
+      stats.updateStats(offenceObject, event.target.textContent);
+      form.checkBan();
+      offenceObject.add_tier();
+    }
+    form.form.classList.add("hidden");
+  };
+
+  const forms = document.querySelectorAll(".form");
+  forms.forEach((eachForm) => {
+    // eachForm is to avoid name conflict with form
+    eachForm.addEventListener("click", (event) =>
+      addOffenceAndUpdateDOM(event)
+    );
+  });
+
+  // To make development easier
+  dismissDisclaimerScreen();
+})();
