@@ -141,6 +141,7 @@ function ZapSimulator(offences) {
     const offence = _findOffence(offenceName);
     const pointsToAdd = tierPoints[offence.pointsAfterOffence];
     points += pointsToAdd;
+    const severityLevel = offence.pointsAfterOffence;
     offence.addTier();
     const nextPoints = tierPoints[offence.pointsAfterOffence];
     return {
@@ -148,6 +149,8 @@ function ZapSimulator(offences) {
       offenceCommitted: offence.offenceName,
       addedPoints: pointsToAdd,
       nextPoints,
+      severityLevel,
+      offenceTier: offence.offenceTier,
       isBanned: _isBanned(),
     };
   }
@@ -278,16 +281,14 @@ const ChartController = function () {
 
   const updateChart = (offenceObject) => {
     const cell = document.querySelector(
-      `#t${offenceObject.offenceTier}${offenceObject.pointsAfterOffence}`
+      `#t${offenceObject.offenceTier}${offenceObject.severityLevel}`
     );
     const div = document.createElement("div");
     div.classList.add("img-container");
-    div.style.backgroundImage = `url(${
-      svgPaths[offenceObject.pointsAfterOffence]
-    })`;
+    div.style.backgroundImage = `url(${svgPaths[offenceObject.severityLevel]})`;
     cell.appendChild(div);
     const allCellImages = document.querySelectorAll(
-      `#t${offenceObject.offenceTier}${offenceObject.pointsAfterOffence} > div`
+      `#t${offenceObject.offenceTier}${offenceObject.severityLevel} > div`
     );
     const setImgs = setImages(allCellImages);
     cell.textContent = "";
@@ -308,11 +309,9 @@ const StatsController = function () {
     const name = document.createElement("div");
     const afterOffencePoints = document.createElement("div");
     currentPoints.classList.add("t_points");
-    currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
+    currentPoints.textContent = `Current Zap Points: ${obj.points}`;
     name.textContent = `Last offence committed: ${offenceType}`;
-    afterOffencePoints.textContent = `${offenceType}'s tier moved: ${
-      tierPoints[obj.pointsAfterOffence]
-    } => ${tierPoints[obj.pointsAfterOffence + 1]}`;
+    afterOffencePoints.textContent = `${offenceType}'s tier moved: ${obj.addedPoints} => ${obj.nextPoints}`;
     return [currentPoints, name, afterOffencePoints];
   };
 
@@ -373,6 +372,7 @@ const ThemeController = function () {
 };
 
 const ScreenController = (function () {
+  const app = ZapSimulator(offences);
   const form = FormController();
   const chart = ChartController();
   const stats = StatsController();
@@ -392,14 +392,15 @@ const ScreenController = (function () {
 
   const addOffenceAndUpdateDOM = (event) => {
     if (event.target.tagName === "BUTTON") {
-      const classes = event.target.classList;
-      const offenceButtonIndex = classes[1][1];
-      const tier = Number(classes[0].slice(-1));
-      const offenceObject = Levels.getObject(offenceButtonIndex, tier);
+      const offenceName = event.target.textContent;
+      const offenceObject = app.commitOffence(offenceName.toLowerCase());
+
       chart.updateChart(offenceObject);
-      stats.updateStats(offenceObject, event.target.textContent);
-      form.checkBan();
-      offenceObject.add_tier();
+      stats.updateStats(offenceObject, offenceName);
+
+      if (offenceObject.isBanned) {
+        document.querySelector(".bannMessage").classList.remove("hidden");
+      }
     }
     form.form.classList.add("hidden");
   };
