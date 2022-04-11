@@ -118,9 +118,8 @@ function ZapSimulator(offences) {
   });
 }
 
-const FormController = function (app) {
+const FormController = function () {
   let form;
-  let banMessageShown = false;
   const colorCodes = {
     0: "#ffdc2f",
     1: "#eeb434",
@@ -128,48 +127,6 @@ const FormController = function (app) {
     3: "#d47032",
     4: "#be1e2d",
   };
-
-  const updateButtons = (form) => {
-    const combinedOffencesContainer = form.lastElementChild;
-    const offencesList = app.offencesList;
-
-    let buttons = [];
-    [...combinedOffencesContainer.childNodes].forEach((element) => {
-      const button = [...element.childNodes].filter(
-        (node) => node.tagName == "BUTTON"
-      );
-      buttons = [...buttons, ...button];
-    });
-
-    buttons.forEach((button) => {
-      const offenceName = button.textContent.toLowerCase();
-      const offence = offencesList.find(
-        (offence) => offence.offenceName === offenceName
-      );
-
-      button.style.borderColor = colorCodes[`${offence.pointsAfterOffence}`];
-      button.nextSibling.textContent = `Add Points: ${
-        app.tierPoints[offence.pointsAfterOffence]
-      }`;
-    });
-  };
-
-  const displayFormWithUpdatedPoints = (event) => {
-    const index = Number(event.target.id.slice(-1));
-    form = document.querySelector(`.lvl${index}`);
-    updateButtons(form);
-    form.classList.remove("hidden");
-  };
-
-  const zapButtons = document.querySelectorAll(".zapButton");
-  zapButtons.forEach((button) => {
-    button.addEventListener("click", (event) =>
-      displayFormWithUpdatedPoints(event)
-    );
-  });
-
-  const tryAgainButton = document.querySelector(".tryAgainButton");
-  const resetButton = document.querySelector(".resetButton");
 
   (function addTierTags() {
     const buttons = document.querySelectorAll(
@@ -181,6 +138,42 @@ const FormController = function (app) {
       button.parentNode.insertBefore(tag, button.nextSibling);
     });
   })();
+
+  function intializeButtonText(tierPoints) {
+    document.querySelectorAll("button").forEach((button) => {
+      const buttonText = button.textContent.toLowerCase();
+
+      if (buttonText in offences) {
+        const offencePoint = offences[buttonText];
+        button.style.borderColor = colorCodes[`${offencePoint}`];
+        button.nextSibling.textContent = `Add Points: ${tierPoints[offencePoint]}`;
+      }
+    });
+  }
+
+  const updateButtonTextPoint = (offenceObject) => {
+    const allButtons = Array.from(document.querySelectorAll("button"));
+    const updateButton = allButtons.find(
+      (button) =>
+        button.textContent.toLowerCase() === offenceObject.offenceCommitted
+    );
+    updateButton.nextSibling.textContent = `Add Points: ${offenceObject.nextPoints}`;
+  };
+
+  const displayForm = (event) => {
+    const index = Number(event.target.id.slice(-1));
+    form = document.querySelector(`.lvl${index}`);
+    form.classList.remove("hidden");
+  };
+
+  const zapButtons = document.querySelectorAll(".zapButton");
+
+  zapButtons.forEach((button) => {
+    button.addEventListener("click", displayForm);
+  });
+
+  const tryAgainButton = document.querySelector(".tryAgainButton");
+  const resetButton = document.querySelector(".resetButton");
 
   const dismissDisclaimerScreen = () => {
     document.querySelector(".disclaimerScreen").remove();
@@ -197,9 +190,6 @@ const FormController = function (app) {
     form.classList.add("hidden");
   };
 
-  // Use during development
-  dismissDisclaimerScreen();
-
   const hideBanMessage = () => {
     document.querySelector(".bannMessage").classList.add("hidden");
     banMessageShown = false;
@@ -209,6 +199,10 @@ const FormController = function (app) {
     document.querySelector(".bannMessage").classList.remove("hidden");
     banMessageShown = true;
   };
+
+  document.querySelectorAll(".closeSvg").forEach((closeButton) => {
+    closeButton.addEventListener("click", hideDisplayedForm);
+  });
 
   return {
     get form() {
@@ -220,15 +214,17 @@ const FormController = function (app) {
     get resetButton() {
       return resetButton;
     },
-    get banMessageShown() {
-      return banMessageShown;
-    },
     get allForms() {
       return allForms;
+    },
+    get zapButtons() {
+      return zapButtons;
     },
     showBanMessage,
     hideBanMessage,
     hideDisplayedForm,
+    updateButtonTextPoint,
+    intializeButtonText,
   };
 };
 
@@ -367,9 +363,11 @@ const ThemeController = (function () {
 
 const ScreenController = (function () {
   const app = ZapSimulator(offences);
-  const form = FormController(app);
+  const form = FormController();
   const chart = ChartController();
   const stats = StatsController();
+
+  form.intializeButtonText(app.tierPoints);
 
   const resetSimulator = () => {
     if (app.points >= 10) {
@@ -380,14 +378,13 @@ const ScreenController = (function () {
     chart.resetChart();
   };
 
-  form.resetButton.addEventListener("click", resetSimulator);
-  form.tryAgainButton.addEventListener("click", resetSimulator);
-
   const waitOneWeek = () => {
     app.waitOneWeek();
     stats.waitWeekUpdateDOM();
   };
 
+  form.resetButton.addEventListener("click", resetSimulator);
+  form.tryAgainButton.addEventListener("click", resetSimulator);
   stats.timeTravelButton.addEventListener("click", waitOneWeek);
 
   const updateScreen = (event) => {
@@ -397,12 +394,13 @@ const ScreenController = (function () {
 
       chart.updateChart(offenceObject);
       stats.updateStats(offenceObject, offenceName);
+      form.updateButtonTextPoint(offenceObject);
+      form.hideDisplayedForm();
 
       if (offenceObject.isBanned) {
         form.showBanMessage();
       }
     }
-    form.hideDisplayedForm();
   };
 
   form.allForms.forEach((eachForm) => {
