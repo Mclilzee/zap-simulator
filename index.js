@@ -94,23 +94,14 @@ function ZapSimulator(offences) {
     };
   }
 
-  function resetSimulator() {
+  function reset() {
     points = 0;
     offenceList = createOffenceList(offences);
-    // resets chart
-    document.querySelectorAll(".cell").forEach((cell) => {
-      cell.textContent = "";
-    });
-    // resets Stats
-    document.querySelector(".zapPointsLabel").textContent =
-      "Welcome, you are clean right now";
-    // hides ban message
-    document.querySelector(".bannMessage").classList.add("hidden");
   }
 
   return Object.freeze({
     commitOffence,
-    resetSimulator,
+    reset,
     waitOneWeek: _reducePoint,
     get offences() {
       return offenceList.map((offence) => offence.offenceName);
@@ -129,6 +120,7 @@ function ZapSimulator(offences) {
 
 const FormController = function (app) {
   let form;
+  let banMessageShown = false;
   const colorCodes = {
     0: "#ffdc2f",
     1: "#eeb434",
@@ -139,7 +131,6 @@ const FormController = function (app) {
 
   const updateButtons = (form) => {
     const combinedOffencesContainer = form.lastElementChild;
-
     const offencesList = app.offencesList;
 
     let buttons = [];
@@ -178,7 +169,7 @@ const FormController = function (app) {
   });
 
   const tryAgainButton = document.querySelector(".tryAgainButton");
-  tryAgainButton.addEventListener("click", app.resetSimulator);
+  const resetButton = document.querySelector(".resetButton");
 
   (function addTierTags() {
     const buttons = document.querySelectorAll(
@@ -191,10 +182,43 @@ const FormController = function (app) {
     });
   })();
 
+  const dismissDisclaimerScreen = () => {
+    document.querySelector(".disclaimerScreen").remove();
+  };
+
+  const disclaimerConfirmButton = document.querySelector(
+    ".disclaimerConfirmButton"
+  );
+  disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
+
+  // Use during development
+  dismissDisclaimerScreen();
+
+  const hideBanMessage = () => {
+    document.querySelector(".bannMessage").classList.add("hidden");
+    banMessageShown = false;
+  };
+
+  const showBanMessage = () => {
+    document.querySelector(".bannMessage").classList.remove("hidden");
+    banMessageShown = true;
+  };
+
   return {
     get form() {
       return form;
     },
+    get tryAgainButton() {
+      return tryAgainButton;
+    },
+    get resetButton() {
+      return resetButton;
+    },
+    get banMessageShown() {
+      return banMessageShown;
+    },
+    showBanMessage,
+    hideBanMessage,
   };
 };
 
@@ -243,8 +267,15 @@ const ChartController = function () {
     });
   };
 
+  const resetChart = () => {
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.textContent = "";
+    });
+  };
+
   return {
     updateChart,
+    resetChart,
   };
 };
 
@@ -280,8 +311,14 @@ const StatsController = function (app) {
   const timeTravelButton = document.querySelector(".timeTravelButton");
   timeTravelButton.addEventListener("click", reducePointAndUpdateDOM);
 
+  const resetStats = () => {
+    document.querySelector(".zapPointsLabel").textContent =
+      "Welcome, you are clean right now";
+  };
+
   return {
     updateStats,
+    resetStats,
   };
 };
 
@@ -322,19 +359,19 @@ const ScreenController = (function () {
   const chart = ChartController();
   const stats = StatsController(app);
 
-  const resetButton = document.querySelector(".resetButton");
-  resetButton.addEventListener("click", app.resetSimulator);
-
-  const dismissDisclaimerScreen = () => {
-    document.querySelector(".disclaimerScreen").remove();
+  const resetSimulator = () => {
+    if (app.points >= 10) {
+      form.hideBanMessage();
+    }
+    app.reset();
+    stats.resetStats();
+    chart.resetChart();
   };
 
-  const disclaimerConfirmButton = document.querySelector(
-    ".disclaimerConfirmButton"
-  );
-  disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
+  form.resetButton.addEventListener("click", resetSimulator);
+  form.tryAgainButton.addEventListener("click", resetSimulator);
 
-  const addOffenceAndUpdateDOM = (event) => {
+  const updateScreen = (event) => {
     if (event.target.tagName === "BUTTON") {
       const offenceName = event.target.textContent;
       const offenceObject = app.commitOffence(offenceName.toLowerCase());
@@ -343,7 +380,7 @@ const ScreenController = (function () {
       stats.updateStats(offenceObject, offenceName);
 
       if (offenceObject.isBanned) {
-        document.querySelector(".bannMessage").classList.remove("hidden");
+        form.showBanMessage();
       }
     }
     form.form.classList.add("hidden");
@@ -352,8 +389,6 @@ const ScreenController = (function () {
   const forms = document.querySelectorAll(".form");
   forms.forEach((eachForm) => {
     // eachForm is to avoid name conflict with form
-    eachForm.addEventListener("click", (event) =>
-      addOffenceAndUpdateDOM(event)
-    );
+    eachForm.addEventListener("click", updateScreen);
   });
 })();
