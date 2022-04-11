@@ -198,7 +198,7 @@ const FormController = function (app) {
   };
 
   // Use during development
-  // dismissDisclaimerScreen();
+  dismissDisclaimerScreen();
 
   const hideBanMessage = () => {
     document.querySelector(".bannMessage").classList.add("hidden");
@@ -289,7 +289,7 @@ const ChartController = function () {
   };
 };
 
-const StatsController = function (app) {
+const StatsController = function () {
   const getStats = (obj, offenceType) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
@@ -312,14 +312,12 @@ const StatsController = function (app) {
     });
   };
 
-  const reducePointAndUpdateDOM = () => {
-    app.waitOneWeek();
+  const waitWeekUpdateDOM = () => {
     const points = document.querySelector(".t_points");
     points ? (points.textContent = `Current Zap Points: ${app.points}`) : null;
   };
 
   const timeTravelButton = document.querySelector(".timeTravelButton");
-  timeTravelButton.addEventListener("click", reducePointAndUpdateDOM);
 
   const resetStats = () => {
     document.querySelector(".zapPointsLabel").textContent =
@@ -329,6 +327,10 @@ const StatsController = function (app) {
   return {
     updateStats,
     resetStats,
+    waitWeekUpdateDOM,
+    get timeTravelButton() {
+      return timeTravelButton;
+    },
   };
 };
 
@@ -367,7 +369,7 @@ const ScreenController = (function () {
   const app = ZapSimulator(offences);
   const form = FormController(app);
   const chart = ChartController();
-  const stats = StatsController(app);
+  const stats = StatsController();
 
   const resetSimulator = () => {
     if (app.points >= 10) {
@@ -380,6 +382,13 @@ const ScreenController = (function () {
 
   form.resetButton.addEventListener("click", resetSimulator);
   form.tryAgainButton.addEventListener("click", resetSimulator);
+
+  const waitOneWeek = () => {
+    app.waitOneWeek();
+    stats.waitWeekUpdateDOM();
+  };
+
+  stats.timeTravelButton.addEventListener("click", waitOneWeek);
 
   const updateScreen = (event) => {
     if (event.target.tagName === "BUTTON") {
