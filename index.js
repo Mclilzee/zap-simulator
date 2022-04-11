@@ -191,8 +191,14 @@ const FormController = function (app) {
   );
   disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
 
+  const allForms = document.querySelectorAll(".form");
+
+  const hideDisplayedForm = () => {
+    form.classList.add("hidden");
+  };
+
   // Use during development
-  dismissDisclaimerScreen();
+  // dismissDisclaimerScreen();
 
   const hideBanMessage = () => {
     document.querySelector(".bannMessage").classList.add("hidden");
@@ -217,8 +223,12 @@ const FormController = function (app) {
     get banMessageShown() {
       return banMessageShown;
     },
+    get allForms() {
+      return allForms;
+    },
     showBanMessage,
     hideBanMessage,
+    hideDisplayedForm,
   };
 };
 
@@ -383,12 +393,10 @@ const ScreenController = (function () {
         form.showBanMessage();
       }
     }
-    form.form.classList.add("hidden");
+    form.hideDisplayedForm();
   };
 
-  const forms = document.querySelectorAll(".form");
-  forms.forEach((eachForm) => {
-    // eachForm is to avoid name conflict with form
+  form.allForms.forEach((eachForm) => {
     eachForm.addEventListener("click", updateScreen);
   });
 })();
