@@ -48,7 +48,6 @@ function createOffenceList(offences) {
   return offenceList;
 }
 
-// Meant to be used as a factory function with 'offences' object
 function ZapSimulator(offences) {
   const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
   let offenceList = createOffenceList(offences);
@@ -109,6 +108,9 @@ function ZapSimulator(offences) {
     get tierPoints() {
       return tierPoints;
     },
+    get offences() {
+      return offences;
+    },
   });
 }
 
@@ -133,7 +135,7 @@ const Form = function () {
     });
   })();
 
-  function intializeButtonText(tierPoints) {
+  function initializeButtonText(tierPoints, offences) {
     document.querySelectorAll("button").forEach((button) => {
       const buttonText = button.textContent.toLowerCase();
 
@@ -151,6 +153,8 @@ const Form = function () {
       (button) =>
         button.textContent.toLowerCase() === offenceObject.offenceCommitted
     );
+    updateButton.style.borderColor =
+      colorCodes[offenceObject.severityLevel + 1];
     updateButton.nextSibling.textContent = `Add Points: ${offenceObject.nextPoints}`;
     hideDisplayedForm();
   };
@@ -197,14 +201,12 @@ const Form = function () {
     closeButton.addEventListener("click", hideDisplayedForm);
   });
 
-  const resetForm = (appPoints, tierPoints) => {
+  const resetForm = (appPoints, tierPoints, offences) => {
     if (appPoints >= 10) {
       hideBanMessage();
     }
-    intializeButtonText(tierPoints);
+    initializeButtonText(tierPoints, offences);
   };
-
-  dismissDisclaimerScreen();
 
   return {
     get tryAgainButton() {
@@ -218,7 +220,7 @@ const Form = function () {
     },
     showBanMessage,
     updateForm,
-    intializeButtonText,
+    initializeButtonText,
     resetForm,
   };
 };
@@ -362,10 +364,10 @@ const ScreenController = (function () {
   const chart = Chart();
   const stats = Stats();
 
-  form.intializeButtonText(app.tierPoints);
+  form.initializeButtonText(app.tierPoints, app.offences);
 
   const resetSimulator = () => {
-    form.resetForm(app.points, app.tierPoints);
+    form.resetForm(app.points, app.tierPoints, app.offences);
     app.reset();
     stats.resetStats();
     chart.resetChart();
