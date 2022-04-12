@@ -103,12 +103,6 @@ function ZapSimulator(offences) {
     commitOffence,
     reset,
     waitOneWeek: _reducePoint,
-    get offences() {
-      return offenceList.map((offence) => offence.offenceName);
-    },
-    get offencesList() {
-      return offenceList;
-    },
     get points() {
       return points;
     },
@@ -118,7 +112,7 @@ function ZapSimulator(offences) {
   });
 }
 
-const FormController = function () {
+const Form = function () {
   let form;
   const colorCodes = {
     0: "#ffdc2f",
@@ -151,13 +145,14 @@ const FormController = function () {
     });
   }
 
-  const updateButtonTextPoint = (offenceObject) => {
+  const updateForm = (offenceObject) => {
     const allButtons = Array.from(document.querySelectorAll("button"));
     const updateButton = allButtons.find(
       (button) =>
         button.textContent.toLowerCase() === offenceObject.offenceCommitted
     );
     updateButton.nextSibling.textContent = `Add Points: ${offenceObject.nextPoints}`;
+    hideDisplayedForm();
   };
 
   const displayForm = (event) => {
@@ -192,22 +187,26 @@ const FormController = function () {
 
   const hideBanMessage = () => {
     document.querySelector(".bannMessage").classList.add("hidden");
-    banMessageShown = false;
   };
 
   const showBanMessage = () => {
     document.querySelector(".bannMessage").classList.remove("hidden");
-    banMessageShown = true;
   };
 
   document.querySelectorAll(".closeSvg").forEach((closeButton) => {
     closeButton.addEventListener("click", hideDisplayedForm);
   });
 
+  const resetForm = (appPoints, tierPoints) => {
+    if (appPoints >= 10) {
+      hideBanMessage();
+    }
+    intializeButtonText(tierPoints);
+  };
+
+  dismissDisclaimerScreen();
+
   return {
-    get form() {
-      return form;
-    },
     get tryAgainButton() {
       return tryAgainButton;
     },
@@ -217,18 +216,14 @@ const FormController = function () {
     get allForms() {
       return allForms;
     },
-    get zapButtons() {
-      return zapButtons;
-    },
     showBanMessage,
-    hideBanMessage,
-    hideDisplayedForm,
-    updateButtonTextPoint,
+    updateForm,
     intializeButtonText,
+    resetForm,
   };
 };
 
-const ChartController = function () {
+const Chart = function () {
   const svgPaths = {
     0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
     1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
@@ -285,7 +280,7 @@ const ChartController = function () {
   };
 };
 
-const StatsController = function () {
+const Stats = function () {
   const getStats = (obj, offenceType) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
@@ -308,9 +303,9 @@ const StatsController = function () {
     });
   };
 
-  const waitWeekUpdateDOM = () => {
+  const waitWeekUpdateDOM = (appPoints) => {
     const points = document.querySelector(".t_points");
-    points ? (points.textContent = `Current Zap Points: ${app.points}`) : null;
+    points ? (points.textContent = `Current Zap Points: ${appPoints}`) : null;
   };
 
   const timeTravelButton = document.querySelector(".timeTravelButton");
@@ -330,7 +325,7 @@ const StatsController = function () {
   };
 };
 
-const ThemeController = (function () {
+const Theme = (function () {
   const changeThemeAndSave = () => {
     document.documentElement.classList.toggle("dark");
     swapThemeIcon();
@@ -363,16 +358,14 @@ const ThemeController = (function () {
 
 const ScreenController = (function () {
   const app = ZapSimulator(offences);
-  const form = FormController();
-  const chart = ChartController();
-  const stats = StatsController();
+  const form = Form();
+  const chart = Chart();
+  const stats = Stats();
 
   form.intializeButtonText(app.tierPoints);
 
   const resetSimulator = () => {
-    if (app.points >= 10) {
-      form.hideBanMessage();
-    }
+    form.resetForm(app.points, app.tierPoints);
     app.reset();
     stats.resetStats();
     chart.resetChart();
@@ -380,7 +373,7 @@ const ScreenController = (function () {
 
   const waitOneWeek = () => {
     app.waitOneWeek();
-    stats.waitWeekUpdateDOM();
+    stats.waitWeekUpdateDOM(app.points);
   };
 
   form.resetButton.addEventListener("click", resetSimulator);
@@ -394,8 +387,7 @@ const ScreenController = (function () {
 
       chart.updateChart(offenceObject);
       stats.updateStats(offenceObject, offenceName);
-      form.updateButtonTextPoint(offenceObject);
-      form.hideDisplayedForm();
+      form.updateForm(offenceObject);
 
       if (offenceObject.isBanned) {
         form.showBanMessage();
