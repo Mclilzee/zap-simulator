@@ -1,62 +1,72 @@
-const offences = {
-  //"offenceName": offenceTier
-  dogpiling: 0,
-  "discussing windows": 0,
-  "chat bombing": 0,
-  "discussing mental health issues": 0,
-  "inappropriate profile": 0,
+const offenceTiers = [
+  {
+    tier: 0,
+    zaps: 0,
+    offences: [
+      "dogpiling",
+      "discussing windows",
+      "chat bombing",
+      "discussing mental health issues",
+      "inappropriate profile",
+    ],
+  },
+  {
+    tier: 1,
+    zaps: 1,
+    offences: [
+      "mini-modding",
+      "requesting out of scope help",
+      "mild unprofessionalism",
+    ],
+  },
+  {
+    tier: 2,
+    zaps: 2,
+    offences: [
+      "discussing piracy",
+      "unsolicited pings/dms",
+      "discussing politics/religion",
+      "mild toxicity",
+      "self promoting without permission",
+    ],
+  },
+  {
+    tier: 3,
+    zaps: 5,
+    offences: [
+      "discussing illegal activities",
+      "arguing over moderation",
+      "excessive toxicity",
+    ],
+  },
+  {
+    tier: 4,
+    zaps: 10,
+    offences: [
+      "bigotry",
+      "continued harrassment",
+      "nsfw or highly offensive content",
+      "spamming",
+      "doxxing",
+    ],
+  },
+];
 
-  "mini-modding": 1,
-  "requesting out of scope help": 1,
-  "mild unprofessionalism": 1,
-
-  "discussing piracy": 2,
-  "unsolicited pings/dms": 2,
-  "discussing politics/religion": 2,
-  "mild toxicity": 2,
-  "self promoting without permission": 2,
-
-  "discussing illegal activities": 3,
-  "arguing over moderation": 3,
-  "excessive toxicity": 3,
-
-  bigotry: 4,
-  "continued harrassment": 4,
-  "nsfw or highly offensive content": 4,
-  spamming: 4,
-  doxxing: 4,
-};
-
-function Offence(offenceName, offenceTier) {
-  return {
-    offenceName,
-    offenceTier: Number(offenceTier),
-    pointsAfterOffence: Number(offenceTier),
-    addTier: function () {
-      if (this.pointsAfterOffence < 4) {
-        this.pointsAfterOffence++;
-      }
-    },
-  };
-}
-
-function createOffenceList(offences) {
-  const offenceList = [];
-  for (const offenceName in offences) {
-    offenceList.push(Offence(offenceName, offences[offenceName]));
-  }
-  return offenceList;
-}
-
-function ZapSimulator(offences) {
-  const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-  let offenceList = createOffenceList(offences);
+function ZapSimulator(offenceTiers) {
   let points = 0;
+  let committedOffences = {};
 
-  function _findOffence(offenceName) {
-    return offenceList.find((offence) => {
-      return offence.offenceName === offenceName;
-    });
+  function _findTier(offenceName) {
+    for (let i = 0; i < offenceTiers.length; i++) {
+      if (offenceTiers[i].offences.includes(offenceName)) {
+        return offenceTiers[i].tier
+      }
+    }
+  }
+
+  function reset() {
+    points = 0;
+    committedOffences = {};
   }
 
   function _isBanned() {
@@ -65,6 +75,24 @@ function ZapSimulator(offences) {
     } else {
       return false;
     }
+  }
+
+  function _calculatePoints(tier, timesCommitted) {
+    if (tier + timesCommitted >= offenceTiers.length) {
+      return 10;
+    } else {
+      return offenceTiers[tier + timesCommitted].zaps;
+    }
+  }
+
+  function _updateTimesCommitted(offenceName) {
+    if (!committedOffences[offenceName]) {
+      committedOffences[offenceName] = 1;
+    } else {
+      ++committedOffences[offenceName];
+    }
+
+    return committedOffences[offenceName];
   }
 
   function _reducePoint() {
@@ -76,26 +104,36 @@ function ZapSimulator(offences) {
   }
 
   function commitOffence(offenceName) {
-    const offence = _findOffence(offenceName);
-    const pointsToAdd = tierPoints[offence.pointsAfterOffence];
+    const offenceTier = _findTier(offenceName);
+    if (offenceTier === undefined) return;
+
+    const previousTimesCommitted = committedOffences[offenceName]
+      ? committedOffences[offenceName]
+      : 0;
+
+    const pointsToAdd = _calculatePoints(offenceTier, previousTimesCommitted);
+
     points += pointsToAdd;
-    const severityLevel = offence.pointsAfterOffence;
-    offence.addTier();
-    const nextPoints = tierPoints[offence.pointsAfterOffence];
+
+    const severityLevel =
+     offenceTier + previousTimesCommitted > offenceTiers.length
+        ? offenceTiers.length
+        : offenceTier + previousTimesCommitted;
+
+    _updateTimesCommitted(offenceName);
+
+    const newTimesCommitted = committedOffences[offenceName];
+    const nextPoints = _calculatePoints(offenceTier, newTimesCommitted);
+
     return {
       points,
-      offenceCommitted: offence.offenceName,
+      offenceCommitted: offenceName,
       addedPoints: pointsToAdd,
       nextPoints,
       severityLevel,
-      offenceTier: offence.offenceTier,
+      offenceTier: offenceTier,
       isBanned: _isBanned(),
     };
-  }
-
-  function reset() {
-    points = 0;
-    offenceList = createOffenceList(offences);
   }
 
   return Object.freeze({
@@ -106,16 +144,18 @@ function ZapSimulator(offences) {
       return points;
     },
     get tierPoints() {
-      return tierPoints;
-    },
-    get offences() {
-      return offences;
+      // {0: 0, 1: 1, 2: 2, 3: 5, 4: 10};
+      return offenceTiers.reduce((object, tier, index) => {
+        object[index] = tier.zaps;
+        return object;
+      }, {});
     },
   });
 }
 
 const Form = function () {
   let form;
+  let tierTagsAdded = false;
   const colorCodes = {
     0: "#ffdc2f",
     1: "#eeb434",
@@ -124,7 +164,8 @@ const Form = function () {
     4: "#be1e2d",
   };
 
-  (function addTierTags() {
+  function addTierTags() {
+    if(tierTagsAdded === true) return
     const buttons = document.querySelectorAll(
       ".levels .combinedOffencesContainer .offenceContainer button"
     );
@@ -133,18 +174,18 @@ const Form = function () {
       tag.classList.add("tier-tag");
       button.parentNode.insertBefore(tag, button.nextSibling);
     });
-  })();
+    tierTagsAdded = true
+  }
 
-  function initializeButtonText(tierPoints, offences) {
-    document.querySelectorAll("button").forEach((button) => {
-      const buttonText = button.textContent.toLowerCase();
-
-      if (buttonText in offences) {
-        const offencePoint = offences[buttonText];
-        button.style.borderColor = colorCodes[`${offencePoint}`];
-        button.nextSibling.textContent = `Add Points: ${tierPoints[offencePoint]}`;
-      }
-    });
+  function initializeButtonText(tierPoints) {
+    addTierTags()
+    allForms.forEach( (form, index) => {
+      const buttons = form.querySelectorAll('button')
+      buttons.forEach(button => {
+        button.nextSibling.textContent = `Add Points: ${tierPoints[index]}`;
+        button.style.borderColor = colorCodes[`${index}`];
+      })
+    })
   }
 
   const updateForm = (offenceObject) => {
@@ -201,11 +242,9 @@ const Form = function () {
     closeButton.addEventListener("click", hideDisplayedForm);
   });
 
-  const resetForm = (appPoints, tierPoints, offences) => {
-    if (appPoints >= 10) {
-      hideBanMessage();
-    }
-    initializeButtonText(tierPoints, offences);
+  const resetForm = (tierPoints) => {
+    hideBanMessage();
+    initializeButtonText(tierPoints);
   };
 
   return {
@@ -216,6 +255,7 @@ const Form = function () {
       return resetButton;
     },
     get allForms() {
+      console.log(allForms)
       return allForms;
     },
     showBanMessage,
@@ -283,21 +323,21 @@ const Chart = function () {
 };
 
 const Stats = function () {
-  const getStats = (obj, offenceType) => {
+  const getStats = (obj) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
     const name = document.createElement("div");
     const afterOffencePoints = document.createElement("div");
     currentPoints.classList.add("t_points");
     currentPoints.textContent = `Current Zap Points: ${obj.points}`;
-    name.textContent = `Last offence committed: ${offenceType}`;
-    afterOffencePoints.textContent = `${offenceType}'s tier moved: ${obj.addedPoints} => ${obj.nextPoints}`;
+    name.textContent = `Last offence committed: ${obj.offenceCommitted}`;
+    afterOffencePoints.textContent = `${obj.offenceCommitted}'s tier moved: ${obj.addedPoints} => ${obj.nextPoints}`;
     return [currentPoints, name, afterOffencePoints];
   };
 
-  const updateStats = (offenceObject, offenceType) => {
+  const updateStats = (offenceObject) => {
     const displayStats = document.querySelector(".zapPointsLabel");
-    const stats = getStats(offenceObject, offenceType);
+    const stats = getStats(offenceObject);
     displayStats.textContent = "";
     stats.forEach((stat) => {
       stat.classList.add("stat");
@@ -359,15 +399,15 @@ const Theme = (function () {
 })();
 
 const ScreenController = (function () {
-  const app = ZapSimulator(offences);
+  const app = ZapSimulator(offenceTiers);
   const form = Form();
   const chart = Chart();
   const stats = Stats();
 
-  form.initializeButtonText(app.tierPoints, app.offences);
+  form.initializeButtonText(app.tierPoints);
 
   const resetSimulator = () => {
-    form.resetForm(app.points, app.tierPoints, app.offences);
+    form.resetForm(app.tierPoints);
     app.reset();
     stats.resetStats();
     chart.resetChart();
@@ -388,7 +428,7 @@ const ScreenController = (function () {
       const offenceObject = app.commitOffence(offenceName.toLowerCase());
 
       chart.updateChart(offenceObject);
-      stats.updateStats(offenceObject, offenceName);
+      stats.updateStats(offenceObject);
       form.updateForm(offenceObject);
 
       if (offenceObject.isBanned) {
