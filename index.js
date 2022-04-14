@@ -79,7 +79,7 @@ function ZapSimulator(offenceTiers) {
 
   function _calculatePoints(tier, timesCommitted) {
     if (tier + timesCommitted >= offenceTiers.length) {
-      return 10;
+      return offenceTiers[offenceTiers.length - 1].zaps
     } else {
       return offenceTiers[tier + timesCommitted].zaps;
     }
@@ -116,8 +116,8 @@ function ZapSimulator(offenceTiers) {
     points += pointsToAdd;
 
     const severityLevel =
-     offenceTier + previousTimesCommitted > offenceTiers.length
-        ? offenceTiers.length
+     offenceTier + previousTimesCommitted >= offenceTiers.length
+        ? offenceTiers.length - 1
         : offenceTier + previousTimesCommitted;
 
     _updateTimesCommitted(offenceName);
