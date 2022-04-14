@@ -140,15 +140,12 @@ function ZapSimulator(offenceTiers) {
     commitOffence,
     reset,
     waitOneWeek: _reducePoint,
+    tierPoints: offenceTiers.reduce((object, tier, index) => {
+      object[index] = tier.zaps;
+      return object;
+    }, {}), // {0: 0, 1: 1, 2: 2, 3: 5, 4: 10};
     get points() {
       return points;
-    },
-    get tierPoints() {
-      // {0: 0, 1: 1, 2: 2, 3: 5, 4: 10};
-      return offenceTiers.reduce((object, tier, index) => {
-        object[index] = tier.zaps;
-        return object;
-      }, {});
     },
   });
 }
