@@ -148,9 +148,9 @@ function ZapSimulator(offenceTiers) {
       return points;
     },
   });
-}
+};
 
-const Form = function () {
+const form = (function () {
   let form;
   let tierTagsAdded = false;
   const colorCodes = {
@@ -260,9 +260,9 @@ const Form = function () {
     initializeButtonText,
     resetForm,
   };
-};
+})();
 
-const Chart = function () {
+const chart = (function () {
   const svgPaths = {
     0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
     1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
@@ -317,9 +317,9 @@ const Chart = function () {
     updateChart,
     resetChart,
   };
-};
+})();
 
-const Stats = function () {
+const stats = (function () {
   const getStats = (obj) => {
     const currentPoints = document.createElement("div");
     currentPoints.style.fontWeight = "bold";
@@ -362,7 +362,7 @@ const Stats = function () {
       return timeTravelButton;
     },
   };
-};
+})();
 
 const Theme = (function () {
   const changeThemeAndSave = () => {
@@ -397,9 +397,6 @@ const Theme = (function () {
 
 const ScreenController = (function () {
   const app = ZapSimulator(offenceTiers);
-  const form = Form();
-  const chart = Chart();
-  const stats = Stats();
 
   form.initializeButtonText(app.tierPoints);
 
