@@ -1,232 +1,437 @@
-const tierPoints = { 0: 0, 1: 1, 2: 2, 3: 5, 4: 10 };
-let totalPoints = 0;
-let form;
+const offenceTiers = [
+  {
+    tier: 0,
+    zaps: 0,
+    offences: [
+      "dogpiling",
+      "discussing windows",
+      "chat bombing",
+      "discussing mental health issues",
+      "inappropriate profile",
+    ],
+  },
+  {
+    tier: 1,
+    zaps: 1,
+    offences: [
+      "mini-modding",
+      "requesting out of scope help",
+      "mild unprofessionalism",
+    ],
+  },
+  {
+    tier: 2,
+    zaps: 2,
+    offences: [
+      "discussing piracy",
+      "unsolicited pings/dms",
+      "discussing politics/religion",
+      "mild toxicity",
+      "self promoting without permission",
+    ],
+  },
+  {
+    tier: 3,
+    zaps: 5,
+    offences: [
+      "discussing illegal activities",
+      "arguing over moderation",
+      "excessive toxicity",
+    ],
+  },
+  {
+    tier: 4,
+    zaps: 10,
+    offences: [
+      "bigotry",
+      "continued harrassment",
+      "nsfw or highly offensive content",
+      "spamming",
+      "doxxing",
+    ],
+  },
+];
 
-const disclaimerConfirmButton = document.querySelector(
-  ".disclaimerConfirmButton"
-);
-disclaimerConfirmButton.addEventListener("click", () => {
-  document.querySelector(".disclaimerScreen").remove();
-});
+function ZapSimulator(offenceTiers) {
+  let points = 0;
+  let committedOffences = {};
 
-(function () {
-  //adds tier tags
-  const buttons = document.querySelectorAll(
-    ".levels .combinedOffencesContainer .offenceContainer button"
-  );
-  buttons.forEach((button) => {
-    const tag = document.createElement("span");
-    tag.classList.add("tier-tag");
-    button.parentNode.insertBefore(tag, button.nextSibling);
+  function _findTier(offenceName) {
+    for (let i = 0; i < offenceTiers.length; i++) {
+      if (offenceTiers[i].offences.includes(offenceName)) {
+        return offenceTiers[i].tier
+      }
+    }
+  }
+
+  function reset() {
+    points = 0;
+    committedOffences = {};
+  }
+
+  function _isBanned() {
+    if (points >= 10) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function _calculatePoints(tier, timesCommitted) {
+    if (tier + timesCommitted >= offenceTiers.length) {
+      return offenceTiers[offenceTiers.length - 1].zaps
+    } else {
+      return offenceTiers[tier + timesCommitted].zaps;
+    }
+  }
+
+  function _updateTimesCommitted(offenceName) {
+    if (!committedOffences[offenceName]) {
+      committedOffences[offenceName] = 1;
+    } else {
+      ++committedOffences[offenceName];
+    }
+
+    return committedOffences[offenceName];
+  }
+
+  function _reducePoint() {
+    if (points > 0) {
+      return --points;
+    } else {
+      return points;
+    }
+  }
+
+  function commitOffence(offenceName) {
+    const offenceTier = _findTier(offenceName);
+    if (offenceTier === undefined) return;
+
+    const previousTimesCommitted = committedOffences[offenceName]
+      ? committedOffences[offenceName]
+      : 0;
+
+    const pointsToAdd = _calculatePoints(offenceTier, previousTimesCommitted);
+
+    points += pointsToAdd;
+
+    const severityLevel =
+     offenceTier + previousTimesCommitted >= offenceTiers.length
+        ? offenceTiers.length - 1
+        : offenceTier + previousTimesCommitted;
+
+    _updateTimesCommitted(offenceName);
+
+    const newTimesCommitted = committedOffences[offenceName];
+    const nextPoints = _calculatePoints(offenceTier, newTimesCommitted);
+
+    return {
+      points,
+      offenceCommitted: offenceName,
+      addedPoints: pointsToAdd,
+      nextPoints,
+      severityLevel,
+      offenceTier: offenceTier,
+      isBanned: _isBanned(),
+    };
+  }
+
+  return Object.freeze({
+    commitOffence,
+    reset,
+    waitOneWeek: _reducePoint,
+    tierPoints: offenceTiers.reduce((object, tier, index) => {
+      object[index] = tier.zaps;
+      return object;
+    }, {}), // {0: 0, 1: 1, 2: 2, 3: 5, 4: 10};
+    get points() {
+      return points;
+    },
   });
+};
+
+const form = (function () {
+  let form;
+  let tierTagsAdded = false;
+  const colorCodes = {
+    0: "#ffdc2f",
+    1: "#eeb434",
+    2: "#e09034",
+    3: "#d47032",
+    4: "#be1e2d",
+  };
+
+  function addTierTags() {
+    if(tierTagsAdded === true) return
+    const buttons = document.querySelectorAll(
+      ".levels .combinedOffencesContainer .offenceContainer button"
+    );
+    buttons.forEach((button) => {
+      const tag = document.createElement("span");
+      tag.classList.add("tier-tag");
+      button.parentNode.insertBefore(tag, button.nextSibling);
+    });
+    tierTagsAdded = true
+  }
+
+  function initializeButtonText(tierPoints) {
+    addTierTags()
+    allForms.forEach( (form, index) => {
+      const buttons = form.querySelectorAll('button')
+      buttons.forEach(button => {
+        button.nextSibling.textContent = `Add Points: ${tierPoints[index]}`;
+        button.style.borderColor = colorCodes[`${index}`];
+      })
+    })
+  }
+
+  const updateForm = (offenceObject) => {
+    const allButtons = Array.from(document.querySelectorAll("button"));
+    const updateButton = allButtons.find(
+      (button) =>
+        button.textContent.toLowerCase() === offenceObject.offenceCommitted
+    );
+    updateButton.style.borderColor =
+      colorCodes[offenceObject.severityLevel + 1];
+    updateButton.nextSibling.textContent = `Add Points: ${offenceObject.nextPoints}`;
+    hideDisplayedForm();
+  };
+
+  const displayForm = (event) => {
+    const index = Number(event.target.id.slice(-1));
+    form = document.querySelector(`.lvl${index}`);
+    form.classList.remove("hidden");
+  };
+
+  const zapButtons = document.querySelectorAll(".zapButton");
+
+  zapButtons.forEach((button) => {
+    button.addEventListener("click", displayForm);
+  });
+
+  const tryAgainButton = document.querySelector(".tryAgainButton");
+  const resetButton = document.querySelector(".resetButton");
+
+  const dismissDisclaimerScreen = () => {
+    document.querySelector(".disclaimerScreen").remove();
+  };
+
+  const disclaimerConfirmButton = document.querySelector(
+    ".disclaimerConfirmButton"
+  );
+  disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
+
+  const allForms = document.querySelectorAll(".form");
+
+  const hideDisplayedForm = () => {
+    form.classList.add("hidden");
+  };
+
+  const hideBanMessage = () => {
+    document.querySelector(".bannMessage").classList.add("hidden");
+  };
+
+  const showBanMessage = () => {
+    document.querySelector(".bannMessage").classList.remove("hidden");
+  };
+
+  document.querySelectorAll(".closeSvg").forEach((closeButton) => {
+    closeButton.addEventListener("click", hideDisplayedForm);
+  });
+
+  const resetForm = (tierPoints) => {
+    hideBanMessage();
+    initializeButtonText(tierPoints);
+  };
+
+  return {
+    get tryAgainButton() {
+      return tryAgainButton;
+    },
+    get resetButton() {
+      return resetButton;
+    },
+    get allForms() {
+      console.log(allForms)
+      return allForms;
+    },
+    showBanMessage,
+    updateForm,
+    initializeButtonText,
+    resetForm,
+  };
 })();
 
-//if you go with the tier level I suggest the below order for Tier 0 to 10:
-const svgPaths = {
-  0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
-  1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
-  2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
-  3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
-  4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
-};
+const chart = (function () {
+  const svgPaths = {
+    0: "./images/zaps/TOPzap-shade-1.svg", //tier 0  #ffdc2f
+    1: "./images/zaps/TOPzap-shade-2.svg", //tier 1  #eeb434
+    2: "./images/zaps/TOPzap-shade-3.svg", //tier 2  #e09034
+    3: "./images/zaps/TOPzap-shade-4.svg", //tier 5  #d47032
+    4: "./images/zaps/TOPzap-shade-5.svg", //tier 10 #be1e2d
+  };
 
-const colorCodes = {
-  0: "#ffdc2f",
-  1: "#eeb434",
-  2: "#e09034",
-  3: "#d47032",
-  4: "#be1e2d",
-};
+  const getFactor = (allCellImages) => {
+    const setFactor = 10; // Gap between each svg
+    return setFactor * (allCellImages.length - 1);
+  };
 
-const generateLevel = (offenseButtonIndex, offenseTier, pointsAfterOffense) => {
+  const setImages = (allCellImages) => {
+    const factor = getFactor(allCellImages);
+    const newSet = [];
+    for (let i = 0; i < allCellImages.length; i++) {
+      const currentImage = allCellImages[i];
+      currentImage.style.width = `${100 - factor}%`;
+      currentImage.style.height = `${100 - factor / 2}%`;
+      currentImage.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
+      newSet.push(currentImage);
+    }
+    return newSet;
+  };
+
+  const updateChart = (offenceObject) => {
+    const cell = document.querySelector(
+      `#t${offenceObject.offenceTier}${offenceObject.severityLevel}`
+    );
+    const div = document.createElement("div");
+    div.classList.add("img-container");
+    div.style.backgroundImage = `url(${svgPaths[offenceObject.severityLevel]})`;
+    cell.appendChild(div);
+    const allCellImages = document.querySelectorAll(
+      `#t${offenceObject.offenceTier}${offenceObject.severityLevel} > div`
+    );
+    const setImgs = setImages(allCellImages);
+    cell.textContent = "";
+    setImgs.forEach((image) => {
+      cell.appendChild(image);
+    });
+  };
+
+  const resetChart = () => {
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.textContent = "";
+    });
+  };
+
   return {
-    offenseButtonIndex: offenseButtonIndex,
-    offenseTier: Number(offenseTier),
-    pointsAfterOffense: Number(pointsAfterOffense),
-    add_tier: function () {
-      this.pointsAfterOffense++;
+    updateChart,
+    resetChart,
+  };
+})();
+
+const stats = (function () {
+  const getStats = (obj) => {
+    const currentPoints = document.createElement("div");
+    currentPoints.style.fontWeight = "bold";
+    const name = document.createElement("div");
+    const afterOffencePoints = document.createElement("div");
+    currentPoints.classList.add("t_points");
+    currentPoints.textContent = `Current Zap Points: ${obj.points}`;
+    name.textContent = `Last offence committed: ${obj.offenceCommitted}`;
+    afterOffencePoints.textContent = `${obj.offenceCommitted}'s tier moved: ${obj.addedPoints} => ${obj.nextPoints}`;
+    return [currentPoints, name, afterOffencePoints];
+  };
+
+  const updateStats = (offenceObject) => {
+    const displayStats = document.querySelector(".zapPointsLabel");
+    const stats = getStats(offenceObject);
+    displayStats.textContent = "";
+    stats.forEach((stat) => {
+      stat.classList.add("stat");
+      displayStats.appendChild(stat);
+    });
+  };
+
+  const waitWeekUpdateDOM = (appPoints) => {
+    const points = document.querySelector(".t_points");
+    points ? (points.textContent = `Current Zap Points: ${appPoints}`) : null;
+  };
+
+  const timeTravelButton = document.querySelector(".timeTravelButton");
+
+  const resetStats = () => {
+    document.querySelector(".zapPointsLabel").textContent =
+      "Welcome, you are clean right now";
+  };
+
+  return {
+    updateStats,
+    resetStats,
+    waitWeekUpdateDOM,
+    get timeTravelButton() {
+      return timeTravelButton;
     },
   };
-};
-const createLevels = () => {
-  return Object.keys(tierPoints).map((tier) =>
-    Object.keys(svgPaths).map((offenseButtonIndex) => generateLevel(offenseButtonIndex, tier, tier))
-  );
-};
+})();
 
-let levels = createLevels().flat();
+const Theme = (function () {
+  const changeThemeAndSave = () => {
+    document.documentElement.classList.toggle("dark");
+    swapThemeIcon();
 
-const getObject = (offenseButtonIndex, tier) => {
-  return levels.find((level) => level.offenseButtonIndex == offenseButtonIndex && level.offenseTier == tier);
-};
-
-const updateButtons = (form) => {
-  const combinedOffencesContainer = form.lastElementChild;
-
-  let buttons = [];
-  [...combinedOffencesContainer.childNodes].forEach((element) => {
-    const button = [...element.childNodes].filter(
-      (node) => node.tagName == "BUTTON"
-    );
-    buttons = [...buttons, ...button];
-  });
-
-  buttons.forEach((button) => {
-    const classes = button.classList;
-    const obj = getObject(classes[1][1], classes[0][1]);
-    button.style.borderColor = colorCodes[`${obj.pointsAfterOffense}`];
-    button.nextSibling.textContent = `Add Points: ${tierPoints[obj.pointsAfterOffense]}`;
-  });
-};
-
-const zapButtons = document.querySelectorAll(".zapButton");
-
-zapButtons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const index = Number(e.target.id.slice(-1));
-    form = document.querySelector(`.lvl${index}`);
-    updateButtons(form);
-    form.classList.remove("hidden");
-  });
-});
-
-const getStats = (obj, offenseType) => {
-  const currentPoints = document.createElement("div");
-  currentPoints.style.fontWeight = "bold";
-  const name = document.createElement("div");
-  const afterOffensePoints = document.createElement("div");
-  currentPoints.classList.add("t_points");
-  currentPoints.textContent = `Current Zap Points: ${totalPoints}`;
-  name.textContent = `Last offense committed: ${offenseType}`;
-  afterOffensePoints.textContent = `${offenseType}'s tier moved: ${
-    tierPoints[obj.pointsAfterOffense]
-  } => ${tierPoints[obj.pointsAfterOffense + 1]}`;
-  return [currentPoints, name, afterOffensePoints];
-};
-
-const updateStats = (offenseObject, offenseType) => {
-  totalPoints += tierPoints[offenseObject.pointsAfterOffense];
-  const displayStats = document.querySelector(".zapPointsLabel");
-  const stats = getStats(offenseObject, offenseType);
-  displayStats.textContent = "";
-  stats.forEach((stat) => {
-    stat.classList.add("stat");
-    displayStats.appendChild(stat);
-  });
-};
-
-const updateObject = (offenseObject) => {
-  offenseObject.add_tier();
-};
-
-const getFactor = (allCellImages) => {
-  const setFactor = 10; // Gap between each svg
-  return setFactor * (allCellImages.length - 1);
-};
-
-const setImages = (allCellImages) => {
-  const factor = getFactor(allCellImages);
-  const newSet = [];
-  for (let i = 0; i < allCellImages.length; i++) {
-    const currentImage = allCellImages[i];
-    currentImage.style.width = `${100 - factor}%`;
-    currentImage.style.height = `${100 - factor / 2}%`;
-    currentImage.style.marginLeft = `${factor * (i / allCellImages.length)}%`;
-    newSet.push(currentImage);
-  }
-  return newSet;
-};
-
-const updateChart = (offenseObject) => {
-  const cell = document.querySelector(`#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense}`);
-  const div = document.createElement("div");
-  div.classList.add("img-container");
-  div.style.backgroundImage = `url(${svgPaths[offenseObject.pointsAfterOffense]})`;
-  cell.appendChild(div);
-  const allCellImages = document.querySelectorAll(
-    `#t${offenseObject.offenseTier}${offenseObject.pointsAfterOffense} > div`
-  );
-  const setImgs = setImages(allCellImages);
-  cell.textContent = "";
-  setImgs.forEach((image) => {
-    cell.appendChild(image);
-  });
-};
-
-const getBanned = () => {
-  document.querySelector(".bannMessage").classList.remove("hidden");
-};
-
-const checkBan = () => {
-  if (totalPoints > 9) {
-    getBanned();
-  }
-};
-
-const forms = document.querySelectorAll(".form");
-forms.forEach((eachForm) => {
-  // eachForm is to avoid name conflict with form
-  eachForm.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON") {
-      const classes = e.target.classList;
-      const offenseButtonIndex = classes[1][1];
-      const tier = Number(classes[0].slice(-1));
-      const offenseObject = getObject(offenseButtonIndex, tier);
-      updateChart(offenseObject);
-      updateStats(offenseObject, e.target.textContent);
-      checkBan();
-      updateObject(offenseObject);
+    if (document.documentElement.classList.contains("dark")) {
+      localStorage.setItem("dark-mode", "true");
+    } else {
+      localStorage.setItem("dark-mode", "false");
     }
-    form.classList.add("hidden");
+  };
+
+  const checkLocalStorageTheme = () => {
+    if (localStorage.getItem("dark-mode") === "true") {
+      document.documentElement.classList.add("dark");
+      swapThemeIcon();
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  const swapThemeIcon = () => {
+    const themeIcons = document.querySelectorAll(".themeSvg");
+    themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
+  };
+
+  const themeIconsButton = document.querySelector(".themeIcons");
+  themeIconsButton.addEventListener("click", changeThemeAndSave);
+  checkLocalStorageTheme();
+})();
+
+const ScreenController = (function () {
+  const app = ZapSimulator(offenceTiers);
+
+  form.initializeButtonText(app.tierPoints);
+
+  const resetSimulator = () => {
+    form.resetForm(app.tierPoints);
+    app.reset();
+    stats.resetStats();
+    chart.resetChart();
+  };
+
+  const waitOneWeek = () => {
+    app.waitOneWeek();
+    stats.waitWeekUpdateDOM(app.points);
+  };
+
+  form.resetButton.addEventListener("click", resetSimulator);
+  form.tryAgainButton.addEventListener("click", resetSimulator);
+  stats.timeTravelButton.addEventListener("click", waitOneWeek);
+
+  const updateScreen = (event) => {
+    if (event.target.tagName === "BUTTON") {
+      const offenceName = event.target.textContent;
+      const offenceObject = app.commitOffence(offenceName.toLowerCase());
+
+      chart.updateChart(offenceObject);
+      stats.updateStats(offenceObject);
+      form.updateForm(offenceObject);
+
+      if (offenceObject.isBanned) {
+        form.showBanMessage();
+      }
+    }
+  };
+
+  form.allForms.forEach((eachForm) => {
+    eachForm.addEventListener("click", updateScreen);
   });
-});
-
-const resetSimulator = () => {
-  levels = createLevels().flat();
-  totalPoints = 0;
-  document.querySelectorAll(".cell").forEach((cell) => {
-    cell.textContent = "";
-  });
-  document.querySelector(".zapPointsLabel").textContent =
-    "Welcome, you are clean right now";
-  document.querySelector(".bannMessage").classList.add("hidden");
-};
-
-const tryAgainButton = document.querySelector(".tryAgainButton");
-tryAgainButton.addEventListener("click", resetSimulator);
-
-const resetButton = document.querySelector(".resetButton");
-resetButton.addEventListener("click", resetSimulator);
-
-const timeTravelButton = document.querySelector(".timeTravelButton");
-
-timeTravelButton.addEventListener("click", () => {
-  totalPoints < 1 ? totalPoints : totalPoints--;
-  const points = document.querySelector(".t_points");
-  points ? (points.textContent = `Current Zap Points: ${totalPoints}`) : null;
-});
-
-const themeIconsButton = document.querySelector(".themeIcons");
-
-themeIconsButton.addEventListener("click", () => {
-  document.documentElement.classList.toggle("dark");
-  swapThemeIcon();
-
-  if (document.documentElement.classList.contains("dark")) {
-    localStorage.setItem("dark-mode", "true");
-  } else {
-    localStorage.setItem("dark-mode", "false");
-  }
-});
-
-const swapThemeIcon = () => {
-  const themeIcons = document.querySelectorAll(".themeSvg");
-  themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
-};
-
-if (localStorage.getItem("dark-mode") === "true") {
-  document.documentElement.classList.add("dark");
-  swapThemeIcon();
-} else {
-  document.documentElement.classList.remove("dark");
-}
+})();
