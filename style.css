@@ -55,11 +55,11 @@ body {
   padding: 1%;
 }
 
-.disclaimerScreen {
+.disclaimer-screen {
   background-color: rgba(128, 128, 128, 0.849);
 }
 
-.disclaimerMessageContainer {
+.disclaimer-message-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,14 +114,14 @@ body {
   aspect-ratio: 4/3;
 }
 
-.themeSvg {
+.theme-svg {
   color: var(--white-black);
   width: 24px;
   height: 24px;
   cursor: pointer;
 }
 
-.closeSvg {
+.close-svg {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -153,7 +153,7 @@ button:hover {
   transition: all 300ms;
 }
 
-.pointsLabel {
+.points-label {
   color: var(--color-accent);
   font-size: clamp(0.625rem, 0.3906rem + 1.0417vw, 0.9375rem);
   font-weight: light;
@@ -161,14 +161,14 @@ button:hover {
   align-self: center;
 }
 
-.statBox {
+.stat-box {
   margin: 1%;
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
 }
 
-.zapPointsLabel {
+.zap-points-label {
   font-size: var(--fs-base);
   margin-bottom: 0.5em;
 }
@@ -190,14 +190,14 @@ button:hover {
 }
 
 .ref,
-.statBox,
+.stat-box,
 .title {
   color: var(--white-black);
 }
 
 .form,
-.bannMessage,
-.disclaimerScreen {
+.ban-message,
+.disclaimer-screen {
   height: 100vh;
   width: 100%;
   display: flex;
@@ -209,7 +209,7 @@ button:hover {
   transition: all ease-out 500ms;
   backdrop-filter: blur(5px);
 }
-.combinedOffencesContainer {
+.combined-offences-container {
   display: flex;
   gap: 1em;
   align-items: center;
@@ -217,7 +217,7 @@ button:hover {
   width: 90%;
   flex-wrap: wrap;
 }
-.zapButton {
+.zap-button {
   width: 80%;
   min-height: 80%;
   margin-right: 1em;
@@ -227,15 +227,15 @@ button:hover {
   background-color: rgba(149, 161, 189, 0.7);
 }
 
-.bannMessage {
+.ban-message {
   color: white;
   background-color: rgba(201, 138, 43, 0.8);
   flex-direction: column;
 }
 
 .form > button,
-.bannMessage > button,
-.disclaimerConfirmButton {
+.ban-message > button,
+.disclaimer-confirm-button {
   padding: 0.8em 1em;
   display: flex;
   align-items: center;
@@ -244,11 +244,11 @@ button:hover {
 }
 
 .form > button,
-.bannMessage > button {
+.ban-message > button {
   min-width: 200px;
 }
 
-.bannMessage > button {
+.ban-message > button {
   margin-top: 20px;
 }
 
@@ -282,7 +282,7 @@ button:hover {
   color: var(--white-black);
   margin-block: 1em;
 }
-.offenceContainer {
+.offence-container {
   width: 100%;
   max-width: 25%;
 }
@@ -295,8 +295,8 @@ button:hover {
   background-repeat: no-repeat;
 }
 
-.timeTravelButton,
-.resetButton {
+.time-travel-button,
+.reset-button {
   margin-top: auto;
   background-color: var(--button-secondary);
   color: #fff;
@@ -325,7 +325,7 @@ svg:hover {
   filter: invert(0.5) sepia(1) hue-rotate(200deg) saturate(4) brightness(1);
 }
 
-.notDisplayed {
+.not-displayed {
   display: none;
 }
 
@@ -344,14 +344,14 @@ svg:hover {
     aspect-ratio: 1;
   }
 
-  .statBox {
+  .stat-box {
     width: 100%;
     align-items: center;
     justify-content: center;
     font-size: 15px;
   }
 
-  .disclaimerMessageContainer {
+  .disclaimer-message-container {
     width: 70%;
   }
 }
@@ -361,22 +361,22 @@ svg:hover {
   .odinHeadIcon {
     transform: scale(0.65, 0.65);
   }
-  .pointsLabel {
+  .points-label {
     font-weight: bold;
   }
-  .disclaimerMessageContainer {
+  .disclaimer-message-container {
     font-size: var(--fs-extra-small);
   }
-  .disclaimerConfirmButton {
+  .disclaimer-confirm-button {
     font-size: var(--fs-button);
   }
   .t0.i0 {
     margin-top: 1em;
   }
-  .combinedOffencesContainer {
+  .combined-offences-container {
     flex-direction: column;
   }
-  .offenceContainer {
+  .offence-container {
     max-width: 50%;
   }
 }
@@ -391,7 +391,7 @@ svg:hover {
   button {
     font-size: var(--fs-base);
   }
-  .pointsLabel {
+  .points-label {
     font-size: var(--fs-base);
   }
 }
