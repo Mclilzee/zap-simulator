@@ -203,21 +203,21 @@ const form = (function () {
     form.classList.remove("hidden");
   };
 
-  const zapButtons = document.querySelectorAll(".zapButton");
+  const zapButtons = document.querySelectorAll(".zap-button");
 
   zapButtons.forEach((button) => {
     button.addEventListener("click", displayForm);
   });
 
-  const tryAgainButton = document.querySelector(".tryAgainButton");
-  const resetButton = document.querySelector(".resetButton");
+  const tryAgainButton = document.querySelector(".try-again-button");
+  const resetButton = document.querySelector(".reset-button");
 
   const dismissDisclaimerScreen = () => {
-    document.querySelector(".disclaimerScreen").remove();
+    document.querySelector(".disclaimer-screen").remove();
   };
 
   const disclaimerConfirmButton = document.querySelector(
-    ".disclaimerConfirmButton"
+    ".disclaimer-confirm-button"
   );
   disclaimerConfirmButton.addEventListener("click", dismissDisclaimerScreen);
 
@@ -228,14 +228,14 @@ const form = (function () {
   };
 
   const hideBanMessage = () => {
-    document.querySelector(".bannMessage").classList.add("hidden");
+    document.querySelector(".ban-message").classList.add("hidden");
   };
 
   const showBanMessage = () => {
-    document.querySelector(".bannMessage").classList.remove("hidden");
+    document.querySelector(".ban-message").classList.remove("hidden");
   };
 
-  document.querySelectorAll(".closeSvg").forEach((closeButton) => {
+  document.querySelectorAll(".close-svg").forEach((closeButton) => {
     closeButton.addEventListener("click", hideDisplayedForm);
   });
 
@@ -333,7 +333,7 @@ const stats = (function () {
   };
 
   const updateStats = (offenceObject) => {
-    const displayStats = document.querySelector(".zapPointsLabel");
+    const displayStats = document.querySelector(".zap-points-label");
     const stats = getStats(offenceObject);
     displayStats.textContent = "";
     stats.forEach((stat) => {
@@ -347,10 +347,10 @@ const stats = (function () {
     points ? (points.textContent = `Current Zap Points: ${appPoints}`) : null;
   };
 
-  const timeTravelButton = document.querySelector(".timeTravelButton");
+  const timeTravelButton = document.querySelector(".time-travel-button");
 
   const resetStats = () => {
-    document.querySelector(".zapPointsLabel").textContent =
+    document.querySelector(".zap-points-label").textContent =
       "Welcome, you are clean right now";
   };
 
@@ -386,11 +386,11 @@ const Theme = (function () {
   };
 
   const swapThemeIcon = () => {
-    const themeIcons = document.querySelectorAll(".themeSvg");
-    themeIcons.forEach((icon) => icon.classList.toggle("notDisplayed"));
+    const themeIcons = document.querySelectorAll(".theme-svg");
+    themeIcons.forEach((icon) => icon.classList.toggle("not-displayed"));
   };
 
-  const themeIconsButton = document.querySelector(".themeIcons");
+  const themeIconsButton = document.querySelector(".theme-icons");
   themeIconsButton.addEventListener("click", changeThemeAndSave);
   checkLocalStorageTheme();
 })();
