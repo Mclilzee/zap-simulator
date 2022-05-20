@@ -164,7 +164,7 @@ const form = (function () {
   function addTierTags() {
     if(tierTagsAdded === true) return
     const buttons = document.querySelectorAll(
-      ".levels .combinedOffencesContainer .offenceContainer button"
+      ".levels .combined-offences-container .offence-container button"
     );
     buttons.forEach((button) => {
       const tag = document.createElement("span");
